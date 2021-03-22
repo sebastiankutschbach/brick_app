@@ -1,4 +1,5 @@
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/overview_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,14 +15,9 @@ class _LoginPageState extends State<LoginPage> {
   var _password = "";
 
   Widget build(BuildContext context) {
-    final rebrickableModel = context.watch<RebrickableModel>();
-    // if (rebrickableModel.isLoggedIn) {
-    //   Navigator.push(
-    //       context, MaterialPageRoute(builder: (context) => LoginPage()));
-    // }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Please enter your Rebrickable credentials'),
+        title: Text('Rebrickable Login'),
       ),
       body: Center(
         child: Padding(
@@ -51,9 +47,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     key: Key('login'),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        rebrickableModel.login(_username, _password);
+                        final success = await context
+                            .read<RebrickableModel>()
+                            .login(_username, _password);
+                        if (success) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OverviewPage()));
+                        }
                       }
                     },
                     child: Text('Login'),

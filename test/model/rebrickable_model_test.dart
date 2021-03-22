@@ -12,30 +12,16 @@ main() {
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => true);
-      bool listenerNotified = false;
 
-      model.addListener(() {
-        listenerNotified = true;
-      });
-      await model.login('username', 'password');
-
-      expect(listenerNotified, true);
-      expect(model.isLoggedIn, true);
+      expect(await model.login('username', 'password'), true);
     });
     test('login failed', () async {
       final serviceMock = RebrickableServiceMock();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => false);
-      bool listenerNotified = false;
 
-      model.addListener(() {
-        listenerNotified = true;
-      });
-      await model.login('username', 'password');
-
-      expect(listenerNotified, true);
-      expect(model.isLoggedIn, false);
+      expect(await model.login('username', 'password'), false);
     });
   });
 }

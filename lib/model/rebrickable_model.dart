@@ -8,11 +8,11 @@ class RebrickableModel with ChangeNotifier {
   bool get isLoggedIn => _loggedIn;
 
   RebrickableModel({RebrickableService rebrickableService}) {
-    this._rebrickableService = rebrickableService ?? RebrickableService();
+    this._rebrickableService = rebrickableService ?? RebrickableService('');
   }
 
-  Future<void> login(String username, String password) async {
+  Future<bool> login(String username, String password) async {
     _loggedIn = await _rebrickableService.authenticate(username, password);
-    notifyListeners();
+    return _loggedIn;
   }
 }

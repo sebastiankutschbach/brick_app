@@ -7,16 +7,19 @@ import 'dart:async';
 
 class RebrickableService {
   Client _client;
+  final _apiKey;
   String _token;
 
   bool get isAuthenticated => _token != null;
 
-  RebrickableService({Client client}) {
+  RebrickableService(this._apiKey, {Client client}) {
     this._client = client ?? Client();
   }
 
   Future<bool> authenticate(String username, String password) async {
+    print(userTokenUrl);
     final response = await _client.post(userTokenUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
         body: 'username=$username&password=$password');
 
     if (response.statusCode != 200) {
@@ -32,7 +35,7 @@ class RebrickableService {
     final uri = setId == null
         ? userSetListUrl
         : Uri.parse(userSetListUrl.toString() + '?list_id=$setId');
-    final response = await _client.get(uri, headers: createAuthHeader());
+    final response = await _client.get(uri, headers: createHeader());
 
     if (response.statusCode != 200) {
       return null;
@@ -49,5 +52,11 @@ class RebrickableService {
     }
   }
 
-  Map<String, String> createAuthHeader() => {'Authorization': 'key $_token'};
+  Map<String, String> createHeader({String contentType}) {
+    if (contentType != null) {
+      return {'Authorization': 'key $_apiKey', 'content-type': contentType};
+    } else {
+      return {'Authorization': 'key $_apiKey'};
+    }
+  }
 }

@@ -9,17 +9,23 @@ import 'rebrickable_service_test.mocks.dart';
 
 @GenerateMocks([Client])
 void main() {
-  final Map<String, String> authHeader = {'Authorization': 'key validtoken'};
+  final String _apiKey = 'apiKey';
+  final Map<String, String> _authHeader = {'Authorization': 'key $_apiKey'};
+  final Map<String, String> _authHeaderWithContentType = {
+    'Authorization': 'key $_apiKey',
+    'content-type': 'application/x-www-form-urlencoded'
+  };
   var client;
   var service;
   group('authentication', () {
     setUp(() {
       client = MockClient();
-      service = RebrickableService(client: client);
+      service = RebrickableService(_apiKey, client: client);
     });
 
     test('it should hava a token set on successful authentication', () async {
       when(client.post(userTokenUrl,
+              headers: _authHeaderWithContentType,
               body: 'username=username&password=password'))
           .thenAnswer(
               (_) async => Response('{"user_token": "validtoken"}', 200));
@@ -30,7 +36,9 @@ void main() {
 
     test('it should not have a token set on unsuccessful authentication',
         () async {
-      when(client.post(userTokenUrl, body: 'username=invalid&password=invalid'))
+      when(client.post(userTokenUrl,
+              headers: _authHeaderWithContentType,
+              body: 'username=invalid&password=invalid'))
           .thenAnswer(
               (_) async => Response('{"detail": "Invalid credentials"}', 403));
 
@@ -42,8 +50,9 @@ void main() {
   group('set list', () {
     setUp(() async {
       client = MockClient();
-      service = RebrickableService(client: client);
+      service = RebrickableService('apiKey', client: client);
       when(client.post(userTokenUrl,
+              headers: _authHeaderWithContentType,
               body: 'username=username&password=password'))
           .thenAnswer(
               (_) async => Response('{"user_token": "validtoken"}', 200));
@@ -52,8 +61,10 @@ void main() {
     });
 
     test('it should retrieve the users set lists', () async {
-      when(client.get(userSetListUrl, headers: authHeader))
-          .thenAnswer((_) async => Response('''{
+      when(client.get(
+        userSetListUrl,
+        headers: _authHeader,
+      )).thenAnswer((_) async => Response('''{
         "count": 1,
         "next": null,
         "previous": null,
@@ -73,7 +84,7 @@ void main() {
     test('it should retrieve a specific set', () async {
       final id = 521857;
       final uri = Uri.parse(userSetListUrl.toString() + '?list_id=$id');
-      when(client.get(uri, headers: authHeader))
+      when(client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('''
           {
             "id": 521857,
