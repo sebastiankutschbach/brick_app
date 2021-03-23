@@ -1,5 +1,6 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
+import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => RebrickableModel(),
+        ),
+        Provider(
+          create: (_) => PreferencesService(),
         )
       ],
       child: MaterialApp(

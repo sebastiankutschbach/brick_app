@@ -1,5 +1,6 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/overview_page.dart';
+import 'package:brick_app/pages/settings_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +19,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rebrickable Login'),
+        actions: [
+          _createSettingsButton(),
+        ],
       ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: SizedBox(
-            width: 320,
+          child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
@@ -41,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (value) => _password = value,
                     validator: (value) =>
                         value.isEmpty ? 'Password cannot be empty' : null,
+                    obscureText: true,
                   ),
                   SizedBox(
                     height: 16,
@@ -69,5 +73,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  IconButton _createSettingsButton() {
+    return IconButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SettingsPage()));
+        },
+        icon: Icon(Icons.settings));
   }
 }
