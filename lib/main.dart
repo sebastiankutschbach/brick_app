@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<RebrickableModel>(
           create: (_) => RebrickableModel(),
         ),
-        Provider(
+        Provider<PreferencesService>(
           create: (_) {
             final service = PreferencesService();
             service.initPreferences();

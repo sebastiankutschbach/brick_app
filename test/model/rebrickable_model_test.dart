@@ -13,7 +13,7 @@ main() {
       when(serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => true);
 
-      expect(await model.login('username', 'password'), true);
+      expect(await model.login('username', 'password', 'apiKey'), true);
     });
     test('login failed', () async {
       final serviceMock = RebrickableServiceMock();
@@ -21,7 +21,7 @@ main() {
       when(serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => false);
 
-      expect(await model.login('username', 'password'), false);
+      expect(await model.login('username', 'password', 'apiKey'), false);
     });
   });
 }

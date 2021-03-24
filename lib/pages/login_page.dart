@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     key: Key('login'),
                     onPressed: () async {
-                      if (apiKey.isEmpty || apiKey == null) {
+                      if (apiKey == null || apiKey.isEmpty) {
                         _showDialog('Please set your api key under settings');
                       }
                       if (_formKey.currentState.validate()) {

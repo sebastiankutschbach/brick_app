@@ -1,5 +1,6 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
+import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -7,20 +8,39 @@ import 'package:provider/provider.dart';
 
 class RebrickableModelMock extends Mock implements RebrickableModel {}
 
+class PreferencesServiceMock extends Mock implements PreferencesService {}
+
 class NavigatorObserverMock extends Mock implements NavigatorObserver {}
 
 void main() {
-  final app = MaterialApp(
-    home: ChangeNotifierProvider<RebrickableModel>(
-      create: (context) => RebrickableModelMock(),
-      child: LoginPage(),
-    ),
-  );
+  createApp(bool loginSucces,
+          {RebrickableModelMock rebrickableModelMock,
+          NavigatorObserverMock navigatorObserverMock}) =>
+      MaterialApp(
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<RebrickableModel>(create: (context) {
+              final modelMock = rebrickableModelMock ?? RebrickableModelMock();
+              when(modelMock.login('username', 'password', 'apiKey'))
+                  .thenAnswer((_) async => loginSucces);
+              return modelMock;
+            }),
+            Provider<PreferencesService>(create: (_) {
+              final service = PreferencesServiceMock();
+              when(service.apiKey).thenReturn('apiKey');
+              return service;
+            }),
+          ],
+          child: LoginPage(),
+        ),
+        navigatorObservers:
+            navigatorObserverMock != null ? [navigatorObserverMock] : [],
+      );
   group('smoke test', () {
     testWidgets(
         'Finds title, login button, username and password fields on login page',
         (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: app));
+      await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.text('Rebrickable Login'), findsOneWidget);
@@ -34,7 +54,7 @@ void main() {
 
   group('input test', () {
     testWidgets('Does not accept empty username', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: app));
+      await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
       expect(find.byKey(Key('username')), findsOneWidget);
       await tester.tap(find.text('Login'));
@@ -45,7 +65,7 @@ void main() {
     });
 
     testWidgets('Does not accept empty password', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: app));
+      await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
       await tester.enterText(find.byKey(Key('username')), 'myUsername');
       await tester.tap(find.byKey(Key('login')));
@@ -59,16 +79,9 @@ void main() {
   group('login test', () {
     testWidgets('Tries to login when username and password given',
         (WidgetTester tester) async {
-      final modelMock = RebrickableModelMock();
-      when(modelMock.login('username', 'password'))
-          .thenAnswer((_) async => true);
-      final app = MaterialApp(
-        home: ChangeNotifierProvider<RebrickableModel>(
-          create: (context) => modelMock,
-          child: LoginPage(),
-        ),
-      );
-      await tester.pumpWidget(MaterialApp(home: app));
+      final rebrickableModelMock = RebrickableModelMock();
+      await tester.pumpWidget(MaterialApp(
+          home: createApp(true, rebrickableModelMock: rebrickableModelMock)));
 
       await tester.enterText(find.byKey(Key('username')), 'username');
       await tester.enterText(find.byKey(Key('password')), 'password');
@@ -76,7 +89,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      verify(modelMock.login('username', 'password'));
+      verify(rebrickableModelMock.login('username', 'password', 'apiKey'));
     });
 
     group('navigation test', () {
@@ -84,16 +97,12 @@ void main() {
           (WidgetTester tester) async {
         final modelMock = RebrickableModelMock();
         final observerMock = NavigatorObserverMock();
-        when(modelMock.login('username', 'password'))
+        when(modelMock.login('username', 'password', 'apiKey'))
             .thenAnswer((_) async => true);
-        final app = MaterialApp(
-          home: ChangeNotifierProvider<RebrickableModel>(
-            create: (context) => modelMock,
-            child: LoginPage(),
-          ),
-          navigatorObservers: [observerMock],
-        );
-        await tester.pumpWidget(MaterialApp(home: app));
+        await tester.pumpWidget(MaterialApp(
+            home: createApp(true,
+                rebrickableModelMock: modelMock,
+                navigatorObserverMock: observerMock)));
 
         await tester.enterText(find.byKey(Key('username')), 'username');
         await tester.enterText(find.byKey(Key('password')), 'password');
@@ -109,16 +118,12 @@ void main() {
         (WidgetTester tester) async {
       final modelMock = RebrickableModelMock();
       final observerMock = NavigatorObserverMock();
-      when(modelMock.login('username', 'password'))
+      when(modelMock.login('username', 'password', 'apiKey'))
           .thenAnswer((_) async => false);
-      final app = MaterialApp(
-        home: ChangeNotifierProvider<RebrickableModel>(
-          create: (context) => modelMock,
-          child: LoginPage(),
-        ),
-        navigatorObservers: [observerMock],
-      );
-      await tester.pumpWidget(MaterialApp(home: app));
+      await tester.pumpWidget(MaterialApp(
+          home: createApp(false,
+              rebrickableModelMock: modelMock,
+              navigatorObserverMock: observerMock)));
 
       await tester.enterText(find.byKey(Key('username')), 'username');
       await tester.enterText(find.byKey(Key('password')), 'password');
