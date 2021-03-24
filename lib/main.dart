@@ -17,7 +17,12 @@ class MyApp extends StatelessWidget {
           create: (_) => RebrickableModel(),
         ),
         Provider(
-          create: (_) => PreferencesService(),
+          create: (_) {
+            final service = PreferencesService();
+            service.initPreferences();
+            return service;
+          },
+          lazy: false,
         )
       ],
       child: MaterialApp(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
-
   PreferencesService _preferencesService;
 
   void initState() {
@@ -32,6 +29,8 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Form(
               key: _formKey,
               child: TextFormField(
+                initialValue: _preferencesService.apiKey,
+                key: Key('apiKey'),
                 decoration: InputDecoration(
                   labelText: 'API Key',
                 ),

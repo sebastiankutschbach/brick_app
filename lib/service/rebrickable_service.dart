@@ -17,7 +17,6 @@ class RebrickableService {
   }
 
   Future<bool> authenticate(String username, String password) async {
-    print(userTokenUrl);
     final response = await _client.post(userTokenUrl,
         headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
         body: 'username=$username&password=$password');
