@@ -7,8 +7,10 @@ import 'dart:async';
 
 class RebrickableService {
   Client _client;
-  final _apiKey;
+  String _apiKey;
   String _token;
+
+  set apiKey(String apiKey) => _apiKey = apiKey;
 
   bool get isAuthenticated => _token != null;
 
@@ -22,6 +24,8 @@ class RebrickableService {
         body: 'username=$username&password=$password');
 
     if (response.statusCode != 200) {
+      print(response.statusCode);
+      print(response.body);
       return false;
     }
 

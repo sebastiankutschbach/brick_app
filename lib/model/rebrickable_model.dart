@@ -11,7 +11,8 @@ class RebrickableModel with ChangeNotifier {
     this._rebrickableService = rebrickableService ?? RebrickableService('');
   }
 
-  Future<bool> login(String username, String password) async {
+  Future<bool> login(String username, String password, String apiKey) async {
+    _rebrickableService.apiKey = apiKey;
     _loggedIn = await _rebrickableService.authenticate(username, password);
     return _loggedIn;
   }
