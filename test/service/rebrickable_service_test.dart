@@ -62,7 +62,7 @@ void main() {
 
     test('it should retrieve the users set lists', () async {
       when(client.get(
-        userSetListUrl,
+        Uri.parse(userSetListUrlTemplate.expand({'user_token': 'validtoken'})),
         headers: _authHeader,
       )).thenAnswer((_) async => Response('''{
         "count": 1,
@@ -83,7 +83,8 @@ void main() {
 
     test('it should retrieve a specific set', () async {
       final id = 521857;
-      final uri = Uri.parse(userSetListUrl.toString() + '?list_id=$id');
+      final uri = Uri.parse(userSetListUrlTemplate
+          .expand({'user_token': 'validtoken', 'list_id': id}));
       when(client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('''
           {

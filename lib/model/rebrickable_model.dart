@@ -1,3 +1,4 @@
+import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,5 +16,9 @@ class RebrickableModel with ChangeNotifier {
     _rebrickableService.apiKey = apiKey;
     _loggedIn = await _rebrickableService.authenticate(username, password);
     return _loggedIn;
+  }
+
+  Future<List<BrickSet>> getUsersSetLists() async {
+    return _rebrickableService.getUsersSetList();
   }
 }

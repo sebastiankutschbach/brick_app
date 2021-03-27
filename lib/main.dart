@@ -4,11 +4,17 @@ import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final preferencesService = PreferencesService();
+  await preferencesService.initPreferences();
+  runApp(MyApp(preferencesService: preferencesService));
 }
 
 class MyApp extends StatelessWidget {
+  final PreferencesService preferencesService;
+  MyApp({this.preferencesService});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -17,11 +23,7 @@ class MyApp extends StatelessWidget {
           create: (_) => RebrickableModel(),
         ),
         Provider<PreferencesService>(
-          create: (_) {
-            final service = PreferencesService();
-            service.initPreferences();
-            return service;
-          },
+          create: (_) => preferencesService,
           lazy: false,
         )
       ],

@@ -35,12 +35,13 @@ class RebrickableService {
   }
 
   Future<List<BrickSet>> getUsersSetList({int setId}) async {
-    final uri = setId == null
-        ? userSetListUrl
-        : Uri.parse(userSetListUrl.toString() + '?list_id=$setId');
-    final response = await _client.get(uri, headers: createHeader());
+    final userSetListUrl = Uri.parse(userSetListUrlTemplate
+        .expand({'user_token': _token, 'list_id': setId}));
+    final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
+      print(response.statusCode);
+      print(response.body);
       return null;
     }
 

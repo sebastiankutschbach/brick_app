@@ -13,7 +13,7 @@ class PreferencesServiceMock extends Mock implements PreferencesService {}
 class NavigatorObserverMock extends Mock implements NavigatorObserver {}
 
 void main() {
-  createApp(bool loginSucces,
+  createApp(bool loginSuccess,
           {RebrickableModelMock rebrickableModelMock,
           NavigatorObserverMock navigatorObserverMock}) =>
       MaterialApp(
@@ -22,7 +22,7 @@ void main() {
             ChangeNotifierProvider<RebrickableModel>(create: (context) {
               final modelMock = rebrickableModelMock ?? RebrickableModelMock();
               when(modelMock.login('username', 'password', 'apiKey'))
-                  .thenAnswer((_) async => loginSucces);
+                  .thenAnswer((_) async => loginSuccess);
               return modelMock;
             }),
             Provider<PreferencesService>(create: (_) {
@@ -36,6 +36,7 @@ void main() {
         navigatorObservers:
             navigatorObserverMock != null ? [navigatorObserverMock] : [],
       );
+
   group('smoke test', () {
     testWidgets(
         'Finds title, login button, username and password fields on login page',
@@ -113,6 +114,7 @@ void main() {
         verify(observerMock.didPush(captureAny, any)).called(2);
       });
     });
+
     testWidgets(
         'Does not navigate to overview page when login was unsuccessful',
         (WidgetTester tester) async {
