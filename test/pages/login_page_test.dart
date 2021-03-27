@@ -16,25 +16,25 @@ void main() {
   createApp(bool loginSuccess,
           {RebrickableModelMock rebrickableModelMock,
           NavigatorObserverMock navigatorObserverMock}) =>
-      MaterialApp(
-        home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider<RebrickableModel>(create: (context) {
-              final modelMock = rebrickableModelMock ?? RebrickableModelMock();
-              when(modelMock.login('username', 'password', 'apiKey'))
-                  .thenAnswer((_) async => loginSuccess);
-              return modelMock;
-            }),
-            Provider<PreferencesService>(create: (_) {
-              final service = PreferencesServiceMock();
-              when(service.apiKey).thenReturn('apiKey');
-              return service;
-            }),
-          ],
-          child: LoginPage(),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<RebrickableModel>(create: (context) {
+            final modelMock = rebrickableModelMock ?? RebrickableModelMock();
+            when(modelMock.login('username', 'password', 'apiKey'))
+                .thenAnswer((_) async => loginSuccess);
+            return modelMock;
+          }),
+          Provider<PreferencesService>(create: (_) {
+            final service = PreferencesServiceMock();
+            when(service.apiKey).thenReturn('apiKey');
+            return service;
+          }),
+        ],
+        child: MaterialApp(
+          home: LoginPage(),
+          navigatorObservers:
+              navigatorObserverMock != null ? [navigatorObserverMock] : [],
         ),
-        navigatorObservers:
-            navigatorObserverMock != null ? [navigatorObserverMock] : [],
       );
 
   group('smoke test', () {
@@ -88,7 +88,7 @@ void main() {
       await tester.enterText(find.byKey(Key('password')), 'password');
       await tester.tap(find.byKey(Key('login')));
 
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 3));
 
       verify(rebrickableModelMock.login('username', 'password', 'apiKey'));
     });
@@ -109,7 +109,7 @@ void main() {
         await tester.enterText(find.byKey(Key('password')), 'password');
         await tester.tap(find.byKey(Key('login')));
 
-        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 3));
 
         verify(observerMock.didPush(captureAny, any)).called(2);
       });

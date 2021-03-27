@@ -23,7 +23,7 @@ void main() {
       service = RebrickableService(_apiKey, client: client);
     });
 
-    test('it should hava a token set on successful authentication', () async {
+    test('it should have a token set on successful authentication', () async {
       when(client.post(userTokenUrl,
               headers: _authHeaderWithContentType,
               body: 'username=username&password=password'))
