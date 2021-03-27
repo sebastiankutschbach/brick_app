@@ -1,3 +1,4 @@
+import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
@@ -54,6 +55,28 @@ main() {
           .thenAnswer((_) async => [setList]);
 
       expect(await model.getUsersSetLists(listId: 521857), [setList]);
+    });
+  });
+
+  group('getSetsFromList', () {
+    test('all sets retrieval', () async {
+      final set = BrickSet.fromJson({
+        "set_num": "70672-1",
+        "name": "Cole's Dirt Bike",
+        "year": 2019,
+        "theme_id": 435,
+        "num_parts": 221,
+        "set_img_url":
+            "https://cdn.rebrickable.com/media/sets/70672-1/12578.jpg",
+        "set_url": "https://rebrickable.com/sets/70672-1/coles-dirt-bike/",
+        "last_modified_dt": "2019-04-19T17:19:54.565420Z"
+      });
+      final serviceMock = RebrickableServiceMock();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(serviceMock.getSetsFromList(listId: 548040))
+          .thenAnswer((_) async => [set]);
+
+      expect(await model.getSetsFromList(listId: 548040), [set]);
     });
   });
 }

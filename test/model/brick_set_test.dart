@@ -1,5 +1,4 @@
 import 'package:brick_app/model/brick_set.dart';
-import 'package:brick_app/model/brick_set_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 main() {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'dart:async';
 
@@ -54,7 +55,7 @@ class RebrickableService {
         .toList(growable: false);
   }
 
-  Future<List<BrickSet>> getSetsFromList({int listId}) async {
+  Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
     final userSetListUrl = Uri.parse(userSetListDetailsUrlTemplate
         .expand({'user_token': _token, 'list_id': listId}));
     final response = await _client.get(userSetListUrl, headers: createHeader());
