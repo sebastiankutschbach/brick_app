@@ -1,12 +1,20 @@
 class BrickSet {
-  final int id;
-  final bool isBuildable;
+  final String setNum;
   final String name;
-  final int numSets;
+  final int year;
+  final int themeId;
+  final int numParts;
+  final String setImgUrl;
+  final String setUrl;
+  final DateTime lastModified;
 
   BrickSet.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        isBuildable = json['is_buildable'],
+      : setNum = json['set_num'],
         name = json['name'],
-        numSets = json['num_sets'];
+        year = json['year'],
+        themeId = json['theme_id'],
+        numParts = json['num_parts'],
+        setImgUrl = json['set_img_url'],
+        setUrl = json['set_url'],
+        lastModified = DateTime.parse(json['last_modified_dt']);
 }

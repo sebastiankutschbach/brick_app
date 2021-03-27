@@ -1,4 +1,4 @@
-import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/overview_page.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class RebrickableModelMock extends Mock implements RebrickableModel {}
 
 main() {
-  createApp({List<BrickSet> brickSets}) =>
+  createApp({List<BrickSetList> brickSets}) =>
       ChangeNotifierProvider<RebrickableModel>(
         create: (_) {
           final mock = RebrickableModelMock();
@@ -34,13 +34,13 @@ main() {
 
     testWidgets('does show a tile for each set list', (tester) async {
       await tester.pumpWidget(createApp(brickSets: [
-        BrickSet.fromJson({
+        BrickSetList.fromJson({
           "id": 521857,
           "is_buildable": true,
           "name": "Set List",
           "num_sets": 23
         }),
-        BrickSet.fromJson({
+        BrickSetList.fromJson({
           "id": 521853,
           "is_buildable": true,
           "name": "Second Set List",

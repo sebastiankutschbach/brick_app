@@ -1,5 +1,6 @@
-import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,8 @@ class OverviewPage extends StatelessWidget {
         });
   }
 
-  ListView _createListView(List<BrickSet> brickSets) => brickSets.length != 0
+  ListView _createListView(List<BrickSetList> brickSets) => brickSets.length !=
+          0
       ? ListView.builder(
           key: ObjectKey('setList'),
           itemBuilder: (context, index) =>
@@ -50,12 +52,15 @@ class OverviewPage extends StatelessWidget {
           itemCount: brickSets.length)
       : ListView(children: [Text('You have no set lists in your account.')]);
 
-  ListTile _createListTile(BuildContext context, BrickSet brickSet) => ListTile(
+  ListTile _createListTile(BuildContext context, BrickSetList brickSet) =>
+      ListTile(
         leading: Icon(
           Icons.domain,
           color: Colors.red,
         ),
         title: Text(brickSet.name),
         subtitle: Text('${brickSet.numSets} sets'),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => SetListPage(brickSet: brickSet))),
       );
 }

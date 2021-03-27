@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:http/http.dart';
 import 'dart:async';
@@ -34,9 +35,9 @@ class RebrickableService {
     return _token != null;
   }
 
-  Future<List<BrickSet>> getUsersSetList({int setId}) async {
+  Future<List<BrickSetList>> getUsersSetList({int listId}) async {
     final userSetListUrl = Uri.parse(userSetListUrlTemplate
-        .expand({'user_token': _token, 'list_id': setId}));
+        .expand({'user_token': _token, 'list_id': listId}));
     final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
@@ -46,14 +47,30 @@ class RebrickableService {
     }
 
     final body = jsonDecode(response.body);
-    if (setId == null) {
-      var results = body['results'] as List;
-      return results
-          .map((json) => BrickSet.fromJson(json))
-          .toList(growable: false);
-    } else {
-      return [BrickSet.fromJson(body)];
+
+    var results = body['results'] as List;
+    return results
+        .map((json) => BrickSetList.fromJson(json))
+        .toList(growable: false);
+  }
+
+  Future<List<BrickSet>> getSetsFromList({int listId}) async {
+    final userSetListUrl = Uri.parse(userSetListDetailsUrlTemplate
+        .expand({'user_token': _token, 'list_id': listId}));
+    final response = await _client.get(userSetListUrl, headers: createHeader());
+
+    if (response.statusCode != 200) {
+      print(response.statusCode);
+      print(response.body);
+      return null;
     }
+
+    final body = jsonDecode(response.body);
+
+    var results = body['results'] as List;
+    return results
+        .map((json) => BrickSet.fromJson(json['set']))
+        .toList(growable: false);
   }
 
   Map<String, String> createHeader({String contentType}) {

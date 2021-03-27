@@ -1,20 +1,33 @@
 import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/brick_set_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
-  group('fromJson', () {
-    test('should create brick set from valid json', () {
+  group('from Json', () {
+    test('valid json', () {
       final brickSet = BrickSet.fromJson({
-        "id": 521857,
-        "is_buildable": true,
-        "name": "Set List",
-        "num_sets": 23
+        "set_num": "70672-1",
+        "name": "Cole's Dirt Bike",
+        "year": 2019,
+        "theme_id": 435,
+        "num_parts": 221,
+        "set_img_url":
+            "https://cdn.rebrickable.com/media/sets/70672-1/12578.jpg",
+        "set_url": "https://rebrickable.com/sets/70672-1/coles-dirt-bike/",
+        "last_modified_dt": "2019-04-19T17:19:54.565420Z"
       });
 
-      expect(brickSet.id, 521857);
-      expect(brickSet.isBuildable, isTrue);
-      expect(brickSet.name, "Set List");
-      expect(brickSet.numSets, 23);
+      expect(brickSet.setNum, "70672-1");
+      expect(brickSet.name, "Cole's Dirt Bike");
+      expect(brickSet.year, 2019);
+      expect(brickSet.themeId, 435);
+      expect(brickSet.numParts, 221);
+      expect(brickSet.setImgUrl,
+          "https://cdn.rebrickable.com/media/sets/70672-1/12578.jpg");
+      expect(brickSet.setUrl,
+          "https://rebrickable.com/sets/70672-1/coles-dirt-bike/");
+      expect(brickSet.lastModified.toIso8601String(),
+          "2019-04-19T17:19:54.565420Z");
     });
   });
 }

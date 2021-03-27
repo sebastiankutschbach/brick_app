@@ -1,4 +1,4 @@
-import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,8 +27,8 @@ main() {
   });
 
   group('getUsersSetList', () {
-    test('set lists retrieval', () async {
-      final setList = BrickSet.fromJson({
+    test('all set lists retrieval', () async {
+      final setList = BrickSetList.fromJson({
         "id": 521857,
         "is_buildable": true,
         "name": "Set List",
@@ -39,6 +39,21 @@ main() {
       when(serviceMock.getUsersSetList()).thenAnswer((_) async => [setList]);
 
       expect(await model.getUsersSetLists(), [setList]);
+    });
+
+    test('single set lists retrieval', () async {
+      final setList = BrickSetList.fromJson({
+        "id": 521857,
+        "is_buildable": true,
+        "name": "Set List",
+        "num_sets": 23
+      });
+      final serviceMock = RebrickableServiceMock();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(serviceMock.getUsersSetList(listId: 521857))
+          .thenAnswer((_) async => [setList]);
+
+      expect(await model.getUsersSetLists(listId: 521857), [setList]);
     });
   });
 }
