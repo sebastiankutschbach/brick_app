@@ -43,24 +43,25 @@ class OverviewPage extends StatelessWidget {
         });
   }
 
-  ListView _createListView(List<BrickSetList> brickSets) => brickSets.length !=
-          0
-      ? ListView.builder(
-          key: ObjectKey('setList'),
-          itemBuilder: (context, index) =>
-              _createListTile(context, brickSets[index]),
-          itemCount: brickSets.length)
-      : ListView(children: [Text('You have no set lists in your account.')]);
+  ListView _createListView(List<BrickSetList> brickSetLists) =>
+      brickSetLists.length != 0
+          ? ListView.builder(
+              key: ObjectKey('setList'),
+              itemBuilder: (context, index) =>
+                  _createListTile(context, brickSetLists[index]),
+              itemCount: brickSetLists.length)
+          : ListView(
+              children: [Text('You have no set lists in your account.')]);
 
-  ListTile _createListTile(BuildContext context, BrickSetList brickSet) =>
+  ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
         leading: Icon(
           Icons.domain,
           color: Colors.red,
         ),
-        title: Text(brickSet.name),
-        subtitle: Text('${brickSet.numSets} sets'),
+        title: Text(brickSetList.name),
+        subtitle: Text('${brickSetList.numSets} sets'),
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SetListPage(brickSet: brickSet))),
+            builder: (context) => SetListPage(brickSetList: brickSetList))),
       );
 }
