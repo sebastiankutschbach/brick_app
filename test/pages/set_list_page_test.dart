@@ -60,11 +60,10 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pump(Duration(seconds: 3));
+        await tester.pumpAndSettle();
 
-        var setTileFinder =
-            find.byKey(ObjectKey('setTile_70672-1'), skipOffstage: false);
-        expect(setTileFinder, findsOneWidget);
+        var setTileImage = find.byType(Image);
+        expect(setTileImage, findsOneWidget);
       });
     });
   });
