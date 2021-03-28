@@ -19,7 +19,9 @@ jobs:
         flutter-version: '2.0.3'
     - run: flutter pub get
     - run: flutter test --coverage
-    - uses: vebr/jest-lcov-reporter@v0.2.0
+    - name: Coverage Report on Pull Request
+      uses: nohmad/lcov-report-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        lcov-info: coverage/lcov.info
     - run: flutter build apk
