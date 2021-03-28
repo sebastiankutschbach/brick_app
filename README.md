@@ -1,3 +1,5 @@
+[![Flutter](https://github.com/sebastiankutschbach/brick_app/actions/workflows/flutter.yml/badge.svg)](https://github.com/sebastiankutschbach/brick_app/actions/workflows/flutter.yml)
+
 # brick_app
 
 A new Flutter project.
