@@ -19,4 +19,12 @@ jobs:
         flutter-version: '2.0.3'
     - run: flutter pub get
     - run: flutter test
+    - name: Report code coverage
+      uses: zgosalvez/github-actions-report-lcov@v1
+      with:
+        coverage-files: coverage/lcov.*.info
+        minimum-coverage: 90
+        artifact-name: code-coverage-report
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: apps/my-first-app
     - run: flutter build apk
