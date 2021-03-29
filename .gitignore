@@ -45,4 +45,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-coverage/
+coverage/*
+!coverage/jgenhtml-1.5.jar
