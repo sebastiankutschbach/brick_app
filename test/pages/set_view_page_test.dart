@@ -1,13 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
-import 'package:brick_app/model/brick_set_list.dart';
-import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/set_list_page.dart';
 import 'package:brick_app/pages/set_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:network_image_mock/network_image_mock.dart';
-import 'package:provider/provider.dart';
 
 main() {
   final brickSet = BrickSet.fromJson({
