@@ -36,22 +36,38 @@ class SetListPage extends StatelessWidget {
   }
 
   Widget _createSetsView(BuildContext context, List<BrickSet> brickSets) {
-    return GridView.builder(
-      itemCount: brickSets.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 10, mainAxisSpacing: 10, crossAxisCount: 3),
-      itemBuilder: (context, index) => _buildTile(
-        context,
-        brickSets[index],
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: GridView.builder(
+        itemCount: brickSets.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisSpacing: 16, mainAxisSpacing: 16, crossAxisCount: 3),
+        itemBuilder: (context, index) => _buildTile(
+          context,
+          brickSets[index],
+        ),
       ),
     );
   }
 
   Widget _buildTile(BuildContext context, BrickSet brickSet) {
-    return Column(key: ObjectKey('setTile_${brickSet.setNum}'), children: [
-      Image.network(
-        brickSet.setImgUrl,
+    return GestureDetector(
+      onTap: () => print(brickSet.name),
+      child: DecoratedBox(
+        key: ObjectKey('setTile_${brickSet.setNum}'),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+              brickSet.setImgUrl,
+            ),
+          ),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey, width: 1),
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
+          ),
+        ),
       ),
-    ]);
+    );
   }
 }
