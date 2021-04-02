@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
@@ -26,8 +27,9 @@ class RebrickableService {
         body: 'username=$username&password=$password');
 
     if (response.statusCode != 200) {
-      print(response.statusCode);
-      print(response.body);
+      log('Error authenticating against rebrickable api');
+      log('Status code: ${response.statusCode}');
+      log('Body: ${response.body}');
       return false;
     }
 
@@ -42,8 +44,9 @@ class RebrickableService {
     final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
-      print(response.statusCode);
-      print(response.body);
+      log('Error getting users set list');
+      log('Status code: ${response.statusCode}');
+      log('Body: ${response.body}');
       return null;
     }
 
@@ -61,8 +64,9 @@ class RebrickableService {
     final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
-      print(response.statusCode);
-      print(response.body);
+      log('Error getting sets from list $listId');
+      log('Status code: ${response.statusCode}');
+      log('Body: ${response.body}');
       return null;
     }
 
