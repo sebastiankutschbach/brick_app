@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
+import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
@@ -76,6 +77,24 @@ class RebrickableService {
     return results
         .map((json) => BrickSet.fromJson(json['set']))
         .toList(growable: false);
+  }
+
+  Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
+    final userSetListUrl =
+        Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
+    final response = await _client.get(userSetListUrl, headers: createHeader());
+
+    if (response.statusCode != 200) {
+      log('Error getting moc for set $setNum');
+      log('Status code: ${response.statusCode}');
+      log('Body: ${response.body}');
+      return null;
+    }
+
+    final body = jsonDecode(response.body);
+
+    var results = body['results'] as List;
+    return results.map((json) => Moc.fromJson(json)).toList(growable: false);
   }
 
   Map<String, String> createHeader({String contentType}) {

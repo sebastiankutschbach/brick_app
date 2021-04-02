@@ -1,4 +1,5 @@
 import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -159,6 +160,62 @@ void main() {
           await service.getSetsFromList(listId: 548040);
 
       expect(brickSets, isNull);
+    });
+  });
+
+  group('mocs for set', () {
+    setUp(() async {
+      _setUpAuthenticatedServiceMock();
+    });
+
+    test('it should retrieve mocs for a set', () async {
+      final setNum = "70672-1";
+      final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
+      when(client.get(uri, headers: _authHeader))
+          .thenAnswer((_) async => Response('''{
+          "count": 2,
+          "next": null,
+          "previous": null,
+          "results": [
+            {
+              "set_num": "MOC-56901",
+              "name": "cole's desert car",
+              "year": 2020,
+              "theme_id": 435,
+              "num_parts": 165,
+              "moc_img_url": "https://cdn.rebrickable.com/media/mocs/moc-56901.jpg",
+              "moc_url": "https://rebrickable.com/mocs/MOC-56901/trainsrkool176/coles-desert-car/",
+              "designer_name": "trainsrkool176",
+              "designer_url": "https://rebrickable.com/users/trainsrkool176/mocs/"
+            },
+            {
+              "set_num": "MOC-69836",
+              "name": "Cole´s Stone Bike",
+              "year": 2021,
+              "theme_id": 435,
+              "num_parts": 195,
+              "moc_img_url": "https://cdn.rebrickable.com/media/mocs/moc-69836.jpg",
+              "moc_url": "https://rebrickable.com/mocs/MOC-69836/dorianbricktron/cole-s-stone-bike/",
+              "designer_name": "dorianbricktron",
+              "designer_url": "https://rebrickable.com/users/dorianbricktron/mocs/"
+            }
+          ]
+        }''', 200));
+
+      final List<Moc> mocs = await service.getMocsFromSet(setNum: setNum);
+
+      expect(mocs.length, 2);
+    });
+
+    test('it should handle http errors', () async {
+      final setNum = "70672-1";
+      final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
+      when(client.get(uri, headers: _authHeader))
+          .thenAnswer((_) async => Response('not found', 404));
+
+      final List<Moc> mocs = await service.getMocsFromSet(setNum: setNum);
+
+      expect(mocs, isNull);
     });
   });
 }
