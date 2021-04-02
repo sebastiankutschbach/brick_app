@@ -62,8 +62,8 @@ main() {
 
         await tester.pumpAndSettle();
 
-        var setTileImage = find.byType(Image);
-        expect(setTileImage, findsOneWidget);
+        var setTileImageFinder = find.byType(DecoratedBox);
+        expect(setTileImageFinder, findsOneWidget);
       });
     });
   });

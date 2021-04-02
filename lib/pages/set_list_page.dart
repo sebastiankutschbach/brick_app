@@ -54,7 +54,6 @@ class SetListPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => print(brickSet.name),
       child: DecoratedBox(
-        key: ObjectKey('setTile_${brickSet.setNum}'),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
@@ -62,7 +61,7 @@ class SetListPage extends StatelessWidget {
             ),
           ),
           color: Colors.white,
-          border: Border.all(color: Colors.grey, width: 1),
+          border: Border.all(color: Colors.blueGrey, width: 1),
           borderRadius: BorderRadius.all(
             Radius.circular(16.0),
           ),
