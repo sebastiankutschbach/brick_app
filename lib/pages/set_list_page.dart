@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/set_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,8 @@ class SetListPage extends StatelessWidget {
 
   Widget _buildTile(BuildContext context, BrickSet brickSet) {
     return GestureDetector(
-      onTap: () => print(brickSet.name),
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => SetViewPage(brickSet))),
       child: DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(
