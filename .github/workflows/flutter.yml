@@ -21,7 +21,6 @@ jobs:
       with:
         package: brick_app
     - run: flutter pub get
-    - run: flutter format --set-exit-if-changed .
     - run: flutter analyze .
     - run: flutter test coverage
     - run: flutter build apk
