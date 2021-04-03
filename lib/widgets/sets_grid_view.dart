@@ -7,8 +7,9 @@ typedef OnTapFunction = void Function(dynamic);
 class SetsGridView extends StatelessWidget {
   final List<SetOrMoc> sets;
   final OnTapFunction onTap;
+  final OnTapFunction onLongPress;
 
-  SetsGridView(this.sets, this.onTap);
+  SetsGridView(this.sets, {this.onTap, this.onLongPress});
   Widget build(BuildContext context) {
     return _createSetsView(context);
   }
@@ -31,6 +32,7 @@ class SetsGridView extends StatelessWidget {
   Widget _buildTile(BuildContext context, set) {
     return GestureDetector(
       onTap: () => onTap(set),
+      onLongPress: () => onLongPress(set),
       child: DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(

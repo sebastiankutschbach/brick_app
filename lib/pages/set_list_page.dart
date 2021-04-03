@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/set_view_page.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +25,16 @@ class SetListPage extends StatelessWidget {
           child: snapshot.hasData
               ? SetsGridView(
                   snapshot.data,
-                  (argument) => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => MocPage(argument))),
+                  onTap: (argument) => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MocPage(argument),
+                    ),
+                  ),
+                  onLongPress: (argument) => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SetViewPage(argument),
+                    ),
+                  ),
                 )
               : CircularProgressIndicator(),
         ),
