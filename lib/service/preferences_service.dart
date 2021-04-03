@@ -25,6 +25,12 @@ class PreferencesService {
     _persist();
   }
 
+  String get userToken => _settings['userToken'] as String ?? '';
+  set userToken(String userToken) {
+    _settings['userToken'] = userToken;
+    _persist();
+  }
+
   void _persist() {
     _sharedPrefs.setString('settings', jsonEncode(_settings));
   }
