@@ -13,7 +13,7 @@ class SetViewPage extends StatelessWidget {
         title: Text(brickSet.name),
       ),
       body: WebView(
-        initialUrl: '${brickSet.setUrl}?inventory=1#alt_builds',
+        initialUrl: '${brickSet.url}?inventory=1#alt_builds',
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );

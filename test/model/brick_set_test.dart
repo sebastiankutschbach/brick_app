@@ -21,9 +21,9 @@ main() {
       expect(brickSet.year, 2019);
       expect(brickSet.themeId, 435);
       expect(brickSet.numParts, 221);
-      expect(brickSet.setImgUrl,
+      expect(brickSet.imgUrl,
           "https://cdn.rebrickable.com/media/sets/70672-1/12578.jpg");
-      expect(brickSet.setUrl,
+      expect(brickSet.url,
           "https://rebrickable.com/sets/70672-1/coles-dirt-bike/");
       expect(brickSet.lastModified.toIso8601String(),
           "2019-04-19T17:19:54.565420Z");
