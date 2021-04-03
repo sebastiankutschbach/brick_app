@@ -80,9 +80,9 @@ class RebrickableService {
   }
 
   Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
-    final userSetListUrl =
+    final mocsUrl =
         Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
-    final response = await _client.get(userSetListUrl, headers: createHeader());
+    final response = await _client.get(mocsUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
       log('Error getting moc for set $setNum');

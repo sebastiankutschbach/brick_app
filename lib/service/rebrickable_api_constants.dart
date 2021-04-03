@@ -13,5 +13,5 @@ UriTemplate userSetListUrlTemplate = UriTemplate(
 UriTemplate userSetListDetailsUrlTemplate = UriTemplate(
     'https://$authority$_baseUrl$_userApi/{user_token}/setlists/{list_id}/sets/');
 
-UriTemplate setMocListUrlTemplate =
-    UriTemplate('https://$authority$_baseUrl$_setsApi/{set_num}/alternates');
+UriTemplate setMocListUrlTemplate = UriTemplate(
+    'https://$authority$_baseUrl/lego$_setsApi/{set_num}/alternates');

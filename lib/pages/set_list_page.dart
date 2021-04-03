@@ -1,9 +1,11 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/set_view_page.dart';
+import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'moc_page.dart';
 
 class SetListPage extends StatelessWidget {
   final BrickSetList brickSetList;
@@ -20,7 +22,11 @@ class SetListPage extends StatelessWidget {
         ),
         body: Center(
           child: snapshot.hasData
-              ? _createSetsView(context, snapshot.data)
+              ? SetsGridView(
+                  snapshot.data,
+                  (argument) => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MocPage(argument))),
+                )
               : CircularProgressIndicator(),
         ),
       ),
@@ -34,41 +40,5 @@ class SetListPage extends StatelessWidget {
       return '(error)';
     else
       return '';
-  }
-
-  Widget _createSetsView(BuildContext context, List<BrickSet> brickSets) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: GridView.builder(
-        itemCount: brickSets.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisSpacing: 16, mainAxisSpacing: 16, crossAxisCount: 3),
-        itemBuilder: (context, index) => _buildTile(
-          context,
-          brickSets[index],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTile(BuildContext context, BrickSet brickSet) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => SetViewPage(brickSet))),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-              brickSet.setImgUrl,
-            ),
-          ),
-          color: Colors.white,
-          border: Border.all(color: Colors.blueGrey, width: 1),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.0),
-          ),
-        ),
-      ),
-    );
   }
 }
