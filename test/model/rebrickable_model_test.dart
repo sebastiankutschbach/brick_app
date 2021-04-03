@@ -1,5 +1,6 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
+import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -77,6 +78,32 @@ main() {
           .thenAnswer((_) async => [set]);
 
       expect(await model.getSetsFromList(listId: 548040), [set]);
+    });
+  });
+
+  group('getMocsFromSet', () {
+    test('all mocs retrieval', () async {
+      final String setNum = "MOC-56901";
+      final moc = Moc.fromJson(
+        {
+          "set_num": "MOC-56901",
+          "name": "cole's desert car",
+          "year": 2020,
+          "theme_id": 435,
+          "num_parts": 165,
+          "moc_img_url": "https://cdn.rebrickable.com/media/mocs/moc-56901.jpg",
+          "moc_url":
+              "https://rebrickable.com/mocs/MOC-56901/trainsrkool176/coles-desert-car/",
+          "designer_name": "trainsrkool176",
+          "designer_url": "https://rebrickable.com/users/trainsrkool176/mocs/"
+        },
+      );
+      final serviceMock = RebrickableServiceMock();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(serviceMock.getMocsFromSet(setNum: setNum))
+          .thenAnswer((_) async => [moc]);
+
+      expect(await model.getMocsFromSet(setNum: setNum), [moc]);
     });
   });
 }

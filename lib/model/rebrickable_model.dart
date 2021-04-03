@@ -1,5 +1,6 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
+import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -25,5 +26,9 @@ class RebrickableModel with ChangeNotifier {
 
   Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
     return _rebrickableService.getSetsFromList(listId: listId);
+  }
+
+  Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
+    return _rebrickableService.getMocsFromSet(setNum: setNum);
   }
 }
