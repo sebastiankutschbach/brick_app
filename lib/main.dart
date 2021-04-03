@@ -1,6 +1,5 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
-import 'package:brick_app/pages/overview_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,19 +8,24 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final preferencesService = PreferencesService();
   await preferencesService.initPreferences();
-  runApp(MyApp(preferencesService: preferencesService));
+  final rebrickableModel = RebrickableModel();
+  runApp(MyApp(
+      preferencesService: preferencesService,
+      rebrickableModel: rebrickableModel));
 }
 
 class MyApp extends StatelessWidget {
   final PreferencesService preferencesService;
-  MyApp({this.preferencesService});
+  final RebrickableModel rebrickableModel;
+
+  MyApp({this.preferencesService, this.rebrickableModel});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<RebrickableModel>(
-          create: (_) => RebrickableModel(),
+          create: (_) => rebrickableModel,
         ),
         Provider<PreferencesService>(
           create: (_) => preferencesService,
@@ -33,8 +37,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:
-            preferencesService.userToken == null ? LoginPage() : OverviewPage(),
+        home: LoginPage(),
       ),
     );
   }

@@ -22,6 +22,13 @@ class RebrickableModel with ChangeNotifier {
     return userToken;
   }
 
+  Future<String> loginWithToken(String userToken, String apiKey) async {
+    _rebrickableService.apiKey = apiKey;
+    _rebrickableService.userToken = userToken;
+    _loggedIn = true;
+    return userToken;
+  }
+
   Future<List<BrickSetList>> getUsersSetLists({int listId}) async {
     return _rebrickableService.getUsersSetList(listId: listId);
   }

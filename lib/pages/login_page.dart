@@ -17,7 +17,14 @@ class _LoginPageState extends State<LoginPage> {
   var _password = "";
 
   Widget build(BuildContext context) {
-    final apiKey = context.watch<PreferencesService>().apiKey;
+    final model = context.read<RebrickableModel>();
+    final route = MaterialPageRoute(builder: (context) => OverviewPage());
+    final apiKey = context.watch<PreferencesService>().apiKey ?? '';
+    final userToken = context.watch<PreferencesService>().userToken ?? '';
+    if (userToken.isNotEmpty && apiKey.isNotEmpty) {
+      model.loginWithToken(userToken, apiKey);
+      Future.delayed(Duration.zero, () => Navigator.of(context).push(route));
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Rebrickable Login'),
@@ -58,16 +65,12 @@ class _LoginPageState extends State<LoginPage> {
                         _showDialog('Please set your api key under settings');
                       }
                       if (_formKey.currentState.validate()) {
-                        final userToken = await context
-                            .read<RebrickableModel>()
-                            .login(_username, _password, apiKey);
+                        final userToken =
+                            await model.login(_username, _password, apiKey);
                         if (userToken != null) {
                           context.read<PreferencesService>().userToken =
                               userToken;
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OverviewPage()));
+                          Navigator.push(context, route);
                         }
                       }
                     },

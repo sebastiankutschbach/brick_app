@@ -12,11 +12,12 @@ import 'dart:async';
 class RebrickableService {
   Client _client;
   String _apiKey;
-  String _token;
+  String _userToken;
 
   set apiKey(String apiKey) => _apiKey = apiKey;
+  set userToken(String userToken) => _userToken = userToken;
 
-  bool get isAuthenticated => _token != null;
+  bool get isAuthenticated => _userToken != null;
 
   RebrickableService(this._apiKey, {Client client}) {
     this._client = client ?? Client();
@@ -30,24 +31,22 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error authenticating against rebrickable api');
       log('Status code: ${response.statusCode}');
-      log('Body: ${response.body}');
       return null;
     }
 
     final body = jsonDecode(response.body);
-    _token = body['user_token'];
-    return _token;
+    _userToken = body['user_token'];
+    return _userToken;
   }
 
   Future<List<BrickSetList>> getUsersSetList({int listId}) async {
     final userSetListUrl = Uri.parse(userSetListUrlTemplate
-        .expand({'user_token': _token, 'list_id': listId}));
+        .expand({'user_token': _userToken, 'list_id': listId}));
     final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
       log('Error getting users set list');
       log('Status code: ${response.statusCode}');
-      log('Body: ${response.body}');
       return null;
     }
 
@@ -61,13 +60,12 @@ class RebrickableService {
 
   Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
     final userSetListUrl = Uri.parse(userSetListDetailsUrlTemplate
-        .expand({'user_token': _token, 'list_id': listId}));
+        .expand({'user_token': _userToken, 'list_id': listId}));
     final response = await _client.get(userSetListUrl, headers: createHeader());
 
     if (response.statusCode != 200) {
       log('Error getting sets from list $listId');
       log('Status code: ${response.statusCode}');
-      log('Body: ${response.body}');
       return null;
     }
 
@@ -87,7 +85,6 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error getting moc for set $setNum');
       log('Status code: ${response.statusCode}');
-      log('Body: ${response.body}');
       return null;
     }
 
