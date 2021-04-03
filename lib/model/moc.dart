@@ -1,4 +1,6 @@
-class Moc {
+import 'package:brick_app/model/set_or_moc.dart';
+
+class Moc extends SetOrMoc {
   final String setNum;
   final String name;
   final int year;
