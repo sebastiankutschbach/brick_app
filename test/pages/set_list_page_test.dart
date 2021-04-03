@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/moc_page.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +10,8 @@ import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
 class RebrickableModelMock extends Mock implements RebrickableModel {}
+
+class NavigatorObserverMock extends Mock implements NavigatorObserver {}
 
 main() {
   final brickSetList = BrickSetList.fromJson(
@@ -24,19 +27,25 @@ main() {
     "last_modified_dt": "2019-04-19T17:19:54.565420Z"
   });
 
-  createApp() => ChangeNotifierProvider<RebrickableModel>(
-        create: (_) {
-          final RebrickableModelMock mock = RebrickableModelMock();
-          when(mock.getSetsFromList(listId: 521857))
-              .thenAnswer((_) async => [brickSet]);
-          return mock;
-        },
-        child: MaterialApp(
-          home: SetListPage(
-            brickSetList: brickSetList,
-          ),
+  NavigatorObserver navigatorObserver;
+
+  createApp() {
+    navigatorObserver = NavigatorObserverMock();
+    return ChangeNotifierProvider<RebrickableModel>(
+      create: (_) {
+        final RebrickableModelMock mock = RebrickableModelMock();
+        when(mock.getSetsFromList(listId: 521857))
+            .thenAnswer((_) async => [brickSet]);
+        return mock;
+      },
+      child: MaterialApp(
+        home: SetListPage(
+          brickSetList: brickSetList,
         ),
-      );
+        navigatorObservers: [navigatorObserver],
+      ),
+    );
+  }
 
   group('app bar', () {
     testWidgets('does show the name of the set list in the app bar',
@@ -64,6 +73,19 @@ main() {
 
         var setTileImageFinder = find.byType(DecoratedBox);
         expect(setTileImageFinder, findsOneWidget);
+      });
+    });
+
+    testWidgets('does navigate to moc page on tap',
+        (WidgetTester tester) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createApp());
+
+        await tester.pump();
+
+        var setTileImageFinder = find.byType(DecoratedBox);
+        await tester.tap(setTileImageFinder.first);
+        verify(navigatorObserver.didPush(any, any)).called(2);
       });
     });
   });
