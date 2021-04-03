@@ -12,22 +12,25 @@ class PreferencesServiceMock extends Mock implements PreferencesService {}
 
 class NavigatorObserverMock extends Mock implements NavigatorObserver {}
 
+final userToken = 'myUserToken';
+
 void main() {
   createApp(bool loginSuccess,
           {RebrickableModelMock rebrickableModelMock,
-          NavigatorObserverMock navigatorObserverMock}) =>
+          NavigatorObserverMock navigatorObserverMock,
+          PreferencesService preferencesService}) =>
       MultiProvider(
         providers: [
           ChangeNotifierProvider<RebrickableModel>(create: (context) {
             final modelMock = rebrickableModelMock ?? RebrickableModelMock();
             when(modelMock.login('username', 'password', 'apiKey'))
-                .thenAnswer((_) async => loginSuccess);
+                .thenAnswer((_) async => loginSuccess ? userToken : null);
             return modelMock;
           }),
           Provider<PreferencesService>(create: (_) {
             final service = PreferencesServiceMock();
             when(service.apiKey).thenReturn('apiKey');
-            return service;
+            return preferencesService ?? service;
           }),
         ],
         child: MaterialApp(
@@ -88,42 +91,40 @@ void main() {
       await tester.enterText(find.byKey(Key('password')), 'password');
       await tester.tap(find.byKey(Key('login')));
 
-      await tester.pump(const Duration(seconds: 3));
+      await tester.pump();
 
       verify(rebrickableModelMock.login('username', 'password', 'apiKey'));
     });
 
-    group('navigation test', () {
-      testWidgets('Navigates to overview page when login was successful',
-          (WidgetTester tester) async {
-        final modelMock = RebrickableModelMock();
-        final observerMock = NavigatorObserverMock();
-        when(modelMock.login('username', 'password', 'apiKey'))
-            .thenAnswer((_) async => true);
-        await tester.pumpWidget(MaterialApp(
-            home: createApp(true,
-                rebrickableModelMock: modelMock,
-                navigatorObserverMock: observerMock)));
+    testWidgets('Persists user token on successful login',
+        (WidgetTester tester) async {
+      final rebrickableModelMock = RebrickableModelMock();
+      final preferencesService = PreferencesServiceMock();
+      when(preferencesService.apiKey).thenReturn('apiKey');
+      await tester.pumpWidget(MaterialApp(
+          home: createApp(true,
+              rebrickableModelMock: rebrickableModelMock,
+              preferencesService: preferencesService)));
 
-        await tester.enterText(find.byKey(Key('username')), 'username');
-        await tester.enterText(find.byKey(Key('password')), 'password');
-        await tester.tap(find.byKey(Key('login')));
+      await tester.enterText(find.byKey(Key('username')), 'username');
+      await tester.enterText(find.byKey(Key('password')), 'password');
+      await tester.tap(find.byKey(Key('login')));
 
-        await tester.pump(const Duration(seconds: 3));
+      await tester.pump();
 
-        verify(observerMock.didPush(captureAny, any)).called(2);
-      });
+      verify(preferencesService.userToken = userToken);
     });
+  });
 
-    testWidgets(
-        'Does not navigate to overview page when login was unsuccessful',
+  group('navigation test', () {
+    testWidgets('Navigates to overview page when login was successful',
         (WidgetTester tester) async {
       final modelMock = RebrickableModelMock();
       final observerMock = NavigatorObserverMock();
       when(modelMock.login('username', 'password', 'apiKey'))
-          .thenAnswer((_) async => false);
+          .thenAnswer((_) async => userToken);
       await tester.pumpWidget(MaterialApp(
-          home: createApp(false,
+          home: createApp(true,
               rebrickableModelMock: modelMock,
               navigatorObserverMock: observerMock)));
 
@@ -131,9 +132,27 @@ void main() {
       await tester.enterText(find.byKey(Key('password')), 'password');
       await tester.tap(find.byKey(Key('login')));
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
-      verify(observerMock.didPush(captureAny, any)).called(1);
+      verify(observerMock.didPush(captureAny, any)).called(2);
     });
+  });
+
+  testWidgets('Does not navigate to overview page when login was unsuccessful',
+      (WidgetTester tester) async {
+    final modelMock = RebrickableModelMock();
+    final observerMock = NavigatorObserverMock();
+    await tester.pumpWidget(MaterialApp(
+        home: createApp(false,
+            rebrickableModelMock: modelMock,
+            navigatorObserverMock: observerMock)));
+
+    await tester.enterText(find.byKey(Key('username')), 'username');
+    await tester.enterText(find.byKey(Key('password')), 'password');
+    await tester.tap(find.byKey(Key('login')));
+
+    await tester.pump();
+
+    verify(observerMock.didPush(captureAny, any)).called(1);
   });
 }

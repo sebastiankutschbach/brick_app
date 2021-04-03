@@ -44,7 +44,7 @@ void main() {
           .thenAnswer(
               (_) async => Response('{"user_token": "validtoken"}', 200));
 
-      expect(await service.authenticate('username', 'password'), isTrue);
+      expect(await service.authenticate('username', 'password'), isNotNull);
       expect(service.isAuthenticated, isTrue);
     });
 
@@ -56,7 +56,7 @@ void main() {
           .thenAnswer(
               (_) async => Response('{"detail": "Invalid credentials"}', 403));
 
-      expect(await service.authenticate('invalid', 'invalid'), isFalse);
+      expect(await service.authenticate('invalid', 'invalid'), isNull);
       expect(service.isAuthenticated, isFalse);
     });
   });

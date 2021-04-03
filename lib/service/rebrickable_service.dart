@@ -22,7 +22,7 @@ class RebrickableService {
     this._client = client ?? Client();
   }
 
-  Future<bool> authenticate(String username, String password) async {
+  Future<String> authenticate(String username, String password) async {
     final response = await _client.post(userTokenUrl,
         headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
         body: 'username=$username&password=$password');
@@ -31,12 +31,12 @@ class RebrickableService {
       log('Error authenticating against rebrickable api');
       log('Status code: ${response.statusCode}');
       log('Body: ${response.body}');
-      return false;
+      return null;
     }
 
     final body = jsonDecode(response.body);
     _token = body['user_token'];
-    return _token != null;
+    return _token;
   }
 
   Future<List<BrickSetList>> getUsersSetList({int listId}) async {

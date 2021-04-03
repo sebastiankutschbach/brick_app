@@ -8,23 +8,25 @@ import 'package:mockito/mockito.dart';
 
 class RebrickableServiceMock extends Mock implements RebrickableService {}
 
+final userToken = 'myUserToken';
+
 main() {
   group('login', () {
     test('login successfully', () async {
       final serviceMock = RebrickableServiceMock();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
-          .thenAnswer((_) async => true);
+          .thenAnswer((_) async => userToken);
 
-      expect(await model.login('username', 'password', 'apiKey'), true);
+      expect(await model.login('username', 'password', 'apiKey'), userToken);
     });
     test('login failed', () async {
       final serviceMock = RebrickableServiceMock();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
-          .thenAnswer((_) async => false);
+          .thenAnswer((_) async => null);
 
-      expect(await model.login('username', 'password', 'apiKey'), false);
+      expect(await model.login('username', 'password', 'apiKey'), isNull);
     });
   });
 

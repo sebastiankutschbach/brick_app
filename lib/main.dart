@@ -1,5 +1,6 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
+import 'package:brick_app/pages/overview_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),
+        home:
+            preferencesService.userToken == null ? LoginPage() : OverviewPage(),
       ),
     );
   }

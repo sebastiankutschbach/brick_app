@@ -58,10 +58,12 @@ class _LoginPageState extends State<LoginPage> {
                         _showDialog('Please set your api key under settings');
                       }
                       if (_formKey.currentState.validate()) {
-                        final success = await context
+                        final userToken = await context
                             .read<RebrickableModel>()
                             .login(_username, _password, apiKey);
-                        if (success) {
+                        if (userToken != null) {
+                          context.read<PreferencesService>().userToken =
+                              userToken;
                           Navigator.push(
                               context,
                               MaterialPageRoute(

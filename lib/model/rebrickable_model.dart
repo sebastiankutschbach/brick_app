@@ -14,10 +14,12 @@ class RebrickableModel with ChangeNotifier {
     this._rebrickableService = rebrickableService ?? RebrickableService('');
   }
 
-  Future<bool> login(String username, String password, String apiKey) async {
+  Future<String> login(String username, String password, String apiKey) async {
     _rebrickableService.apiKey = apiKey;
-    _loggedIn = await _rebrickableService.authenticate(username, password);
-    return _loggedIn;
+    final userToken =
+        await _rebrickableService.authenticate(username, password);
+    _loggedIn = userToken != null;
+    return userToken;
   }
 
   Future<List<BrickSetList>> getUsersSetLists({int listId}) async {
