@@ -1,6 +1,5 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/overview_page.dart';
-import 'package:brick_app/pages/settings_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
@@ -30,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: BrickAppBar(
         Text('Rebrickable Login'),
+        showLogoutButton: false,
       ),
       body: Center(
         child: Padding(
@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (apiKey == null || apiKey.isEmpty) {
                         _showDialog('Please set your api key under settings');
+                        return;
                       }
                       if (_formKey.currentState.validate()) {
                         try {

@@ -34,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 decoration: InputDecoration(
                   labelText: 'API Key',
                 ),
+                onSaved: (value) => _preferencesService.apiKey = value,
                 onChanged: (value) => _preferencesService.apiKey = value,
               ),
             ),
