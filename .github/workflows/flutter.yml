@@ -28,16 +28,10 @@ jobs:
       with:
         name: release-apk
         path: build/app/outputs/apk/release/app-release.apk
-  report-coverage:
-    runs-on: ubuntu-latest
-    steps:
     - uses: codecov/codecov-action@v1.0.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage/lcov.info
-  release-artifact:
-    runs-on: ubuntu-latest
-    steps:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
