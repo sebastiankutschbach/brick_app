@@ -22,7 +22,7 @@ jobs:
         package: brick_app
     - run: flutter pub get
     - run: flutter analyze .
-    - run: flutter test coverage
+    - run: flutter test --coverage
     - run: flutter build apk
     - uses: actions/upload-artifact@v1
       with:
