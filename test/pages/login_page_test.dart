@@ -1,6 +1,7 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
+import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -46,7 +47,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
-      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byType(BrickAppBar), findsOneWidget);
       expect(find.text('Rebrickable Login'), findsOneWidget);
 
       expect(find.byKey(Key('username')), findsOneWidget);

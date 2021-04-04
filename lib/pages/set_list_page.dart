@@ -2,6 +2,7 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_view_page.dart';
+import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +19,8 @@ class SetListPage extends StatelessWidget {
           .read<RebrickableModel>()
           .getSetsFromList(listId: brickSetList.id),
       builder: (context, snapshot) => Scaffold(
-        appBar: AppBar(
-          title: Text('${brickSetList.name} ${_getTitleIndicator(snapshot)}'),
+        appBar: BrickAppBar(
+          Text('${brickSetList.name} ${_getTitleIndicator(snapshot)}'),
         ),
         body: Center(
           child: snapshot.hasData

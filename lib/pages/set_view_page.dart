@@ -1,4 +1,5 @@
 import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -9,8 +10,8 @@ class SetViewPage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(brickSet.name),
+      appBar: BrickAppBar(
+        Text(brickSet.name),
       ),
       body: WebView(
         initialUrl: '${brickSet.url}?inventory=1#alt_builds',

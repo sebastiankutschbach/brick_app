@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
+import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
@@ -56,7 +57,8 @@ void main() {
           .thenAnswer(
               (_) async => Response('{"detail": "Invalid credentials"}', 403));
 
-      expect(await service.authenticate('invalid', 'invalid'), isNull);
+      expect(service.authenticate('invalid', 'invalid'),
+          throwsA(isA<RebrickableApiException>()));
       expect(service.isAuthenticated, isFalse);
     });
   });
@@ -156,10 +158,8 @@ void main() {
       when(client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
 
-      final List<BrickSet> brickSets =
-          await service.getSetsFromList(listId: 548040);
-
-      expect(brickSets, isNull);
+      expect(service.getSetsFromList(listId: 548040),
+          throwsA(isA<RebrickableApiException>()));
     });
   });
 
@@ -213,9 +213,8 @@ void main() {
       when(client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
 
-      final List<Moc> mocs = await service.getMocsFromSet(setNum: setNum);
-
-      expect(mocs, isNull);
+      expect(service.getMocsFromSet(setNum: setNum),
+          throwsA(isA<RebrickableApiException>()));
     });
   });
 }

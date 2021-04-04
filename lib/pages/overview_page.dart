@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
+import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,8 @@ class OverviewPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
-              appBar: AppBar(
-                title: Text('My Set Lists (${snapshot.data.length})'),
+              appBar: BrickAppBar(
+                Text('My Set Lists (${snapshot.data.length})'),
               ),
               body: Center(
                 child: _createListView(snapshot.data),

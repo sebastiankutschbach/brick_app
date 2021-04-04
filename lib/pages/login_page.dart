@@ -2,6 +2,8 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/overview_page.dart';
 import 'package:brick_app/pages/settings_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
+import 'package:brick_app/service/rebrickable_api_exception.dart';
+import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,11 +28,8 @@ class _LoginPageState extends State<LoginPage> {
       Future.delayed(Duration.zero, () => Navigator.of(context).push(route));
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Rebrickable Login'),
-        actions: [
-          _createSettingsButton(),
-        ],
+      appBar: BrickAppBar(
+        Text('Rebrickable Login'),
       ),
       body: Center(
         child: Padding(
@@ -65,12 +64,16 @@ class _LoginPageState extends State<LoginPage> {
                         _showDialog('Please set your api key under settings');
                       }
                       if (_formKey.currentState.validate()) {
-                        final userToken =
-                            await model.login(_username, _password, apiKey);
-                        if (userToken != null) {
-                          context.read<PreferencesService>().userToken =
-                              userToken;
-                          Navigator.push(context, route);
+                        try {
+                          final userToken =
+                              await model.login(_username, _password, apiKey);
+                          if (userToken != null) {
+                            context.read<PreferencesService>().userToken =
+                                userToken;
+                            Navigator.push(context, route);
+                          }
+                        } on RebrickableApiException catch (e) {
+                          _showDialog('Login failed: ${e.message}');
                         }
                       }
                     },
@@ -83,15 +86,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  IconButton _createSettingsButton() {
-    return IconButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SettingsPage()));
-        },
-        icon: Icon(Icons.settings));
   }
 
   Future<void> _showDialog(message) async {

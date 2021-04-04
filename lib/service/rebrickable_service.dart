@@ -5,6 +5,7 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
+import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'dart:async';
@@ -31,7 +32,7 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error authenticating against rebrickable api');
       log('Status code: ${response.statusCode}');
-      return null;
+      throw RebrickableApiException(response.statusCode);
     }
 
     final body = jsonDecode(response.body);
@@ -47,7 +48,7 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error getting users set list');
       log('Status code: ${response.statusCode}');
-      return null;
+      throw RebrickableApiException(response.statusCode);
     }
 
     final body = jsonDecode(response.body);
@@ -66,7 +67,7 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error getting sets from list $listId');
       log('Status code: ${response.statusCode}');
-      return null;
+      throw RebrickableApiException(response.statusCode);
     }
 
     final body = jsonDecode(response.body);
@@ -85,7 +86,7 @@ class RebrickableService {
     if (response.statusCode != 200) {
       log('Error getting moc for set $setNum');
       log('Status code: ${response.statusCode}');
-      return null;
+      throw RebrickableApiException(response.statusCode);
     }
 
     final body = jsonDecode(response.body);
