@@ -61,7 +61,8 @@ class _LoginPageState extends State<LoginPage> {
                     key: Key('login'),
                     onPressed: () async {
                       if (apiKey == null || apiKey.isEmpty) {
-                        _showDialog('Please set your api key under settings');
+                        _showDialog('API Key not set',
+                            'Please set your api key under settings');
                         return;
                       }
                       if (_formKey.currentState.validate()) {
@@ -74,7 +75,8 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(context, route);
                           }
                         } on RebrickableApiException catch (e) {
-                          _showDialog('Login failed: ${e.message}');
+                          _showDialog(
+                              'Login failed', 'Error code: ${e.message}');
                         }
                       }
                     },
@@ -89,12 +91,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _showDialog(message) async {
+  Future<void> _showDialog(String title, String message) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('API Key not set'),
+          title: Text(title),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

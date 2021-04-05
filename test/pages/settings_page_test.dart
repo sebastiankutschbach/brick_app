@@ -10,7 +10,7 @@ import '../mocks.dart';
 main() {
   final preferencesServiceMock = PreferencesServiceMock();
   final app = MaterialApp(
-    home: Provider<PreferencesService>(
+    home: ChangeNotifierProvider<PreferencesService>(
       create: (context) => preferencesServiceMock,
       child: SettingsPage(),
     ),

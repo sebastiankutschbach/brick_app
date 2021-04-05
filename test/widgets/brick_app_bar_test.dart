@@ -15,7 +15,7 @@ main() {
   }) =>
       MultiProvider(
         providers: [
-          Provider<PreferencesService>(
+          ChangeNotifierProvider<PreferencesService>(
             create: (_) => preferencesServiceMock ?? PreferencesServiceMock(),
           ),
         ],

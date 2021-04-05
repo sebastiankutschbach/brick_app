@@ -24,7 +24,7 @@ void main() {
                 .thenAnswer((_) async => loginSuccess ? userToken : null);
             return modelMock;
           }),
-          Provider<PreferencesService>(create: (_) {
+          ChangeNotifierProvider<PreferencesService>(create: (_) {
             final service = PreferencesServiceMock();
             when(service.apiKey).thenReturn('apiKey');
             return preferencesService ?? service;

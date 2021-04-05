@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferencesService {
+class PreferencesService extends ChangeNotifier {
   SharedPreferences _sharedPrefs;
   Map<String, dynamic> _settings;
 
@@ -15,6 +16,7 @@ class PreferencesService {
 
   set(String key, String value) {
     _sharedPrefs.setString(key, value);
+    notifyListeners();
   }
 
   String get(String key) => _sharedPrefs.getString(key);
@@ -23,15 +25,17 @@ class PreferencesService {
   set apiKey(String apiKey) {
     _settings['apiKey'] = apiKey;
     _persist();
+    notifyListeners();
   }
 
   String get userToken => _settings['userToken'] as String ?? '';
   set userToken(String userToken) {
     _settings['userToken'] = userToken;
     _persist();
+    notifyListeners();
   }
 
-  void _persist() {
-    _sharedPrefs.setString('settings', jsonEncode(_settings));
+  Future<void> _persist() async {
+    await _sharedPrefs.setString('settings', jsonEncode(_settings));
   }
 }

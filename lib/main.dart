@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<RebrickableModel>(
           create: (_) => rebrickableModel,
         ),
-        Provider<PreferencesService>(
+        ChangeNotifierProvider<PreferencesService>(
           create: (_) => preferencesService,
           lazy: false,
         )
