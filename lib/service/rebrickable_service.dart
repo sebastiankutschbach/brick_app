@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/moc.dart';
+import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,36 +44,20 @@ class RebrickableService {
   Future<List<BrickSetList>> getUsersSetList({int listId}) async {
     final userSetListUrl = Uri.parse(userSetListUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
-    final response = await _client.get(userSetListUrl, headers: createHeader());
+    var results =
+        await getPaginated(_client, userSetListUrl, headers: createHeader());
 
-    if (response.statusCode != 200) {
-      log('Error getting users set list');
-      log('Status code: ${response.statusCode}');
-      throw RebrickableApiException(response.statusCode);
-    }
-
-    final body = jsonDecode(response.body);
-
-    var results = body['results'] as List;
     return results
         .map((json) => BrickSetList.fromJson(json))
         .toList(growable: false);
   }
 
   Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
-    final userSetListUrl = Uri.parse(userSetListDetailsUrlTemplate
+    final userSetListDetailsUrl = Uri.parse(userSetListDetailsUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
-    final response = await _client.get(userSetListUrl, headers: createHeader());
+    var results = await getPaginated(_client, userSetListDetailsUrl,
+        headers: createHeader());
 
-    if (response.statusCode != 200) {
-      log('Error getting sets from list $listId');
-      log('Status code: ${response.statusCode}');
-      throw RebrickableApiException(response.statusCode);
-    }
-
-    final body = jsonDecode(response.body);
-
-    var results = body['results'] as List;
     return results
         .map((json) => BrickSet.fromJson(json['set']))
         .toList(growable: false);
@@ -81,17 +66,8 @@ class RebrickableService {
   Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
     final mocsUrl =
         Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
-    final response = await _client.get(mocsUrl, headers: createHeader());
+    var results = await getPaginated(_client, mocsUrl, headers: createHeader());
 
-    if (response.statusCode != 200) {
-      log('Error getting moc for set $setNum');
-      log('Status code: ${response.statusCode}');
-      throw RebrickableApiException(response.statusCode);
-    }
-
-    final body = jsonDecode(response.body);
-
-    var results = body['results'] as List;
     return results.map((json) => Moc.fromJson(json)).toList(growable: false);
   }
 
