@@ -1,13 +1,9 @@
 import 'package:brick_app/main.dart';
-import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
-import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class PreferencesServiceMock extends Mock implements PreferencesService {}
-
-class RebrickableModelMock extends Mock implements RebrickableModel {}
+import 'mocks.dart';
 
 main() {
   group('login', () {

@@ -7,11 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-class RebrickableModelMock extends Mock implements RebrickableModel {}
-
-class PreferencesServiceMock extends Mock implements PreferencesService {}
-
-class NavigatorObserverMock extends Mock implements NavigatorObserver {}
+import '../mocks.dart';
 
 final userToken = 'myUserToken';
 

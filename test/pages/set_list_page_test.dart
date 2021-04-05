@@ -8,9 +8,7 @@ import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
-class RebrickableModelMock extends Mock implements RebrickableModel {}
-
-class NavigatorObserverMock extends Mock implements NavigatorObserver {}
+import '../mocks.dart';
 
 main() {
   final brickSetList = BrickSetList.fromJson(

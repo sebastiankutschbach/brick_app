@@ -26,7 +26,9 @@ main() {
               showLogoutButton: showLogoutButton,
             ),
           ),
-          navigatorObservers: [navigatorObserverMock],
+          navigatorObservers: [
+            navigatorObserverMock ?? NavigatorObserverMock()
+          ],
         ),
       );
 

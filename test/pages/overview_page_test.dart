@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-class RebrickableModelMock extends Mock implements RebrickableModel {}
+import '../mocks.dart';
 
 main() {
   createApp({List<BrickSetList> brickSets}) =>

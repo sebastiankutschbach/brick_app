@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-class PreferencesServiceMock extends Mock implements PreferencesService {}
+import '../mocks.dart';
 
 main() {
   final preferencesServiceMock = PreferencesServiceMock();

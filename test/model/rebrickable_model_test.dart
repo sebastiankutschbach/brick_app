@@ -3,11 +3,10 @@ import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
-import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-class RebrickableServiceMock extends Mock implements RebrickableService {}
+import '../mocks.dart';
 
 final userToken = 'myUserToken';
 
