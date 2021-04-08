@@ -1,5 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
+import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
+import 'package:brick_app/model/part.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
@@ -215,6 +217,64 @@ void main() {
 
       expect(service.getMocsFromSet(setNum: setNum),
           throwsA(isA<RebrickableApiException>()));
+    });
+
+    group('inventories of set', () {
+      setUp(() async {
+        _setUpAuthenticatedServiceMock();
+      });
+
+      test('it should retrieve inventories for a set', () async {
+        final setNum = "70672-1";
+        final uri =
+            Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
+        when(client.get(uri, headers: _authHeader))
+            .thenAnswer((_) async => Response('''{
+            "count": 2,
+            "next": null,
+            "previous": null,
+            "results": [
+              {
+                "set_num": "MOC-56901",
+                "name": "cole's desert car",
+                "year": 2020,
+                "theme_id": 435,
+                "num_parts": 165,
+                "moc_img_url": "https://cdn.rebrickable.com/media/mocs/moc-56901.jpg",
+                "moc_url": "https://rebrickable.com/mocs/MOC-56901/trainsrkool176/coles-desert-car/",
+                "designer_name": "trainsrkool176",
+                "designer_url": "https://rebrickable.com/users/trainsrkool176/mocs/"
+              },
+              {
+                "set_num": "MOC-69836",
+                "name": "Cole´s Stone Bike",
+                "year": 2021,
+                "theme_id": 435,
+                "num_parts": 195,
+                "moc_img_url": "https://cdn.rebrickable.com/media/mocs/moc-69836.jpg",
+                "moc_url": "https://rebrickable.com/mocs/MOC-69836/dorianbricktron/cole-s-stone-bike/",
+                "designer_name": "dorianbricktron",
+                "designer_url": "https://rebrickable.com/users/dorianbricktron/mocs/"
+              }
+            ]
+          }''', 200));
+
+        final List<Inventory> inventories =
+            await service.getInventoriesOfSet(setNum: setNum);
+
+        expect(inventories.length, 2);
+      });
+
+      test('it should handle http errors', () async {
+        final setNum = "70672-1";
+        final uri =
+            Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
+        when(client.get(uri, headers: _authHeader))
+            .thenAnswer((_) async => Response('not found', 404));
+
+        expect(service.getInventoriesOfSet(setNum: setNum),
+            throwsA(isA<RebrickableApiException>()));
+      });
     });
   });
 }

@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
+import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
+import 'package:brick_app/model/part.dart';
 import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
@@ -69,6 +71,16 @@ class RebrickableService {
     var results = await getPaginated(_client, mocsUrl, headers: createHeader());
 
     return results.map((json) => Moc.fromJson(json)).toList(growable: false);
+  }
+
+  Future<List<Inventory>> getInventoriesOfSet({@required String setNum}) async {
+    final mocsUrl =
+        Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
+    var results = await getPaginated(_client, mocsUrl, headers: createHeader());
+
+    return results
+        .map((json) => Inventory.fromJson(json))
+        .toList(growable: false);
   }
 
   Map<String, String> createHeader({String contentType}) {
