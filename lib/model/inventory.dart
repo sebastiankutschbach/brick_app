@@ -1,3 +1,4 @@
+import 'package:brick_app/model/color.dart';
 import 'package:brick_app/model/part.dart';
 
 class Inventory {
@@ -6,6 +7,7 @@ class Inventory {
   final String setNum;
   final int quantity;
   final Part part;
+  final Color color;
   final bool isSpare;
   final String elementId;
   final int numSets;
@@ -16,6 +18,7 @@ class Inventory {
         setNum = json['set_num'],
         quantity = json['quantity'],
         part = Part.fromJson(json['part']),
+        color = Color.fromJson(json['color']),
         isSpare = json['is_spare'] == 'true',
         elementId = json['element_id'],
         numSets = json['num_sets'];

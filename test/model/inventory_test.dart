@@ -11,6 +11,7 @@ main() {
       expect(inventory.setNum, "8063-1");
       expect(inventory.quantity, 3);
       expect(inventory.part, isNotNull);
+      expect(inventory.color, isNotNull);
       expect(inventory.isSpare, false);
       expect(inventory.elementId, "614326");
       expect(inventory.numSets, 364);
