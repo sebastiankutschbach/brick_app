@@ -5,7 +5,6 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
-import 'package:brick_app/model/part.dart';
 import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
