@@ -79,30 +79,24 @@ class SetsGridView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _createButton(
-                context,
-                Icons.menu_book,
-                MaterialPageRoute(
-                  settings: RouteSettings(name: 'setRoute'),
-                  builder: (context) => SetViewPage(set),
-                ),
+                context: context,
+                iconData: Icons.menu_book,
+                routeName: 'setRoute',
+                builder: (context) => SetViewPage(set),
               ),
               _createDivider(),
               _createButton(
-                context,
-                Icons.star,
-                MaterialPageRoute(
-                  settings: RouteSettings(name: 'mocsRoute'),
-                  builder: (context) => MocPage(set),
-                ),
+                context: context,
+                iconData: Icons.star,
+                routeName: 'mocsRoute',
+                builder: (context) => MocPage(set),
               ),
               _createDivider(),
               _createButton(
-                context,
-                Icons.grain,
-                MaterialPageRoute(
-                  settings: RouteSettings(name: 'partsRoute'),
-                  builder: (context) => PartList(set),
-                ),
+                context: context,
+                iconData: Icons.grain,
+                routeName: 'partsRoute',
+                builder: (context) => PartList(set),
               ),
             ],
           ),
@@ -110,12 +104,20 @@ class SetsGridView extends StatelessWidget {
       );
 
   Widget _createButton(
-          BuildContext context, IconData iconData, MaterialPageRoute route) =>
+          {@required BuildContext context,
+          @required IconData iconData,
+          @required builder,
+          @required String routeName}) =>
       Expanded(
         flex: 4,
         child: IconButton(
           icon: Icon(iconData, color: Colors.white),
-          onPressed: () => Navigator.of(context).push(route),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              settings: RouteSettings(name: routeName),
+              builder: builder,
+            ),
+          ),
         ),
       );
 
