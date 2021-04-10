@@ -14,7 +14,7 @@ class SetViewPage extends StatelessWidget {
         Text(brickSet.name),
       ),
       body: WebView(
-        initialUrl: '$brickSet.url',
+        initialUrl: brickSet.url,
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );
