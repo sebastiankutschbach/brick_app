@@ -1,5 +1,6 @@
 import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/pages/moc_page.dart';
+import 'package:brick_app/pages/set_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -79,35 +80,41 @@ class SetsGridView extends StatelessWidget {
               _createButton(
                 context,
                 Icons.menu_book,
-                (context) => MocPage(set),
+                MaterialPageRoute(
+                  settings: RouteSettings(name: 'setRoute'),
+                  builder: (context) => MocPage(set),
+                ),
               ),
               _createDivider(),
               _createButton(
                 context,
                 Icons.star,
-                (context) => MocPage(set),
+                MaterialPageRoute(
+                  settings: RouteSettings(name: 'mocsRoute'),
+                  builder: (context) => MocPage(set),
+                ),
               ),
               _createDivider(),
               _createButton(
                 context,
                 Icons.grain,
-                (context) => MocPage(set),
+                MaterialPageRoute(
+                  settings: RouteSettings(name: 'partsRoute'),
+                  builder: (context) => MocPage(set),
+                ),
               ),
             ],
           ),
         ),
       );
 
-  Widget _createButton(BuildContext context, IconData iconData, builder) =>
+  Widget _createButton(
+          BuildContext context, IconData iconData, MaterialPageRoute route) =>
       Expanded(
         flex: 4,
         child: IconButton(
           icon: Icon(iconData, color: Colors.white),
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: builder,
-            ),
-          ),
+          onPressed: () => Navigator.of(context).push(route),
         ),
       );
 

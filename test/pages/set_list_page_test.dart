@@ -44,6 +44,18 @@ main() {
     );
   }
 
+  void _verifyCorrectRouting(String routeName) {
+    List<MaterialPageRoute> pushedRoutes =
+        verify(navigatorObserver.didPush(captureAny, any))
+            .captured
+            .cast<MaterialPageRoute>();
+    expect(
+        pushedRoutes
+            .where((element) => element.settings.name == routeName)
+            .length,
+        1);
+  }
+
   group('app bar', () {
     testWidgets('does show the name of the set list in the app bar',
         (tester) async {
@@ -82,7 +94,7 @@ main() {
 
         var setTileImageFinder = find.byIcon(Icons.menu_book);
         await tester.tap(setTileImageFinder.first);
-        verify(navigatorObserver.didPush(any, any)).called(2);
+        _verifyCorrectRouting('setRoute');
       });
     });
 
@@ -95,7 +107,8 @@ main() {
 
         var setTileImageFinder = find.byIcon(Icons.grain);
         await tester.tap(setTileImageFinder.first);
-        verify(navigatorObserver.didPush(any, any)).called(2);
+
+        _verifyCorrectRouting('partsRoute');
       });
     });
 
@@ -108,7 +121,7 @@ main() {
 
         var setTileImageFinder = find.byIcon(Icons.star);
         await tester.tap(setTileImageFinder.first);
-        verify(navigatorObserver.didPush(any, any)).called(2);
+        _verifyCorrectRouting('mocsRoute');
       });
     });
   });
