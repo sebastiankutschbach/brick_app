@@ -1,5 +1,6 @@
 import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/pages/moc_page.dart';
+import 'package:brick_app/pages/part_list.dart';
 import 'package:brick_app/pages/set_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class SetsGridView extends StatelessWidget {
                 Icons.menu_book,
                 MaterialPageRoute(
                   settings: RouteSettings(name: 'setRoute'),
-                  builder: (context) => MocPage(set),
+                  builder: (context) => SetViewPage(set),
                 ),
               ),
               _createDivider(),
@@ -100,7 +101,7 @@ class SetsGridView extends StatelessWidget {
                 Icons.grain,
                 MaterialPageRoute(
                   settings: RouteSettings(name: 'partsRoute'),
-                  builder: (context) => MocPage(set),
+                  builder: (context) => PartList(set),
                 ),
               ),
             ],
