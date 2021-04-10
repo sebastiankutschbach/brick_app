@@ -7,8 +7,10 @@ import 'package:flutter/cupertino.dart';
 class RebrickableModel with ChangeNotifier {
   RebrickableService _rebrickableService;
   bool _loggedIn = false;
+  BrickSet _selectedBrickSet;
 
   bool get isLoggedIn => _loggedIn;
+  BrickSet get selectedBrickSet => _selectedBrickSet;
 
   RebrickableModel({RebrickableService rebrickableService}) {
     this._rebrickableService = rebrickableService ?? RebrickableService('');

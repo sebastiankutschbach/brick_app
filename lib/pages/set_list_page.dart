@@ -1,13 +1,10 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/set_view_page.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'moc_page.dart';
 
 class SetListPage extends StatelessWidget {
   final BrickSetList brickSetList;
@@ -26,16 +23,7 @@ class SetListPage extends StatelessWidget {
           child: snapshot.hasData
               ? SetsGridView(
                   snapshot.data,
-                  onTap: (argument) => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MocPage(argument),
-                    ),
-                  ),
-                  onLongPress: (argument) => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SetViewPage(argument),
-                    ),
-                  ),
+                  withButtons: true,
                 )
               : CircularProgressIndicator(),
         ),

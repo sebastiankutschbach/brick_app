@@ -68,8 +68,34 @@ main() {
 
         await tester.pumpAndSettle();
 
-        var setTileImageFinder = find.byType(DecoratedBox);
+        var setTileImageFinder = find.byType(Image);
         expect(setTileImageFinder, findsOneWidget);
+      });
+    });
+
+    testWidgets('does navigate to set home page on tap',
+        (WidgetTester tester) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createApp());
+
+        await tester.pump();
+
+        var setTileImageFinder = find.byIcon(Icons.menu_book);
+        await tester.tap(setTileImageFinder.first);
+        verify(navigatorObserver.didPush(any, any)).called(2);
+      });
+    });
+
+    testWidgets('does navigate to parts page on tap',
+        (WidgetTester tester) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createApp());
+
+        await tester.pump();
+
+        var setTileImageFinder = find.byIcon(Icons.grain);
+        await tester.tap(setTileImageFinder.first);
+        verify(navigatorObserver.didPush(any, any)).called(2);
       });
     });
 
@@ -80,7 +106,7 @@ main() {
 
         await tester.pump();
 
-        var setTileImageFinder = find.byType(DecoratedBox);
+        var setTileImageFinder = find.byIcon(Icons.star);
         await tester.tap(setTileImageFinder.first);
         verify(navigatorObserver.didPush(any, any)).called(2);
       });

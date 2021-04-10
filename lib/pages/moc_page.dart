@@ -23,7 +23,10 @@ class MocPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             snapshot.data.forEach((moc) => log(moc.name));
-            return SetsGridView(snapshot.data);
+            return SetsGridView(
+              snapshot.data,
+              withButtons: false,
+            );
           } else {
             return CircularProgressIndicator();
           }
