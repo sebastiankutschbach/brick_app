@@ -92,7 +92,7 @@ main() {
 
         await tester.pump();
 
-        var setTileImageFinder = find.byIcon(Icons.menu_book);
+        var setTileImageFinder = find.byType(Image);
         await tester.tap(setTileImageFinder.first);
         _verifyCorrectRouting('setRoute');
       });

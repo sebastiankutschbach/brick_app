@@ -1,20 +1,19 @@
-import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class SetViewPage extends StatelessWidget {
-  final BrickSet brickSet;
+class WebViewPage extends StatelessWidget {
+  final String url;
 
-  SetViewPage(this.brickSet);
+  WebViewPage(this.url);
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BrickAppBar(
-        Text(brickSet.name),
+        Text('Rebrickable'),
       ),
       body: WebView(
-        initialUrl: brickSet.url,
+        initialUrl: url,
         javascriptMode: JavascriptMode.unrestricted,
       ),
     );

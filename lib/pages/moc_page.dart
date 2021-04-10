@@ -22,7 +22,6 @@ class MocPage extends StatelessWidget {
         future: service.getMocsFromSet(setNum: brickSet.setNum),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            snapshot.data.forEach((moc) => log(moc.name));
             return SetsGridView(
               snapshot.data,
               withButtons: false,

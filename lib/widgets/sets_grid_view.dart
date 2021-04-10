@@ -1,7 +1,7 @@
 import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/pages/moc_page.dart';
 import 'package:brick_app/pages/part_list.dart';
-import 'package:brick_app/pages/set_view_page.dart';
+import 'package:brick_app/pages/web_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,26 +40,34 @@ class SetsGridView extends StatelessWidget {
   }
 
   Widget _buildTile(BuildContext context, set) {
-    return DecoratedBox(
-      key: ObjectKey('tile_${set.setNum}'),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Theme.of(context).accentColor, width: 2),
-        borderRadius: BorderRadius.all(
-          Radius.circular(16.0),
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          settings: RouteSettings(name: 'setRoute'),
+          builder: (_) => WebViewPage(set.url),
         ),
       ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: withButtons ? 8 : 1,
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Image.network(set.imgUrl),
-            ),
+      child: DecoratedBox(
+        key: ObjectKey('tile_${set.setNum}'),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Theme.of(context).accentColor, width: 2),
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
           ),
-          withButtons ? _createButtons(context, set) : Container(),
-        ],
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              flex: withButtons ? 8 : 1,
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Image.network(set.imgUrl),
+              ),
+            ),
+            withButtons ? _createButtons(context, set) : Container(),
+          ],
+        ),
       ),
     );
   }
@@ -78,13 +86,6 @@ class SetsGridView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _createButton(
-                context: context,
-                iconData: Icons.menu_book,
-                routeName: 'setRoute',
-                builder: (context) => SetViewPage(set),
-              ),
-              _createDivider(),
               _createButton(
                 context: context,
                 iconData: Icons.star,
@@ -124,7 +125,7 @@ class SetsGridView extends StatelessWidget {
   Widget _createDivider() => Expanded(
         flex: 2,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          padding: const EdgeInsets.all(2),
           child: VerticalDivider(
             color: Colors.white,
           ),

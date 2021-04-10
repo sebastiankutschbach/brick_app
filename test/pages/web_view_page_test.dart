@@ -1,5 +1,5 @@
 import 'package:brick_app/model/brick_set.dart';
-import 'package:brick_app/pages/set_view_page.dart';
+import 'package:brick_app/pages/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,8 +16,8 @@ main() {
   });
 
   createApp() => MaterialApp(
-        home: SetViewPage(
-          brickSet,
+        home: WebViewPage(
+          brickSet.url,
         ),
       );
 
@@ -33,7 +33,7 @@ main() {
           .single
           .widget as Text;
 
-      expect(textInAppBar.data, startsWith("Cole's Dirt Bike"));
+      expect(textInAppBar.data, 'Rebrickable');
     });
   });
 }
