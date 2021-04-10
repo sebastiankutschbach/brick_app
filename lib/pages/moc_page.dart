@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
