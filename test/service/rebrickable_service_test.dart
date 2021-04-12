@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
@@ -9,6 +11,7 @@ import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../mocks.dart';
 import 'rebrickable_service_test.mocks.dart';
 
 @GenerateMocks([Client])
@@ -171,6 +174,28 @@ void main() {
 
       expect(service.getInventoriesOfSet(setNum: setNum),
           throwsA(isA<RebrickableApiException>()));
+    });
+  });
+
+  group('moc instructions', () {
+    setUp(() async {
+      _setUpAuthenticatedServiceMock();
+    });
+
+    test('it should retrieve pdf url for a moc', () async {
+      final moc = MocMock();
+      final mocUrl = Uri.parse('https://myawesome.mock');
+      final html = await get(Uri.parse(
+          'https://rebrickable.com/mocs/MOC-22588/LegoMechable/70652-storm-dragon-mech/#details'));
+      when(moc.url).thenReturn(mocUrl.toString());
+      when(client.get(mocUrl)).thenAnswer((_) async => html);
+
+      final mocInstructionUrl = await service.getMocInstructionUrl(moc: moc);
+
+      expect(
+          mocInstructionUrl,
+          startsWith(
+              'https://rebrickable.com/users/Rebrickable/mocs/purchases/download/'));
     });
   });
 }

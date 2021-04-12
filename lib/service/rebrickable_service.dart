@@ -9,6 +9,7 @@ import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'dart:async';
 
@@ -80,6 +81,18 @@ class RebrickableService {
     return results
         .map((json) => Inventory.fromJson(json))
         .toList(growable: false);
+  }
+
+  Future<String> getMocInstructionUrl({Moc moc}) async {
+    var response = await _client.get(Uri.parse(moc.url));
+    var document = parse(response.body);
+    final selectors = document.querySelectorAll('div > a');
+
+    final pdfUrl = selectors
+        .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
+    return pdfUrl != null
+        ? 'https://rebrickable.com${pdfUrl.attributes["href"]}'
+        : null;
   }
 
   Map<String, String> createHeader({String contentType}) {
