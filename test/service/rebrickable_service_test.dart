@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
