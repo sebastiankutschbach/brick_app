@@ -46,6 +46,8 @@ class PartList extends StatelessWidget {
         leading: Text('${inventory.quantity}x'),
         title: Text('${inventory.part.name}'),
         subtitle: Text('${inventory.partId}'),
-        trailing: Image.network(inventory.part.partImgUrl),
+        trailing: inventory.part.partImgUrl == null
+            ? Text("Image n/a") // TODO can be replaced with image e.g.
+            : Image.network(inventory.part.partImgUrl),
       );
 }
