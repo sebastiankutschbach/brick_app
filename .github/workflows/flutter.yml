@@ -24,10 +24,15 @@ jobs:
     - run: flutter analyze .
     - run: flutter test --coverage
     - run: flutter build apk
+    - run: flutter build web --release
     - uses: actions/upload-artifact@v1
       with:
         name: release-apk
         path: build/app/outputs/apk/release/app-release.apk
+    - uses: actions/upload-artifact@v1
+      with:
+        name: release-web
+        path: build/web
     - uses: codecov/codecov-action@v1.0.2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
