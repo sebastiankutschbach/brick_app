@@ -19,7 +19,7 @@ class Inventory {
         quantity = json['quantity'],
         part = Part.fromJson(json['part']),
         color = Color.fromJson(json['color']),
-        isSpare = json['is_spare'] == 'true',
+        isSpare = json['is_spare'] == true,
         elementId = json['element_id'],
         numSets = json['num_sets'];
 }
