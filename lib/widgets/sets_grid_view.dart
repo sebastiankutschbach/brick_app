@@ -3,7 +3,9 @@ import 'package:brick_app/pages/moc_page.dart';
 import 'package:brick_app/pages/part_list.dart';
 import 'package:brick_app/pages/web_view_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef OnTapCallback = void Function(dynamic);
 
@@ -41,12 +43,7 @@ class SetsGridView extends StatelessWidget {
 
   Widget _buildTile(BuildContext context, set) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          settings: RouteSettings(name: 'setRoute'),
-          builder: (_) => WebViewPage(set.url),
-        ),
-      ),
+      onTap: () => _openUrl(context, set.url),
       child: DecoratedBox(
         key: ObjectKey('tile_${set.setNum}'),
         decoration: BoxDecoration(
@@ -131,4 +128,13 @@ class SetsGridView extends StatelessWidget {
           ),
         ),
       );
+
+  void _openUrl(BuildContext context, String url) {
+    kIsWeb
+        ? launch(url)
+        : Navigator.of(context).push(MaterialPageRoute(
+            settings: RouteSettings(name: 'setRoute'),
+            builder: (_) => WebViewPage(url),
+          ));
+  }
 }
