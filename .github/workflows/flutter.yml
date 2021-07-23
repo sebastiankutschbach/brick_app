@@ -18,8 +18,6 @@ jobs:
       with:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '2.0.4'
     - uses: stelynx/dart-full-coverage@v1.0.3
       with:
         package: brick_app
