@@ -9,9 +9,7 @@ import 'package:provider/provider.dart';
 class OverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future:
-            //Future.delayed(Duration(milliseconds: 10), () => []),
-            context.read<RebrickableModel>().getUsersSetLists(),
+        future: context.read<RebrickableModel>().getUsersSetLists(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
