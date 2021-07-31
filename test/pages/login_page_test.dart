@@ -4,29 +4,35 @@ import 'package:brick_app/service/preferences_service.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
+import 'login_page_test.mocks.dart';
 
 final userToken = 'myUserToken';
 
+@GenerateMocks([RebrickableModel, PreferencesService],
+    customMocks: [MockSpec<NavigatorObserver>(returnNullOnMissingStub: true)])
 void main() {
   createApp(bool loginSuccess,
-          {RebrickableModelMock? rebrickableModelMock,
-          NavigatorObserverMock? navigatorObserverMock,
+          {MockRebrickableModel? rebrickableModelMock,
+          MockNavigatorObserver? navigatorObserverMock,
           PreferencesService? preferencesService}) =>
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<RebrickableModel>(create: (context) {
-            final modelMock = rebrickableModelMock ?? RebrickableModelMock();
+          ChangeNotifierProvider<RebrickableModel>(create: (_) {
+            final modelMock = rebrickableModelMock ?? MockRebrickableModel();
             when(modelMock.login('username', 'password', 'apiKey'))
+                .thenAnswer((_) async => loginSuccess ? userToken : '');
+            when(modelMock.loginWithToken('userToken', 'apiKey'))
                 .thenAnswer((_) async => loginSuccess ? userToken : '');
             return modelMock;
           }),
           ChangeNotifierProvider<PreferencesService>(create: (_) {
-            final service = PreferencesServiceMock();
-            when(service.apiKey).thenReturn('apiKey');
+            final service = MockPreferencesService();
+            when(service.apiKey).thenReturn('');
+            when(service.userToken).thenReturn('');
             return preferencesService ?? service;
           }),
         ],
@@ -80,7 +86,7 @@ void main() {
   group('login test', () {
     testWidgets('Tries to login when username and password given',
         (WidgetTester tester) async {
-      final rebrickableModelMock = RebrickableModelMock();
+      final rebrickableModelMock = MockRebrickableModel();
       await tester.pumpWidget(MaterialApp(
           home: createApp(true, rebrickableModelMock: rebrickableModelMock)));
 
@@ -95,8 +101,8 @@ void main() {
 
     testWidgets('Persists user token on successful login',
         (WidgetTester tester) async {
-      final rebrickableModelMock = RebrickableModelMock();
-      final preferencesService = PreferencesServiceMock();
+      final rebrickableModelMock = MockRebrickableModel();
+      final preferencesService = MockPreferencesService();
       when(preferencesService.apiKey).thenReturn('apiKey');
       await tester.pumpWidget(MaterialApp(
           home: createApp(true,
@@ -116,8 +122,8 @@ void main() {
   group('navigation test', () {
     testWidgets('Navigates to overview page when login was successful',
         (WidgetTester tester) async {
-      final modelMock = RebrickableModelMock();
-      final observerMock = NavigatorObserverMock();
+      final modelMock = MockRebrickableModel();
+      final observerMock = MockNavigatorObserver();
       when(modelMock.login('username', 'password', 'apiKey'))
           .thenAnswer((_) async => userToken);
       await tester.pumpWidget(MaterialApp(
@@ -138,8 +144,8 @@ void main() {
 
   testWidgets('Does not navigate to overview page when login was unsuccessful',
       (WidgetTester tester) async {
-    final modelMock = RebrickableModelMock();
-    final observerMock = NavigatorObserverMock();
+    final modelMock = MockRebrickableModel();
+    final observerMock = MockNavigatorObserver();
     await tester.pumpWidget(MaterialApp(
         home: createApp(false,
             rebrickableModelMock: modelMock,

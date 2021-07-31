@@ -2,21 +2,24 @@ import 'package:brick_app/service/preferences_service.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
+import 'brick_app_bar_test.mocks.dart';
 
+@GenerateMocks([PreferencesService],
+    customMocks: [MockSpec<NavigatorObserver>(returnNullOnMissingStub: true)])
 main() {
   Widget _createApp({
-    PreferencesServiceMock? preferencesServiceMock,
-    NavigatorObserverMock? navigatorObserverMock,
+    MockPreferencesService? preferencesServiceMock,
+    MockNavigatorObserver? navigatorObserverMock,
     bool showLogoutButton = true,
   }) =>
       MultiProvider(
         providers: [
           ChangeNotifierProvider<PreferencesService>(
-            create: (_) => preferencesServiceMock ?? PreferencesServiceMock(),
+            create: (_) => preferencesServiceMock ?? MockPreferencesService(),
           ),
         ],
         child: MaterialApp(
@@ -27,7 +30,7 @@ main() {
             ),
           ),
           navigatorObservers: [
-            navigatorObserverMock ?? NavigatorObserverMock()
+            navigatorObserverMock ?? MockNavigatorObserver()
           ],
         ),
       );
@@ -50,7 +53,7 @@ main() {
     });
 
     testWidgets('logout triggers reset of user_token', (tester) async {
-      final preferencesServiceMock = PreferencesServiceMock();
+      final preferencesServiceMock = MockPreferencesService();
       await tester.pumpWidget(
           _createApp(preferencesServiceMock: preferencesServiceMock));
 
@@ -64,7 +67,7 @@ main() {
   group('settings', () {
     testWidgets('tap on settings button navigates to settings page',
         (tester) async {
-      final observerMock = NavigatorObserverMock();
+      final observerMock = MockNavigatorObserver();
       await tester.pumpWidget(_createApp(navigatorObserverMock: observerMock));
 
       await tester.tap(find.byKey(ObjectKey('brickAppBarSettings')));

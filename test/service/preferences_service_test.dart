@@ -18,7 +18,7 @@ main() {
 
   test('universal get', () {
     expect(_preferencesService.get('testKey'), 'testValue');
-    expect(_preferencesService.get('notExistingKey'), isNull);
+    expect(_preferencesService.get('notExistingKey'), '');
   });
 
   group('api key', () {

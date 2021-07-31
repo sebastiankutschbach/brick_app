@@ -9,10 +9,9 @@ import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../mocks.dart';
 import 'rebrickable_service_test.mocks.dart';
 
-@GenerateMocks([Client])
+@GenerateMocks([Client, Moc])
 void main() {
   final String _apiKey = 'apiKey';
   final Map<String, String> _authHeader = {'Authorization': 'key $_apiKey'};
@@ -183,7 +182,7 @@ void main() {
     });
 
     test('it should retrieve pdf url for a moc', () async {
-      final moc = MocMock();
+      final moc = MockMoc();
       final mocUrl = Uri.parse('https://myawesome.mock');
       final html = await get(Uri.parse(
           'https://rebrickable.com/mocs/MOC-22588/LegoMechable/70652-storm-dragon-mech/#details'));

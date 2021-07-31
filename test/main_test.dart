@@ -1,19 +1,24 @@
 import 'package:brick_app/main.dart';
+import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
+import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'mocks.dart';
+import 'main_test.mocks.dart';
 
+@GenerateMocks([PreferencesService, RebrickableModel])
 main() {
   group('login', () {
     testWidgets('login page is shown when user token is not yet persisted',
         (tester) async {
-      final preferencesService = PreferencesServiceMock();
+      final preferencesService = MockPreferencesService();
       when(preferencesService.userToken).thenReturn('');
+      when(preferencesService.apiKey).thenReturn('');
       await tester.pumpWidget(MyApp(
         preferencesService: preferencesService,
-        rebrickableModel: RebrickableModelMock(),
+        rebrickableModel: MockRebrickableModel(),
       ));
 
       expect(find.byType(LoginPage), findsOneWidget);
@@ -22,12 +27,14 @@ main() {
     testWidgets(
         'login page does redirect directly when user token is persisted',
         (tester) async {
-      final preferencesService = PreferencesServiceMock();
-      final rebrickableModel = RebrickableModelMock();
+      final preferencesService = MockPreferencesService();
+      final rebrickableModel = MockRebrickableModel();
       when(preferencesService.apiKey).thenReturn('apiKey');
       when(preferencesService.userToken).thenReturn('myUserToken');
       when(rebrickableModel.loginWithToken('myUserToken', 'apiKey'))
           .thenAnswer((_) async => 'myUserToken');
+      when(rebrickableModel.getUsersSetLists())
+          .thenAnswer((_) async => Future.value([]));
       await tester.pumpWidget(MyApp(
           preferencesService: preferencesService,
           rebrickableModel: rebrickableModel));

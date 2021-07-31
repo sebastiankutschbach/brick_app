@@ -4,7 +4,7 @@ class Part {
   final int partCatId;
   final String partUrl;
   final String partImgUrl;
-  final String printOf;
+  final String? printOf;
 
   Part.fromJson(Map<String, dynamic> json)
       : partNum = json['part_num'],

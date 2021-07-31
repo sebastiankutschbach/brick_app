@@ -2,13 +2,15 @@ import 'package:brick_app/pages/settings_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
+import 'settings_page_test.mocks.dart';
 
+@GenerateMocks([PreferencesService])
 main() {
-  final preferencesServiceMock = PreferencesServiceMock();
+  final preferencesServiceMock = MockPreferencesService();
   final app = MaterialApp(
     home: ChangeNotifierProvider<PreferencesService>(
       create: (context) => preferencesServiceMock,

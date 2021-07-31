@@ -4,12 +4,15 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
+import 'set_list_page_test.mocks.dart';
 
+@GenerateMocks([RebrickableModel],
+    customMocks: [MockSpec<NavigatorObserver>(returnNullOnMissingStub: true)])
 main() {
   final brickSetList = BrickSetList.fromJson(
       {"id": 521857, "is_buildable": true, "name": "Set List", "num_sets": 1});
@@ -27,10 +30,10 @@ main() {
   NavigatorObserver navigatorObserver;
 
   createApp() {
-    navigatorObserver = NavigatorObserverMock();
+    navigatorObserver = MockNavigatorObserver();
     return ChangeNotifierProvider<RebrickableModel>(
       create: (_) {
-        final RebrickableModelMock mock = RebrickableModelMock();
+        final RebrickableModel mock = MockRebrickableModel();
         when(mock.getSetsFromList(listId: 521857))
             .thenAnswer((_) async => [brickSet]);
         return mock;

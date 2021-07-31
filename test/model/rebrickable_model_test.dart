@@ -3,17 +3,20 @@ import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
+import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../mocks.dart';
+import 'rebrickable_model_test.mocks.dart';
 
 final userToken = 'myUserToken';
 
+@GenerateMocks([RebrickableService])
 main() {
   group('login', () {
     test('login successfully', () async {
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => userToken);
@@ -22,7 +25,7 @@ main() {
     });
 
     test('login failed', () async {
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.authenticate('username', 'password'))
           .thenThrow(RebrickableApiException('message'));
@@ -40,7 +43,7 @@ main() {
         "name": "Set List",
         "num_sets": 23
       });
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getUsersSetList()).thenAnswer((_) async => [setList]);
 
@@ -54,7 +57,7 @@ main() {
         "name": "Set List",
         "num_sets": 23
       });
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getUsersSetList(listId: 521857))
           .thenAnswer((_) async => [setList]);
@@ -63,7 +66,7 @@ main() {
     });
 
     test('set lists retrieval failed', () async {
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getUsersSetList(listId: 521857))
           .thenThrow(RebrickableApiException('message'));
@@ -86,7 +89,7 @@ main() {
         "set_url": "https://rebrickable.com/sets/70672-1/coles-dirt-bike/",
         "last_modified_dt": "2019-04-19T17:19:54.565420Z"
       });
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getSetsFromList(listId: 548040))
           .thenAnswer((_) async => [set]);
@@ -95,7 +98,7 @@ main() {
     });
 
     test('all sets retrieval failed', () async {
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getSetsFromList(listId: 548040))
           .thenThrow(RebrickableApiException('message'));
@@ -122,7 +125,7 @@ main() {
           "designer_url": "https://rebrickable.com/users/trainsrkool176/mocs/"
         },
       );
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getMocsFromSet(setNum: setNum))
           .thenAnswer((_) async => [moc]);
@@ -132,7 +135,7 @@ main() {
 
     test('all mocs retrieval failed', () async {
       final String setNum = "MOC-56901";
-      final serviceMock = RebrickableServiceMock();
+      final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(serviceMock.getMocsFromSet(setNum: setNum))
           .thenThrow(RebrickableApiException('message'));

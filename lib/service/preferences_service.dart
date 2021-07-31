@@ -21,14 +21,14 @@ class PreferencesService extends ChangeNotifier {
 
   String get(String key) => _sharedPrefs.getString(key) ?? '';
 
-  String get apiKey => _settings['apiKey'];
+  String get apiKey => _settings['apiKey'] ?? '';
   set apiKey(String apiKey) {
     _settings['apiKey'] = apiKey;
     _persist();
     notifyListeners();
   }
 
-  String get userToken => _settings['userToken'];
+  String get userToken => _settings['userToken'] ?? '';
   set userToken(String userToken) {
     _settings['userToken'] = userToken;
     _persist();
