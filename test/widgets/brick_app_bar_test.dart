@@ -2,14 +2,11 @@ import 'package:brick_app/service/preferences_service.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-import 'brick_app_bar_test.mocks.dart';
+import '../mocks.dart';
 
-@GenerateMocks([PreferencesService],
-    customMocks: [MockSpec<NavigatorObserver>(returnNullOnMissingStub: true)])
 main() {
   Widget _createApp({
     MockPreferencesService? preferencesServiceMock,
@@ -35,6 +32,10 @@ main() {
         ),
       );
 
+  setUpAll(() {
+    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+  });
+
   group('logout', () {
     testWidgets('logout button is not shown if showLogoutButton is false',
         (tester) async {
@@ -59,8 +60,7 @@ main() {
 
       await tester.tap(find.byKey(ObjectKey('brickAppBarLogout')));
 
-      fail('fix line below');
-      //verify(preferencesServiceMock.userToken = null).called(1);
+      verify(() => preferencesServiceMock.userToken = '').called(1);
     });
   });
 
@@ -68,13 +68,16 @@ main() {
     testWidgets('tap on settings button navigates to settings page',
         (tester) async {
       final observerMock = MockNavigatorObserver();
-      await tester.pumpWidget(_createApp(navigatorObserverMock: observerMock));
+      final preferencesServiceMock = MockPreferencesService();
+      when(() => preferencesServiceMock.apiKey).thenReturn('');
+      await tester.pumpWidget(_createApp(
+          navigatorObserverMock: observerMock,
+          preferencesServiceMock: preferencesServiceMock));
 
       await tester.tap(find.byKey(ObjectKey('brickAppBarSettings')));
       await tester.pump();
 
-      fail('fix line below');
-      //verify(observerMock.didPush(captureAny, any)).called(2);
+      verify(() => observerMock.didPush(captureAny(), any())).called(2);
     });
   });
 }

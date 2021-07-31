@@ -3,7 +3,7 @@ class Part {
   final String name;
   final int partCatId;
   final String partUrl;
-  final String partImgUrl;
+  final String? partImgUrl;
   final String? printOf;
 
   Part.fromJson(Map<String, dynamic> json)

@@ -6,12 +6,10 @@ import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'rebrickable_service_test.mocks.dart';
+import '../mocks.dart';
 
-@GenerateMocks([Client, Moc])
 void main() {
   final String _apiKey = 'apiKey';
   final Map<String, String> _authHeader = {'Authorization': 'key $_apiKey'};
@@ -26,7 +24,7 @@ void main() {
     client = MockClient();
     service = RebrickableService(client: client);
     service.apiKey = 'apiKey';
-    when(client.post(userTokenUrl,
+    when(() => client.post(userTokenUrl,
             headers: _authHeaderWithContentType,
             body: 'username=username&password=password'))
         .thenAnswer((_) async => Response('{"user_token": "validtoken"}', 200));
@@ -42,19 +40,19 @@ void main() {
     });
 
     test('it should have a token set on successful authentication', () async {
-      when(client.post(userTokenUrl,
+      when(() => client.post(userTokenUrl,
               headers: _authHeaderWithContentType,
               body: 'username=username&password=password'))
           .thenAnswer(
               (_) async => Response('{"user_token": "validtoken"}', 200));
 
-      expect(await service.authenticate('username', 'password'), isNotNull);
+      expect(await service.authenticate('username', 'password'), isNotEmpty);
       expect(service.isAuthenticated, isTrue);
     });
 
     test('it should not have a token set on unsuccessful authentication',
         () async {
-      when(client.post(userTokenUrl,
+      when(() => client.post(userTokenUrl,
               headers: _authHeaderWithContentType,
               body: 'username=invalid&password=invalid'))
           .thenAnswer(
@@ -72,10 +70,11 @@ void main() {
     });
 
     test('it should retrieve the users set lists', () async {
-      when(client.get(
-        Uri.parse(userSetListUrlTemplate.expand({'user_token': 'validtoken'})),
-        headers: _authHeader,
-      )).thenAnswer((_) async => Response(aSetListList, 200));
+      when(() => client.get(
+            Uri.parse(
+                userSetListUrlTemplate.expand({'user_token': 'validtoken'})),
+            headers: _authHeader,
+          )).thenAnswer((_) async => Response(aSetListList, 200));
 
       expect((await service.getUsersSetList()).length, 1);
     });
@@ -84,7 +83,7 @@ void main() {
       final id = 521857;
       final uri = Uri.parse(userSetListUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(aSingleSetListList, 200));
 
       expect((await service.getUsersSetList(listId: 521857)).first.id, 521857);
@@ -100,7 +99,7 @@ void main() {
       final id = 548040;
       final uri = Uri.parse(userSetListDetailsUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(aSingleSet, 200));
 
       final List<BrickSet> brickSets =
@@ -113,7 +112,7 @@ void main() {
       final id = 548040;
       final uri = Uri.parse(userSetListDetailsUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
 
       expect(service.getSetsFromList(listId: 548040),
@@ -129,7 +128,7 @@ void main() {
     test('it should retrieve mocs for a set', () async {
       final setNum = "70672-1";
       final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(aMocList, 200));
 
       final List<Moc> mocs = await service.getMocsFromSet(setNum: setNum);
@@ -140,7 +139,7 @@ void main() {
     test('it should handle http errors', () async {
       final setNum = "70672-1";
       final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
 
       expect(service.getMocsFromSet(setNum: setNum),
@@ -156,7 +155,7 @@ void main() {
     test('it should retrieve inventories for a set', () async {
       final setNum = "70672-1";
       final uri = Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(anInventoryList, 200));
 
       final List<Inventory> inventories =
@@ -168,7 +167,7 @@ void main() {
     test('it should handle http errors', () async {
       final setNum = "70672-1";
       final uri = Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
-      when(client.get(uri, headers: _authHeader))
+      when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
 
       expect(service.getInventoriesOfSet(setNum: setNum),
@@ -186,8 +185,8 @@ void main() {
       final mocUrl = Uri.parse('https://myawesome.mock');
       final html = await get(Uri.parse(
           'https://rebrickable.com/mocs/MOC-22588/LegoMechable/70652-storm-dragon-mech/#details'));
-      when(moc.url).thenReturn(mocUrl.toString());
-      when(client.get(mocUrl)).thenAnswer((_) async => html);
+      when(() => moc.url).thenReturn(mocUrl.toString());
+      when(() => client.get(mocUrl)).thenAnswer((_) async => html);
 
       final mocInstructionUrl = await service.getMocInstructionUrl(moc: moc);
 

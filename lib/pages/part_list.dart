@@ -49,7 +49,7 @@ class PartList extends StatelessWidget {
         subtitle: Text('${inventory.part.partNum}'),
         trailing: inventory.part.partImgUrl == null
             ? Text("Image n/a") // TODO can be replaced with image e.g.
-            : Image.network(inventory.part.partImgUrl),
+            : Image.network(inventory.part.partImgUrl!),
         tileColor: inventory.isSpare ? Color(0xFFEEEEEE) : Colors.white,
       );
 }

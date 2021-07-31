@@ -20,7 +20,7 @@ class RebrickableService {
   set apiKey(String apiKey) => _apiKey = apiKey;
   set userToken(String userToken) => _userToken = userToken;
 
-  bool get isAuthenticated => _userToken.isEmpty;
+  bool get isAuthenticated => _userToken.isNotEmpty;
 
   RebrickableService({Client? client}) {
     this._client = client ?? Client();

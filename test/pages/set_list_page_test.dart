@@ -4,15 +4,12 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'set_list_page_test.mocks.dart';
+import '../mocks.dart';
 
-@GenerateMocks([RebrickableModel],
-    customMocks: [MockSpec<NavigatorObserver>(returnNullOnMissingStub: true)])
 main() {
   final brickSetList = BrickSetList.fromJson(
       {"id": 521857, "is_buildable": true, "name": "Set List", "num_sets": 1});
@@ -27,14 +24,18 @@ main() {
     "last_modified_dt": "2019-04-19T17:19:54.565420Z"
   });
 
-  NavigatorObserver navigatorObserver;
+  late NavigatorObserver navigatorObserver;
+
+  setUpAll(() {
+    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+  });
 
   createApp() {
     navigatorObserver = MockNavigatorObserver();
     return ChangeNotifierProvider<RebrickableModel>(
       create: (_) {
         final RebrickableModel mock = MockRebrickableModel();
-        when(mock.getSetsFromList(listId: 521857))
+        when(() => mock.getSetsFromList(listId: 521857))
             .thenAnswer((_) async => [brickSet]);
         return mock;
       },
@@ -48,16 +49,15 @@ main() {
   }
 
   void _verifyCorrectRouting(String routeName) {
-    fail('fix line below');
-    // List<MaterialPageRoute> pushedRoutes =
-    //     verify(navigatorObserver.didPush(captureAny, any))
-    //         .captured
-    //         .cast<MaterialPageRoute>();
-    // expect(
-    //     pushedRoutes
-    //         .where((element) => element.settings.name == routeName)
-    //         .length,
-    //     1);
+    List<MaterialPageRoute> pushedRoutes =
+        verify(() => navigatorObserver.didPush(captureAny(), any()))
+            .captured
+            .cast<MaterialPageRoute>();
+    expect(
+        pushedRoutes
+            .where((element) => element.settings.name == routeName)
+            .length,
+        1);
   }
 
   group('app bar', () {

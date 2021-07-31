@@ -2,23 +2,23 @@ import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:uri/uri.dart';
 
-import 'rebrickable_service_test.mocks.dart';
+import '../mocks.dart';
 
-@GenerateMocks([Client])
 main() {
   group('pagination', () {
     test('loads next page until "next" field is not null', () async {
       final client = MockClient();
       final urlTemplate = UriTemplate('https://myUrl{?page}');
-      when(client.get(Uri.parse(urlTemplate.expand({}))))
+      when(() => client.get(Uri.parse(urlTemplate.expand({})), headers: {}))
           .thenAnswer((_) async => Response(firstUrlResponseBody, 200));
-      when(client.get(Uri.parse(urlTemplate.expand({'page': 2}))))
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 2})), headers: {}))
           .thenAnswer((_) async => Response(secondUrlResponseBody, 200));
-      when(client.get(Uri.parse(urlTemplate.expand({'page': 3}))))
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 3})), headers: {}))
           .thenAnswer((_) async => Response(thirdUrlResponseBody, 200));
 
       final result =
@@ -33,11 +33,13 @@ main() {
         () async {
       final client = MockClient();
       final urlTemplate = UriTemplate('https://myUrl{?page}');
-      when(client.get(Uri.parse(urlTemplate.expand({}))))
+      when(() => client.get(Uri.parse(urlTemplate.expand({})), headers: {}))
           .thenAnswer((_) async => Response(firstUrlResponseBody, 200));
-      when(client.get(Uri.parse(urlTemplate.expand({'page': 2}))))
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 2})), headers: {}))
           .thenAnswer((_) async => Response(secondUrlResponseBody, 200));
-      when(client.get(Uri.parse(urlTemplate.expand({'page': 3}))))
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 3})), headers: {}))
           .thenAnswer((_) async => Response(thirdUrlResponseBody, 404));
 
       expect(getPaginated(client, Uri.parse(urlTemplate.expand({}))),

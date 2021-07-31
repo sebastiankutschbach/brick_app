@@ -5,19 +5,18 @@ import 'package:brick_app/pages/part_list.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
+import '../mocks.dart';
 import '../model/inventory_test.dart';
-import 'part_list_test.mocks.dart';
 
-@GenerateMocks([RebrickableModel])
 main() {
   createApp() {
     final RebrickableModel rebrickableModelMock = MockRebrickableModel();
-    when(rebrickableModelMock.getInventoriesOfSet(setNum: brickSet.setNum))
+    when(() =>
+            rebrickableModelMock.getInventoriesOfSet(setNum: brickSet.setNum))
         .thenAnswer((_) async => inventoryList);
     return ChangeNotifierProvider<RebrickableModel>(
       create: (_) => rebrickableModelMock,

@@ -3,22 +3,19 @@ import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
-import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'rebrickable_model_test.mocks.dart';
+import '../mocks.dart';
 
 final userToken = 'myUserToken';
 
-@GenerateMocks([RebrickableService])
 main() {
   group('login', () {
     test('login successfully', () async {
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.authenticate('username', 'password'))
+      when(() => serviceMock.authenticate('username', 'password'))
           .thenAnswer((_) async => userToken);
 
       expect(await model.login('username', 'password', 'apiKey'), userToken);
@@ -27,7 +24,7 @@ main() {
     test('login failed', () async {
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.authenticate('username', 'password'))
+      when(() => serviceMock.authenticate('username', 'password'))
           .thenThrow(RebrickableApiException('message'));
 
       expect(model.login('username', 'password', 'apiKey'),
@@ -45,7 +42,8 @@ main() {
       });
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getUsersSetList()).thenAnswer((_) async => [setList]);
+      when(() => serviceMock.getUsersSetList())
+          .thenAnswer((_) async => [setList]);
 
       expect(await model.getUsersSetLists(), [setList]);
     });
@@ -59,7 +57,7 @@ main() {
       });
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getUsersSetList(listId: 521857))
+      when(() => serviceMock.getUsersSetList(listId: 521857))
           .thenAnswer((_) async => [setList]);
 
       expect(await model.getUsersSetLists(listId: 521857), [setList]);
@@ -68,7 +66,7 @@ main() {
     test('set lists retrieval failed', () async {
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getUsersSetList(listId: 521857))
+      when(() => serviceMock.getUsersSetList(listId: 521857))
           .thenThrow(RebrickableApiException('message'));
 
       expect(model.getUsersSetLists(listId: 521857),
@@ -91,7 +89,7 @@ main() {
       });
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getSetsFromList(listId: 548040))
+      when(() => serviceMock.getSetsFromList(listId: 548040))
           .thenAnswer((_) async => [set]);
 
       expect(await model.getSetsFromList(listId: 548040), [set]);
@@ -100,7 +98,7 @@ main() {
     test('all sets retrieval failed', () async {
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getSetsFromList(listId: 548040))
+      when(() => serviceMock.getSetsFromList(listId: 548040))
           .thenThrow(RebrickableApiException('message'));
 
       expect(model.getSetsFromList(listId: 548040),
@@ -127,7 +125,7 @@ main() {
       );
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getMocsFromSet(setNum: setNum))
+      when(() => serviceMock.getMocsFromSet(setNum: setNum))
           .thenAnswer((_) async => [moc]);
 
       expect(await model.getMocsFromSet(setNum: setNum), [moc]);
@@ -137,7 +135,7 @@ main() {
       final String setNum = "MOC-56901";
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
-      when(serviceMock.getMocsFromSet(setNum: setNum))
+      when(() => serviceMock.getMocsFromSet(setNum: setNum))
           .thenThrow(RebrickableApiException('message'));
 
       expect(model.getMocsFromSet(setNum: setNum),

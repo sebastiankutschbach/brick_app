@@ -3,19 +3,17 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/overview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-import 'overview_page_test.mocks.dart';
+import '../mocks.dart';
 
-@GenerateMocks([RebrickableModel])
 main() {
   createApp({List<BrickSetList>? brickSets}) =>
       ChangeNotifierProvider<RebrickableModel>(
         create: (_) {
           final mock = MockRebrickableModel();
-          when(mock.getUsersSetLists())
+          when(() => mock.getUsersSetLists())
               .thenAnswer((_) async => brickSets ?? []);
           return mock;
         },
