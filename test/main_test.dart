@@ -10,8 +10,11 @@ main() {
     testWidgets('login page is shown when user token is not yet persisted',
         (tester) async {
       final preferencesService = PreferencesServiceMock();
-      when(preferencesService.userToken).thenReturn(null);
-      await tester.pumpWidget(MyApp(preferencesService: preferencesService));
+      when(preferencesService.userToken).thenReturn('');
+      await tester.pumpWidget(MyApp(
+        preferencesService: preferencesService,
+        rebrickableModel: RebrickableModelMock(),
+      ));
 
       expect(find.byType(LoginPage), findsOneWidget);
     });

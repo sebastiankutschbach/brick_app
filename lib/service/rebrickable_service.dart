@@ -8,22 +8,21 @@ import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'dart:async';
 
 class RebrickableService {
-  Client _client;
-  String _apiKey;
-  String _userToken;
+  late Client _client;
+  String _apiKey = '';
+  String _userToken = '';
 
   set apiKey(String apiKey) => _apiKey = apiKey;
   set userToken(String userToken) => _userToken = userToken;
 
-  bool get isAuthenticated => _userToken != null;
+  bool get isAuthenticated => _userToken.isEmpty;
 
-  RebrickableService(this._apiKey, {Client client}) {
+  RebrickableService({Client? client}) {
     this._client = client ?? Client();
   }
 
@@ -43,7 +42,7 @@ class RebrickableService {
     return _userToken;
   }
 
-  Future<List<BrickSetList>> getUsersSetList({int listId}) async {
+  Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
     final userSetListUrl = Uri.parse(userSetListUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
     var results =
@@ -54,7 +53,7 @@ class RebrickableService {
         .toList(growable: false);
   }
 
-  Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
+  Future<List<BrickSet>> getSetsFromList({required int listId}) async {
     final userSetListDetailsUrl = Uri.parse(userSetListDetailsUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
     var results = await getPaginated(_client, userSetListDetailsUrl,
@@ -65,7 +64,7 @@ class RebrickableService {
         .toList(growable: false);
   }
 
-  Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
+  Future<List<Moc>> getMocsFromSet({required String setNum}) async {
     final mocsUrl =
         Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
     var results = await getPaginated(_client, mocsUrl, headers: createHeader());
@@ -73,7 +72,7 @@ class RebrickableService {
     return results.map((json) => Moc.fromJson(json)).toList(growable: false);
   }
 
-  Future<List<Inventory>> getInventoriesOfSet({@required String setNum}) async {
+  Future<List<Inventory>> getInventoriesOfSet({required String setNum}) async {
     final mocsUrl =
         Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
     var results = await getPaginated(_client, mocsUrl, headers: createHeader());
@@ -83,7 +82,7 @@ class RebrickableService {
         .toList(growable: false);
   }
 
-  Future<String> getMocInstructionUrl({Moc moc}) async {
+  Future<String> getMocInstructionUrl({required Moc moc}) async {
     var response = await _client.get(Uri.parse(moc.url));
     var document = parse(response.body);
     final selectors = document.querySelectorAll('div > a');
@@ -92,10 +91,10 @@ class RebrickableService {
         .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
     return pdfUrl != null
         ? 'https://rebrickable.com${pdfUrl.attributes["href"]}'
-        : null;
+        : '';
   }
 
-  Map<String, String> createHeader({String contentType}) {
+  Map<String, String> createHeader({String? contentType}) {
     if (contentType != null) {
       return {'Authorization': 'key $_apiKey', 'content-type': contentType};
     } else {

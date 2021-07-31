@@ -5,7 +5,7 @@ import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:http/http.dart';
 
 Future<List<dynamic>> getPaginated(Client client, Uri url,
-    {Map<String, String> headers}) async {
+    {Map<String, String> headers = const {}}) async {
   var body = await _getJsonDecoded(client, url, headers: headers);
   final List values = body['results'];
   while (body['next'] != null) {
@@ -17,7 +17,7 @@ Future<List<dynamic>> getPaginated(Client client, Uri url,
 }
 
 Future<Map> _getJsonDecoded(Client client, Uri url,
-    {Map<String, String> headers}) async {
+    {Map<String, String> headers = const {}}) async {
   final response = await client.get(url, headers: headers);
   _checkStatusCode(response.statusCode, url);
   return jsonDecode(response.body);

@@ -9,8 +9,8 @@ import '../mocks.dart';
 
 main() {
   Widget _createApp({
-    PreferencesServiceMock preferencesServiceMock,
-    NavigatorObserverMock navigatorObserverMock,
+    PreferencesServiceMock? preferencesServiceMock,
+    NavigatorObserverMock? navigatorObserverMock,
     bool showLogoutButton = true,
   }) =>
       MultiProvider(
@@ -56,7 +56,8 @@ main() {
 
       await tester.tap(find.byKey(ObjectKey('brickAppBarLogout')));
 
-      verify(preferencesServiceMock.userToken = null).called(1);
+      fail('fix line below');
+      //verify(preferencesServiceMock.userToken = null).called(1);
     });
   });
 
@@ -69,7 +70,8 @@ main() {
       await tester.tap(find.byKey(ObjectKey('brickAppBarSettings')));
       await tester.pump();
 
-      verify(observerMock.didPush(captureAny, any)).called(2);
+      fail('fix line below');
+      //verify(observerMock.didPush(captureAny, any)).called(2);
     });
   });
 }

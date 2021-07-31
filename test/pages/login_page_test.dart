@@ -13,15 +13,15 @@ final userToken = 'myUserToken';
 
 void main() {
   createApp(bool loginSuccess,
-          {RebrickableModelMock rebrickableModelMock,
-          NavigatorObserverMock navigatorObserverMock,
-          PreferencesService preferencesService}) =>
+          {RebrickableModelMock? rebrickableModelMock,
+          NavigatorObserverMock? navigatorObserverMock,
+          PreferencesService? preferencesService}) =>
       MultiProvider(
         providers: [
           ChangeNotifierProvider<RebrickableModel>(create: (context) {
             final modelMock = rebrickableModelMock ?? RebrickableModelMock();
             when(modelMock.login('username', 'password', 'apiKey'))
-                .thenAnswer((_) async => loginSuccess ? userToken : null);
+                .thenAnswer((_) async => loginSuccess ? userToken : '');
             return modelMock;
           }),
           ChangeNotifierProvider<PreferencesService>(create: (_) {
@@ -131,7 +131,8 @@ void main() {
 
       await tester.pump();
 
-      verify(observerMock.didPush(captureAny, any)).called(2);
+      fail('fix line below');
+      //verify(observerMock.didPush(captureAny, any)).called(2);
     });
   });
 
@@ -150,6 +151,7 @@ void main() {
 
     await tester.pump();
 
-    verify(observerMock.didPush(captureAny, any)).called(1);
+    fail('fix line below');
+    //verify(observerMock.didPush(captureAny, any)).called(1);
   });
 }

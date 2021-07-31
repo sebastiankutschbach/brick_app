@@ -21,11 +21,12 @@ void main() {
     'content-type': 'application/x-www-form-urlencoded'
   };
   var client;
-  RebrickableService service;
+  late RebrickableService service;
 
   void _setUpAuthenticatedServiceMock() async {
     client = MockClient();
-    service = RebrickableService('apiKey', client: client);
+    service = RebrickableService(client: client);
+    service.apiKey = 'apiKey';
     when(client.post(userTokenUrl,
             headers: _authHeaderWithContentType,
             body: 'username=username&password=password'))
@@ -37,7 +38,8 @@ void main() {
   group('authentication', () {
     setUp(() {
       client = MockClient();
-      service = RebrickableService(_apiKey, client: client);
+      service = RebrickableService(client: client);
+      service.apiKey = 'apiKey';
     });
 
     test('it should have a token set on successful authentication', () async {

@@ -45,15 +45,16 @@ main() {
   }
 
   void _verifyCorrectRouting(String routeName) {
-    List<MaterialPageRoute> pushedRoutes =
-        verify(navigatorObserver.didPush(captureAny, any))
-            .captured
-            .cast<MaterialPageRoute>();
-    expect(
-        pushedRoutes
-            .where((element) => element.settings.name == routeName)
-            .length,
-        1);
+    fail('fix line below');
+    // List<MaterialPageRoute> pushedRoutes =
+    //     verify(navigatorObserver.didPush(captureAny, any))
+    //         .captured
+    //         .cast<MaterialPageRoute>();
+    // expect(
+    //     pushedRoutes
+    //         .where((element) => element.settings.name == routeName)
+    //         .length,
+    //     1);
   }
 
   group('app bar', () {

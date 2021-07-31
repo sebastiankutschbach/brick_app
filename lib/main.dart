@@ -1,6 +1,7 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
+import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final preferencesService = PreferencesService();
   await preferencesService.initPreferences();
-  final rebrickableModel = RebrickableModel();
+  final rebrickableModel =
+      RebrickableModel(rebrickableService: RebrickableService());
   runApp(MyApp(
       preferencesService: preferencesService,
       rebrickableModel: rebrickableModel));
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
   final PreferencesService preferencesService;
   final RebrickableModel rebrickableModel;
 
-  MyApp({this.preferencesService, this.rebrickableModel});
+  MyApp({required this.preferencesService, required this.rebrickableModel});
 
   @override
   Widget build(BuildContext context) {

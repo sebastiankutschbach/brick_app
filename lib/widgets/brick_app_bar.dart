@@ -11,7 +11,7 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final showLogoutButton;
 
-  BrickAppBar(this.title, {Key key, this.showLogoutButton = true})
+  BrickAppBar(this.title, {Key? key, this.showLogoutButton = true})
       : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
@@ -39,7 +39,7 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
     return IconButton(
         key: ObjectKey('brickAppBarLogout'),
         onPressed: () {
-          context.read<PreferencesService>().userToken = null;
+          context.read<PreferencesService>().userToken = '';
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => LoginPage()));
         },

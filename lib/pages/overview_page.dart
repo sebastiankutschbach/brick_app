@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 
 class OverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<BrickSetList>>(
         future: context.read<RebrickableModel>().getUsersSetLists(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
               appBar: BrickAppBar(
-                Text('My Set Lists (${snapshot.data.length})'),
+                Text('My Set Lists (${snapshot.data!.length})'),
               ),
               body: Center(
-                child: _createListView(snapshot.data),
+                child: _createListView(snapshot.data!),
               ),
             );
           } else if (snapshot.hasError) {

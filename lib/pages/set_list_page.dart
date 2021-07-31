@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class SetListPage extends StatelessWidget {
   final BrickSetList brickSetList;
 
-  SetListPage({@required this.brickSetList});
+  SetListPage({required this.brickSetList});
   Widget build(BuildContext context) {
     return FutureBuilder<List<BrickSet>>(
       future: context
@@ -22,7 +22,7 @@ class SetListPage extends StatelessWidget {
         body: Center(
           child: snapshot.hasData
               ? SetsGridView(
-                  snapshot.data,
+                  snapshot.data!,
                   withButtons: true,
                 )
               : CircularProgressIndicator(),

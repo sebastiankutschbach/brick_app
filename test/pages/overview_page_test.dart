@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../mocks.dart';
 
 main() {
-  createApp({List<BrickSetList> brickSets}) =>
+  createApp({List<BrickSetList>? brickSets}) =>
       ChangeNotifierProvider<RebrickableModel>(
         create: (_) {
           final mock = RebrickableModelMock();

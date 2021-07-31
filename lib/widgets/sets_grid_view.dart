@@ -48,7 +48,8 @@ class SetsGridView extends StatelessWidget {
         key: ObjectKey('tile_${set.setNum}'),
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Theme.of(context).accentColor, width: 2),
+          border: Border.all(
+              color: Theme.of(context).colorScheme.secondary, width: 2),
           borderRadius: BorderRadius.all(
             Radius.circular(16.0),
           ),
@@ -73,7 +74,7 @@ class SetsGridView extends StatelessWidget {
         flex: 2,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(16.0),
               bottomRight: Radius.circular(16.0),
@@ -102,10 +103,10 @@ class SetsGridView extends StatelessWidget {
       );
 
   Widget _createButton(
-          {@required BuildContext context,
-          @required IconData iconData,
-          @required builder,
-          @required String routeName}) =>
+          {required BuildContext context,
+          required IconData iconData,
+          required builder,
+          required String routeName}) =>
       Expanded(
         flex: 4,
         child: IconButton(

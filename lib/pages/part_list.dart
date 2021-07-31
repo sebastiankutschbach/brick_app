@@ -27,7 +27,7 @@ class PartList extends StatelessWidget {
           return Scaffold(
             appBar: BrickAppBar(Text('Parts of Set: ${brickSet.name}')),
             body: Center(
-              child: _createListView(snapshot.data),
+              child: _createListView(snapshot.data!),
             ),
           );
         }
@@ -44,7 +44,8 @@ class PartList extends StatelessWidget {
 
   Widget _createListTile(Inventory inventory) => ListTile(
         leading: Text('${inventory.quantity}x'),
-        title: Text('${inventory.part.name}${inventory.isSpare?" (spare part)":""}'),
+        title: Text(
+            '${inventory.part.name}${inventory.isSpare ? " (spare part)" : ""}'),
         subtitle: Text('${inventory.part.partNum}'),
         trailing: inventory.part.partImgUrl == null
             ? Text("Image n/a") // TODO can be replaced with image e.g.

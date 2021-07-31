@@ -20,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final model = context.read<RebrickableModel>();
     final route = MaterialPageRoute(builder: (context) => OverviewPage());
-    final apiKey = context.watch<PreferencesService>().apiKey ?? '';
-    final userToken = context.watch<PreferencesService>().userToken ?? '';
+    final apiKey = context.watch<PreferencesService>().apiKey;
+    final userToken = context.watch<PreferencesService>().userToken;
     if (userToken.isNotEmpty && apiKey.isNotEmpty) {
       model.loginWithToken(userToken, apiKey);
       Future.delayed(Duration.zero, () => Navigator.of(context).push(route));
@@ -44,14 +44,14 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(labelText: 'Username'),
                     onChanged: (value) => _username = value,
                     validator: (value) =>
-                        value.isEmpty ? 'Username cannot be empty' : null,
+                        value!.isEmpty ? 'Username cannot be empty' : null,
                   ),
                   TextFormField(
                     key: Key('password'),
                     decoration: InputDecoration(labelText: 'Password'),
                     onChanged: (value) => _password = value,
                     validator: (value) =>
-                        value.isEmpty ? 'Password cannot be empty' : null,
+                        value!.isEmpty ? 'Password cannot be empty' : null,
                     obscureText: true,
                   ),
                   SizedBox(
@@ -60,16 +60,16 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     key: Key('login'),
                     onPressed: () async {
-                      if (apiKey == null || apiKey.isEmpty) {
+                      if (apiKey.isEmpty) {
                         _showDialog('API Key not set',
                             'Please set your api key under settings');
                         return;
                       }
-                      if (_formKey.currentState.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         try {
                           final userToken =
                               await model.login(_username, _password, apiKey);
-                          if (userToken != null) {
+                          if (userToken.isEmpty) {
                             context.read<PreferencesService>().userToken =
                                 userToken;
                             Navigator.push(context, route);

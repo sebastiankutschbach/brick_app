@@ -6,45 +6,44 @@ import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter/cupertino.dart';
 
 class RebrickableModel with ChangeNotifier {
-  RebrickableService _rebrickableService;
+  RebrickableService rebrickableService;
   bool _loggedIn = false;
-  BrickSet _selectedBrickSet;
+  BrickSet? _selectedBrickSet;
 
   bool get isLoggedIn => _loggedIn;
-  BrickSet get selectedBrickSet => _selectedBrickSet;
+  BrickSet? get selectedBrickSet => _selectedBrickSet;
 
-  RebrickableModel({RebrickableService rebrickableService}) {
-    this._rebrickableService = rebrickableService ?? RebrickableService('');
-  }
+  RebrickableModel({required this.rebrickableService});
 
   Future<String> login(String username, String password, String apiKey) async {
-    _rebrickableService.apiKey = apiKey;
-    final userToken =
-        await _rebrickableService.authenticate(username, password);
-    _loggedIn = userToken != null;
+    rebrickableService.apiKey = apiKey;
+    final userToken = await rebrickableService.authenticate(username, password);
+    _loggedIn = userToken.isNotEmpty;
     return userToken;
   }
 
   Future<String> loginWithToken(String userToken, String apiKey) async {
-    _rebrickableService.apiKey = apiKey;
-    _rebrickableService.userToken = userToken;
+    rebrickableService.apiKey = apiKey;
+    rebrickableService.userToken = userToken;
     _loggedIn = true;
     return userToken;
   }
 
-  Future<List<BrickSetList>> getUsersSetLists({int listId}) async {
-    return _rebrickableService.getUsersSetList(listId: listId);
+  Future<List<BrickSetList>> getUsersSetLists({int? listId}) async {
+    return listId == null
+        ? rebrickableService.getUsersSetList()
+        : rebrickableService.getUsersSetList(listId: listId);
   }
 
-  Future<List<BrickSet>> getSetsFromList({@required int listId}) async {
-    return _rebrickableService.getSetsFromList(listId: listId);
+  Future<List<BrickSet>> getSetsFromList({required int listId}) async {
+    return rebrickableService.getSetsFromList(listId: listId);
   }
 
-  Future<List<Moc>> getMocsFromSet({@required String setNum}) async {
-    return _rebrickableService.getMocsFromSet(setNum: setNum);
+  Future<List<Moc>> getMocsFromSet({required String setNum}) async {
+    return rebrickableService.getMocsFromSet(setNum: setNum);
   }
 
-  Future<List<Inventory>> getInventoriesOfSet({@required String setNum}) async {
-    return _rebrickableService.getInventoriesOfSet(setNum: setNum);
+  Future<List<Inventory>> getInventoriesOfSet({required String setNum}) async {
+    return rebrickableService.getInventoriesOfSet(setNum: setNum);
   }
 }

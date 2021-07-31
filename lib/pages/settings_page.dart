@@ -10,7 +10,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey _formKey = GlobalKey<FormState>();
-  PreferencesService _preferencesService;
+  late PreferencesService _preferencesService;
 
   void initState() {
     super.initState();
@@ -35,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 decoration: InputDecoration(
                   labelText: 'API Key',
                 ),
-                onSaved: (value) => _preferencesService.apiKey = value,
+                onSaved: (value) => _preferencesService.apiKey = value!,
                 onChanged: (value) => _preferencesService.apiKey = value,
               ),
             ),
