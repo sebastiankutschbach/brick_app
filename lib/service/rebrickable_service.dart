@@ -89,9 +89,7 @@ class RebrickableService {
 
     final pdfUrl = selectors
         .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
-    return pdfUrl != null
-        ? 'https://rebrickable.com${pdfUrl.attributes["href"]}'
-        : '';
+    return 'https://rebrickable.com${pdfUrl.attributes["href"]}';
   }
 
   Map<String, String> createHeader({String? contentType}) {
