@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                         try {
                           final userToken =
                               await model.login(_username, _password, apiKey);
-                          if (userToken.isEmpty) {
+                          if (userToken.isNotEmpty) {
                             context.read<PreferencesService>().userToken =
                                 userToken;
                             Navigator.push(context, route);

@@ -28,7 +28,7 @@ void main() {
           }),
           ChangeNotifierProvider<PreferencesService>(create: (_) {
             final service = MockPreferencesService();
-            when(() => service.apiKey).thenReturn('');
+            when(() => service.apiKey).thenReturn('apiKey');
             when(() => service.userToken).thenReturn('');
             return preferencesService ?? service;
           }),
@@ -39,6 +39,10 @@ void main() {
               navigatorObserverMock != null ? [navigatorObserverMock] : [],
         ),
       );
+
+  setUpAll(() {
+    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+  });
 
   group('smoke test', () {
     testWidgets(
@@ -84,6 +88,8 @@ void main() {
     testWidgets('Tries to login when username and password given',
         (WidgetTester tester) async {
       final rebrickableModelMock = MockRebrickableModel();
+      when(() => rebrickableModelMock.getUsersSetLists())
+          .thenAnswer((_) async => []);
       await tester.pumpWidget(MaterialApp(
           home: createApp(true, rebrickableModelMock: rebrickableModelMock)));
 
@@ -100,8 +106,13 @@ void main() {
     testWidgets('Persists user token on successful login',
         (WidgetTester tester) async {
       final rebrickableModelMock = MockRebrickableModel();
+      when(() => rebrickableModelMock.getUsersSetLists())
+          .thenAnswer((_) async => []);
       final preferencesService = MockPreferencesService();
       when(() => preferencesService.apiKey).thenReturn('apiKey');
+      when(() => preferencesService.userToken).thenReturn('');
+      when(() => preferencesService.userToken = userToken)
+          .thenReturn('userToken');
       await tester.pumpWidget(MaterialApp(
           home: createApp(true,
               rebrickableModelMock: rebrickableModelMock,
@@ -121,6 +132,7 @@ void main() {
     testWidgets('Navigates to overview page when login was successful',
         (WidgetTester tester) async {
       final modelMock = MockRebrickableModel();
+      when(() => modelMock.getUsersSetLists()).thenAnswer((_) async => []);
       final observerMock = MockNavigatorObserver();
       when(() => modelMock.login('username', 'password', 'apiKey'))
           .thenAnswer((_) async => userToken);
@@ -135,8 +147,7 @@ void main() {
 
       await tester.pump();
 
-      fail('fix line below');
-      //verify(observerMock.didPush(captureAny, any)).called(2);
+      verify(() => observerMock.didPush(captureAny(), any())).called(2);
     });
   });
 
@@ -155,7 +166,6 @@ void main() {
 
     await tester.pump();
 
-    fail('fix line below');
-    //verify(observerMock.didPush(captureAny, any)).called(1);
+    verify(() => observerMock.didPush(captureAny(), any())).called(1);
   });
 }
