@@ -1,16 +1,23 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'part.g.dart';
+
+@JsonSerializable()
 class Part {
+  @JsonKey(name: 'part_num')
   final String partNum;
   final String name;
+  @JsonKey(name: 'part_cat_id')
   final int partCatId;
+  @JsonKey(name: 'part_url')
   final String partUrl;
+  @JsonKey(name: 'part_img_url')
   final String? partImgUrl;
+  @JsonKey(name: 'print_of')
   final String? printOf;
 
-  Part.fromJson(Map<String, dynamic> json)
-      : partNum = json['part_num'],
-        name = json['name'],
-        partCatId = json['part_cat_id'],
-        partUrl = json['part_url'],
-        partImgUrl = json['part_img_url'],
-        printOf = json['print_of'];
+  Part(this.partNum, this.name, this.partCatId, this.partUrl, this.partImgUrl,
+      this.printOf);
+
+  factory Part.fromJson(Map<String, dynamic> json) => _$PartFromJson(json);
 }
