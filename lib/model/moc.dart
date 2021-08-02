@@ -26,4 +26,6 @@ class Moc extends SetOrMoc {
       this.imgUrl, this.url, this.designerName, this.designerUrl);
 
   factory Moc.fromJson(Map<String, dynamic> json) => _$MocFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MocToJson(this);
 }

@@ -25,4 +25,6 @@ class BrickSet extends SetOrMoc {
 
   factory BrickSet.fromJson(Map<String, dynamic> json) =>
       _$BrickSetFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BrickSetToJson(this);
 }

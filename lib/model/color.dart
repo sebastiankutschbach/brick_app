@@ -13,4 +13,6 @@ class Color {
   Color(this.id, this.name, this.rgb, this.isTransparent);
 
   factory Color.fromJson(Map<String, dynamic> json) => _$ColorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ColorToJson(this);
 }

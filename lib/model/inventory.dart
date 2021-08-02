@@ -26,4 +26,6 @@ class Inventory {
 
   factory Inventory.fromJson(Map<String, dynamic> json) =>
       _$InventoryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InventoryToJson(this);
 }

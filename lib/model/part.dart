@@ -20,4 +20,6 @@ class Part {
       this.printOf);
 
   factory Part.fromJson(Map<String, dynamic> json) => _$PartFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PartToJson(this);
 }

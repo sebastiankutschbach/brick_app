@@ -15,4 +15,6 @@ class BrickSetList {
 
   factory BrickSetList.fromJson(Map<String, dynamic> json) =>
       _$BrickSetListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BrickSetListToJson(this);
 }
