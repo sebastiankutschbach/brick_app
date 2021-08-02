@@ -24,6 +24,7 @@ jobs:
       with:
         package: brick_app
     - run: flutter pub get
+    - run: flutter pub run build_runner build
     - run: flutter analyze .
     - run: flutter test --coverage
     - run: flutter build apk
