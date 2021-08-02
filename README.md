@@ -6,3 +6,6 @@
 A simple flutter app for an easy overview over your sets organized by Rebrickable.
 
 Makes use of the Rebrickable API and therefore an account and api token is needed to use this app.
+
+# Setup
+Run `flutter pub run build_runner build` to generate json related classes.
