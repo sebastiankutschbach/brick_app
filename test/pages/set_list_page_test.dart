@@ -2,6 +2,7 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
+import 'package:brick_app/widgets/sets_grid_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
@@ -94,10 +95,14 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pump();
-
         var setTileImageFinder = find.byType(Image);
         await tester.tap(setTileImageFinder.first);
+
+        await tester.pump();
+
+        var buttonFinder = find.byIcon(Icons.home);
+        await tester.tap(buttonFinder.first);
+
         _verifyCorrectRouting('setRoute');
       });
     });
@@ -107,10 +112,13 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
+        var setTileImageFinder = find.byType(Image);
+        await tester.tap(setTileImageFinder.first);
+
         await tester.pump();
 
-        var setTileImageFinder = find.byIcon(Icons.grain);
-        await tester.tap(setTileImageFinder.first);
+        var buttonFinder = find.byIcon(Icons.grain);
+        await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('partsRoute');
       });
@@ -121,10 +129,14 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
+        var setTileImageFinder = find.byType(SetsGridTile);
+        await tester.tap(setTileImageFinder.first);
+
         await tester.pump();
 
-        var setTileImageFinder = find.byIcon(Icons.star);
-        await tester.tap(setTileImageFinder.first);
+        var buttonFinder = find.byIcon(Icons.star);
+        await tester.tap(buttonFinder.first);
+
         _verifyCorrectRouting('mocsRoute');
       });
     });
