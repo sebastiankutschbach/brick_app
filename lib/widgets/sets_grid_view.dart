@@ -1,12 +1,7 @@
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/pages/moc_page.dart';
-import 'package:brick_app/pages/part_list.dart';
-import 'package:brick_app/pages/web_view_page.dart';
 import 'package:brick_app/widgets/sets_grid_tile.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 typedef OnTapCallback = void Function(dynamic);
 

@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'tile_button.dart';
+
 class SetsGridTile extends StatefulWidget {
   final SetOrMoc set;
   final bool withButtons;
@@ -25,7 +27,6 @@ class _SetGridTileState extends State<SetsGridTile> {
           ? _clickedSetNum = null
           : _clickedSetNum = widget.set.setNum),
       child: DecoratedBox(
-        key: Key('tile_${widget.set.setNum}'),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
@@ -47,7 +48,10 @@ class _SetGridTileState extends State<SetsGridTile> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(set.imgUrl),
+            Image.network(
+              set.imgUrl,
+              key: Key('tile_${widget.set.setNum}'),
+            ),
             withOverlay ? _createButtons(context, set) : Container(),
           ],
         ),
@@ -59,20 +63,20 @@ class _SetGridTileState extends State<SetsGridTile> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _createButton(
-            context: context,
+          TileButton(
+            key: Key('home_button_${set.setNum}'),
             iconData: Icons.home,
             label: 'Sets',
-            onPressed: () => _openUrl(context, set.url),
+            onPressedCallback: () => _openUrl(context, set.url),
           ),
           SizedBox(
             height: 30,
           ),
-          _createButton(
-            context: context,
+          TileButton(
+            key: Key('mocs_button_${set.setNum}'),
             iconData: Icons.star,
             label: 'MOCs',
-            onPressed: () => Navigator.of(context).push(
+            onPressedCallback: () => Navigator.of(context).push(
               MaterialPageRoute(
                 settings: RouteSettings(name: 'mocsRoute'),
                 builder: (context) => MocPage(set),
@@ -82,11 +86,11 @@ class _SetGridTileState extends State<SetsGridTile> {
           SizedBox(
             height: 30,
           ),
-          _createButton(
-            context: context,
+          TileButton(
+            key: Key('parts_button_${set.setNum}'),
             iconData: Icons.grain,
             label: 'Parts',
-            onPressed: () => Navigator.of(context).push(
+            onPressedCallback: () => Navigator.of(context).push(
               MaterialPageRoute(
                 settings: RouteSettings(name: 'partsRoute'),
                 builder: (context) => PartList(set),
@@ -94,23 +98,6 @@ class _SetGridTileState extends State<SetsGridTile> {
             ),
           ),
         ],
-      );
-
-  Widget _createButton({
-    required BuildContext context,
-    required IconData iconData,
-    required String label,
-    required onPressed,
-  }) =>
-      ElevatedButton.icon(
-        icon: Icon(iconData, color: Colors.white),
-        label: Text(label),
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          fixedSize: Size.fromWidth(200),
-          padding: EdgeInsets.all(16),
-          textStyle: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
       );
 
   void _openUrl(BuildContext context, String url) {

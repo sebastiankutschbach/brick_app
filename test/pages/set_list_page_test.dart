@@ -2,7 +2,6 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
-import 'package:brick_app/widgets/sets_grid_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
@@ -30,6 +29,12 @@ main() {
   setUpAll(() {
     registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
   });
+
+  void _increaseScreenSizeForTest(WidgetTester tester) {
+    tester.binding.window.physicalSizeTestValue = Size(1920, 1080);
+    // resets the screen to its original size after the test end
+    addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+  }
 
   createApp() {
     navigatorObserver = MockNavigatorObserver();
@@ -85,22 +90,48 @@ main() {
 
         await tester.pumpAndSettle();
 
-        var setTileImageFinder = find.byType(Image);
-        expect(setTileImageFinder, findsOneWidget);
+        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        expect(setTileFinder, findsOneWidget);
       });
     });
+
+    testWidgets('does show buttons after first tap',
+            (WidgetTester tester) async {
+          await mockNetworkImagesFor(() async {
+            _increaseScreenSizeForTest(tester);
+            await tester.pumpWidget(createApp());
+
+            await tester.pumpAndSettle();
+
+            expect(find.byKey(Key('home_button_70672-1')), findsNothing);
+            expect(find.byKey(Key('mocs_button_70672-1')), findsNothing);
+            expect(find.byKey(Key('parts_button_70672-1')), findsNothing);
+
+            final setTileFinder = find.byKey(Key('tile_70672-1'));
+            await tester.tap(setTileFinder.first);
+
+            await tester.pump();
+
+            expect(find.byKey(Key('home_button_70672-1')), findsOneWidget);
+            expect(find.byKey(Key('mocs_button_70672-1')), findsOneWidget);
+            expect(find.byKey(Key('parts_button_70672-1')), findsOneWidget);
+          });
+        });
 
     testWidgets('does navigate to set home page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
+        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
-        var setTileImageFinder = find.byType(Image);
-        await tester.tap(setTileImageFinder.first);
+        await tester.pumpAndSettle();
+
+        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        await tester.tap(setTileFinder.first);
 
         await tester.pump();
 
-        var buttonFinder = find.byIcon(Icons.home);
+        final buttonFinder =  find.byKey(Key('home_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('setRoute');
@@ -110,14 +141,17 @@ main() {
     testWidgets('does navigate to parts page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
+        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
-        var setTileImageFinder = find.byType(Image);
-        await tester.tap(setTileImageFinder.first);
+        await tester.pumpAndSettle();
+
+        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        await tester.tap(setTileFinder.first);
 
         await tester.pump();
 
-        var buttonFinder = find.byIcon(Icons.grain);
+        final buttonFinder =  find.byKey(Key('parts_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('partsRoute');
@@ -127,14 +161,17 @@ main() {
     testWidgets('does navigate to moc page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
+        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
-        var setTileImageFinder = find.byType(SetsGridTile);
-        await tester.tap(setTileImageFinder.first);
+        await tester.pumpAndSettle();
 
-        await tester.pump();
+        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        await tester.tap(setTileFinder.first);
 
-        var buttonFinder = find.byIcon(Icons.star);
+        await tester.pumpAndSettle();
+
+        final buttonFinder =  find.byKey(Key('mocs_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('mocsRoute');
