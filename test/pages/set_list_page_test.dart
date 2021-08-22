@@ -30,12 +30,6 @@ main() {
     registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
   });
 
-  void _increaseScreenSizeForTest(WidgetTester tester) {
-    tester.binding.window.physicalSizeTestValue = Size(1920, 1080);
-    // resets the screen to its original size after the test end
-    addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-  }
-
   createApp() {
     navigatorObserver = MockNavigatorObserver();
     return ChangeNotifierProvider<RebrickableModel>(
@@ -98,7 +92,6 @@ main() {
     testWidgets('does show buttons after first tap',
             (WidgetTester tester) async {
           await mockNetworkImagesFor(() async {
-            _increaseScreenSizeForTest(tester);
             await tester.pumpWidget(createApp());
 
             await tester.pumpAndSettle();
@@ -121,7 +114,6 @@ main() {
     testWidgets('does navigate to set home page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
-        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
         await tester.pumpAndSettle();
@@ -141,7 +133,6 @@ main() {
     testWidgets('does navigate to parts page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
-        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
         await tester.pumpAndSettle();
@@ -161,7 +152,6 @@ main() {
     testWidgets('does navigate to moc page on tap',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
-        _increaseScreenSizeForTest(tester);
         await tester.pumpWidget(createApp());
 
         await tester.pumpAndSettle();

@@ -21,9 +21,7 @@ class TileButton extends StatelessWidget {
       label: Text(label),
       onPressed: onPressedCallback,
       style: ElevatedButton.styleFrom(
-        fixedSize: Size.fromWidth(200),
-        padding: EdgeInsets.all(16),
-        textStyle: TextStyle(fontSize: 16),
+        minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
       ),
     );
   }

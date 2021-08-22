@@ -44,7 +44,7 @@ class _SetGridTileState extends State<SetsGridTile> {
   Widget _createSetTile(context, set, {required withOverlay}) {
     return Container(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(10),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -63,37 +63,39 @@ class _SetGridTileState extends State<SetsGridTile> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TileButton(
-            key: Key('home_button_${set.setNum}'),
-            iconData: Icons.home,
-            label: 'Sets',
-            onPressedCallback: () => _openUrl(context, set.url),
+          Expanded(
+            child: TileButton(
+              key: Key('home_button_${set.setNum}'),
+              iconData: Icons.home,
+              label: 'Sets',
+              onPressedCallback: () => _openUrl(context, set.url),
+            ),
           ),
-          SizedBox(
-            height: 30,
-          ),
-          TileButton(
-            key: Key('mocs_button_${set.setNum}'),
-            iconData: Icons.star,
-            label: 'MOCs',
-            onPressedCallback: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                settings: RouteSettings(name: 'mocsRoute'),
-                builder: (context) => MocPage(set),
+          Expanded(child: Divider()),
+          Expanded(
+            child: TileButton(
+              key: Key('mocs_button_${set.setNum}'),
+              iconData: Icons.star,
+              label: 'MOCs',
+              onPressedCallback: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  settings: RouteSettings(name: 'mocsRoute'),
+                  builder: (context) => MocPage(set),
+                ),
               ),
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
-          TileButton(
-            key: Key('parts_button_${set.setNum}'),
-            iconData: Icons.grain,
-            label: 'Parts',
-            onPressedCallback: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                settings: RouteSettings(name: 'partsRoute'),
-                builder: (context) => PartList(set),
+          Expanded(child: Divider()),
+          Expanded(
+            child: TileButton(
+              key: Key('parts_button_${set.setNum}'),
+              iconData: Icons.grain,
+              label: 'Parts',
+              onPressedCallback: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  settings: RouteSettings(name: 'partsRoute'),
+                  builder: (context) => PartList(set),
+                ),
               ),
             ),
           ),
