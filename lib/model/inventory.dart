@@ -17,7 +17,7 @@ class Inventory {
   @JsonKey(name: 'is_spare')
   final bool isSpare;
   @JsonKey(name: 'element_id')
-  final String elementId;
+  final String? elementId;
   @JsonKey(name: 'num_sets')
   final int numSets;
 
