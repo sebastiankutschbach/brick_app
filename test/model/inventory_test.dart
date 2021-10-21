@@ -18,7 +18,7 @@ main() {
     });
 
     test('elementId can be null', () {
-      final inventory = Inventory.fromJson(inventoryJson_elementId_value_is_null);
+      final inventory = Inventory.fromJson(inventoryJsonelementIdisNull);
 
       expect(inventory.id, 173266);
       expect(inventory.partId, 173266);
@@ -99,7 +99,7 @@ final inventoryJson = {
   "num_sets": 364
 };
 
-final inventoryJson_elementId_value_is_null = {
+final inventoryJsonelementIdisNull = {
   "id": 173266,
   "inv_part_id": 173266,
   "part": {
