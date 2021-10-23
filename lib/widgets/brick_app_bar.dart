@@ -10,18 +10,24 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final showLogoutButton;
+  final List<IconButton> additionalButtons;
 
-  BrickAppBar(this.title, {Key? key, this.showLogoutButton = true})
+  BrickAppBar(this.title,
+      {Key? key,
+      this.showLogoutButton = true,
+      this.additionalButtons = const []})
       : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
   Widget build(BuildContext context) {
     return AppBar(
       title: title,
-      actions: [
-        _createSettingsButton(context),
-        showLogoutButton ? _createLogoutButton(context) : Container(),
-      ],
+      actions: []
+        ..addAll(additionalButtons)
+        ..addAll([
+          _createSettingsButton(context),
+          showLogoutButton ? _createLogoutButton(context) : Container(),
+        ]),
     );
   }
 

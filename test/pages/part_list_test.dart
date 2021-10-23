@@ -36,9 +36,28 @@ main() {
               matching: find.text('Parts of Set: ${brickSet.name}')),
           findsOneWidget);
     });
+
+    testWidgets('renders sort icon', (WidgetTester tester) async {
+      await tester.pumpWidget(createApp());
+
+      expect(
+          find.descendant(
+              of: find.byType(BrickAppBar), matching: find.byIcon(Icons.sort)),
+          findsOneWidget);
+    });
   });
 
   group('part list view', () {
+    void _checkPosition(int index, String partName) {
+      final listTileFinder = find.byType(ListTile);
+      expect(
+          find.descendant(
+              of: listTileFinder.at(index),
+              matching: find.text(partName),
+              skipOffstage: false),
+          findsOneWidget);
+    }
+
     testWidgets('renders list tile for part correctly',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
@@ -47,10 +66,30 @@ main() {
         await tester.pump();
 
         expect(find.text(inventoryList.first.part.name, skipOffstage: false),
-            findsOneWidget);
+            findsNWidgets(2));
         expect(
             find.text('${inventoryList.first.quantity}x', skipOffstage: false),
             findsOneWidget);
+      });
+    });
+
+    testWidgets('sorts parts correctly depending on quantity',
+        (WidgetTester tester) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createApp());
+
+        await tester.pump();
+
+        _checkPosition(0, '4x');
+        _checkPosition(1, '3x');
+
+        await tester.tap(find.descendant(
+            of: find.byType(BrickAppBar), matching: find.byIcon(Icons.sort)));
+
+        await tester.pump();
+
+        _checkPosition(0, '3x');
+        _checkPosition(1, '4x');
       });
     });
   });
@@ -67,4 +106,7 @@ final BrickSet brickSet = BrickSet.fromJson({
   "last_modified_dt": "2019-04-19T17:19:54.565420Z"
 });
 
-final List<Inventory> inventoryList = [Inventory.fromJson(inventoryJson)];
+final List<Inventory> inventoryList = [
+  Inventory.fromJson(inventoryJson),
+  Inventory.fromJson(inventoryJson..['quantity'] = 4)
+];

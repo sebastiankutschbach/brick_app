@@ -5,34 +5,58 @@ import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PartList extends StatelessWidget {
+enum SortDirection { ascending, descending }
+
+class PartList extends StatefulWidget {
   final BrickSet brickSet;
 
   PartList(this.brickSet);
 
+  @override
+  State<PartList> createState() => _PartListState();
+}
+
+class _PartListState extends State<PartList> {
+  SortDirection sortDirection = SortDirection.descending;
+
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Inventory>>(
-      future: context
-          .read<RebrickableModel>()
-          .getInventoriesOfSet(setNum: brickSet.setNum),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Scaffold(
-            appBar: BrickAppBar(Text('Parts of Set: ${brickSet.name}')),
-            body: Center(
+    return Scaffold(
+      appBar: BrickAppBar(
+        Text('Parts of Set: ${widget.brickSet.name}'),
+        additionalButtons: [
+          _createSortButton(context),
+        ],
+      ),
+      body: FutureBuilder<List<Inventory>>(
+        future: context
+            .read<RebrickableModel>()
+            .getInventoriesOfSet(setNum: widget.brickSet.setNum),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
               child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return Scaffold(
-            appBar: BrickAppBar(Text('Parts of Set: ${brickSet.name}')),
-            body: Center(
-              child: _createListView(snapshot.data!),
-            ),
-          );
-        }
-      },
+            );
+          } else {
+            return Center(
+              child: _createListView(
+                _sortedList(snapshot.data!),
+              ),
+            );
+          }
+        },
+      ),
     );
+  }
+
+  List<Inventory> _sortedList(List<Inventory> inventories) {
+    return inventories
+      ..sort((itemA, itemB) {
+        if (sortDirection == SortDirection.descending) {
+          return itemB.quantity.compareTo(itemA.quantity);
+        } else {
+          return itemA.quantity.compareTo(itemB.quantity);
+        }
+      });
   }
 
   Widget _createListView(List<Inventory> inventories) {
@@ -52,4 +76,17 @@ class PartList extends StatelessWidget {
             : Image.network(inventory.part.partImgUrl!),
         tileColor: inventory.isSpare ? Color(0xFFEEEEEE) : Colors.white,
       );
+
+  IconButton _createSortButton(BuildContext context) {
+    return IconButton(
+        key: ObjectKey('brickAppBarSort'),
+        onPressed: () {
+          setState(() {
+            sortDirection == SortDirection.ascending
+                ? sortDirection = SortDirection.descending
+                : sortDirection = SortDirection.ascending;
+          });
+        },
+        icon: Icon(Icons.sort));
+  }
 }
