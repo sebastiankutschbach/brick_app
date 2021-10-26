@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -10,7 +11,6 @@ import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'dart:async';
 
 class RebrickableService {
   late Client _client;
@@ -45,8 +45,8 @@ class RebrickableService {
   Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
     final userSetListUrl = Uri.parse(userSetListUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
-    var results =
-        await getPaginated(_client, userSetListUrl, headers: createHeader());
+    var results = await getPaginated(_client, userSetListUrl,
+        headers: createHeader(), cacheable: true);
 
     return results
         .map((json) => BrickSetList.fromJson(json))
@@ -57,7 +57,7 @@ class RebrickableService {
     final userSetListDetailsUrl = Uri.parse(userSetListDetailsUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
     var results = await getPaginated(_client, userSetListDetailsUrl,
-        headers: createHeader());
+        headers: createHeader(), cacheable: true);
 
     return results
         .map((json) => BrickSet.fromJson(json['set']))
@@ -67,7 +67,8 @@ class RebrickableService {
   Future<List<Moc>> getMocsFromSet({required String setNum}) async {
     final mocsUrl =
         Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
-    var results = await getPaginated(_client, mocsUrl, headers: createHeader());
+    var results = await getPaginated(_client, mocsUrl,
+        headers: createHeader(), cacheable: true);
 
     return results.map((json) => Moc.fromJson(json)).toList(growable: false);
   }
@@ -75,7 +76,8 @@ class RebrickableService {
   Future<List<Inventory>> getInventoriesOfSet({required String setNum}) async {
     final mocsUrl =
         Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
-    var results = await getPaginated(_client, mocsUrl, headers: createHeader());
+    var results = await getPaginated(_client, mocsUrl,
+        headers: createHeader(), cacheable: true);
 
     return results
         .map((json) => Inventory.fromJson(json))
