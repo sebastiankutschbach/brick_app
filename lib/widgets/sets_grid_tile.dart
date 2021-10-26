@@ -9,64 +9,57 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'tile_button.dart';
 
-class SetsGridTile extends StatefulWidget {
+class SetsGridTile extends StatelessWidget {
   final SetOrMoc set;
   final bool withButtons;
 
   SetsGridTile(this.set, {this.withButtons = false});
 
-  @override
-  State<SetsGridTile> createState() => _SetGridTileState();
-}
-
-class _SetGridTileState extends State<SetsGridTile> {
-  String? _clickedSetNum;
-
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => setState(() {
-        _clickedSetNum =
-            _clickedSetNum == widget.set.setNum ? null : widget.set.setNum;
-      }),
-      child: Container(
-        margin: EdgeInsets.only(bottom: 10),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(
-                color: Theme.of(context).colorScheme.secondary, width: 2),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+              color: Theme.of(context).colorScheme.secondary, width: 2),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10.0),
           ),
-          child: _createSetTile(context, widget.set,
-              selected: _clickedSetNum == widget.set.setNum),
         ),
+        child: _createSetTile(context, set),
       ),
     );
   }
 
-  Widget _createSetTile(context, set, {required selected}) {
-    return selected
-        ? _createButtons(context, set)
-        : ListTile(
-            contentPadding: EdgeInsets.all(10),
-            title: CachedNetworkImage(
-              imageUrl: set.imgUrl,
-              key: Key('tile_${widget.set.setNum}'),
-            ),
-            subtitle: Column(
-              children: [
-                Text(set.name),
-              ],
-            ),
-          );
+  Widget _createSetTile(context, set) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: withButtons ? () {} : () => _openUrl(context, set.url),
+          contentPadding: EdgeInsets.all(10),
+          title: CachedNetworkImage(
+            imageUrl: set.imgUrl,
+            key: Key('tile_${set.setNum}'),
+          ),
+          subtitle: Column(
+            children: [
+              Text(set.name),
+            ],
+          ),
+        ),
+        withButtons ? _createButtons(context, set) : Container(),
+      ],
+    );
   }
 
   Widget _createButtons(BuildContext context, set) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: TileButton(
               key: Key('home_button_${set.setNum}'),
@@ -74,6 +67,9 @@ class _SetGridTileState extends State<SetsGridTile> {
               label: 'Sets',
               onPressedCallback: () => _openUrl(context, set.url),
             ),
+          ),
+          SizedBox(
+            width: 10,
           ),
           Expanded(
             child: TileButton(
@@ -88,6 +84,9 @@ class _SetGridTileState extends State<SetsGridTile> {
               ),
             ),
           ),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: TileButton(
               key: Key('parts_button_${set.setNum}'),
@@ -100,6 +99,9 @@ class _SetGridTileState extends State<SetsGridTile> {
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            width: 10,
           ),
         ],
       );

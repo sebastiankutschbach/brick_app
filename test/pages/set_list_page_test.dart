@@ -4,9 +4,9 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
 
@@ -89,27 +89,18 @@ main() {
       });
     });
 
-    testWidgets('does show buttons after first tap',
-            (WidgetTester tester) async {
-          await mockNetworkImagesFor(() async {
-            await tester.pumpWidget(createApp());
+    testWidgets('does have buttons for further navigation',
+        (WidgetTester tester) async {
+      await mockNetworkImagesFor(() async {
+        await tester.pumpWidget(createApp());
 
-            await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-            expect(find.byKey(Key('home_button_70672-1')), findsNothing);
-            expect(find.byKey(Key('mocs_button_70672-1')), findsNothing);
-            expect(find.byKey(Key('parts_button_70672-1')), findsNothing);
-
-            final setTileFinder = find.byKey(Key('tile_70672-1'));
-            await tester.tap(setTileFinder.first);
-
-            await tester.pump();
-
-            expect(find.byKey(Key('home_button_70672-1')), findsOneWidget);
-            expect(find.byKey(Key('mocs_button_70672-1')), findsOneWidget);
-            expect(find.byKey(Key('parts_button_70672-1')), findsOneWidget);
-          });
-        });
+        expect(find.byKey(Key('home_button_70672-1')), findsOneWidget);
+        expect(find.byKey(Key('mocs_button_70672-1')), findsOneWidget);
+        expect(find.byKey(Key('parts_button_70672-1')), findsOneWidget);
+      });
+    });
 
     testWidgets('does navigate to set home page on tap',
         (WidgetTester tester) async {
@@ -123,7 +114,7 @@ main() {
 
         await tester.pump();
 
-        final buttonFinder =  find.byKey(Key('home_button_70672-1'));
+        final buttonFinder = find.byKey(Key('home_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('setRoute');
@@ -142,7 +133,7 @@ main() {
 
         await tester.pump();
 
-        final buttonFinder =  find.byKey(Key('parts_button_70672-1'));
+        final buttonFinder = find.byKey(Key('parts_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('partsRoute');
@@ -161,7 +152,7 @@ main() {
 
         await tester.pumpAndSettle();
 
-        final buttonFinder =  find.byKey(Key('mocs_button_70672-1'));
+        final buttonFinder = find.byKey(Key('mocs_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('mocsRoute');
