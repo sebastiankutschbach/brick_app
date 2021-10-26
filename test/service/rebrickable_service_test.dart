@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
+import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/service/rebrickable_service.dart';
@@ -21,6 +22,7 @@ void main() {
   late RebrickableService service;
 
   void _setUpAuthenticatedServiceMock() async {
+    httpCache.clear();
     client = MockClient();
     service = RebrickableService(client: client);
     service.apiKey = 'apiKey';

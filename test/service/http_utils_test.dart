@@ -46,6 +46,55 @@ main() {
           throwsA(isA<RebrickableApiException>()));
     });
   });
+  group('cache', () {
+    setUpAll(() {
+      registerFallbackValue(Uri.parse("https://brickapp.sebku.de"));
+    });
+
+    test('caches api response if cacheable', () async {
+      final client = MockClient();
+      final urlTemplate = UriTemplate('https://myUrl{?page}');
+      when(() => client.get(Uri.parse(urlTemplate.expand({})), headers: {}))
+          .thenAnswer((_) async => Response(firstUrlResponseBody, 200));
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 2})), headers: {}))
+          .thenAnswer((_) async => Response(secondUrlResponseBody, 200));
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 3})), headers: {}))
+          .thenAnswer((_) async => Response(thirdUrlResponseBody, 200));
+
+      var result = await getPaginated(client, Uri.parse(urlTemplate.expand({})),
+          cacheable: true);
+      expect(3, result.length);
+
+      result = await getPaginated(client, Uri.parse(urlTemplate.expand({})),
+          cacheable: true);
+
+      verify(() => client.get(any(), headers: {})).called(3);
+    });
+
+    test('does not cache api response if not cacheable', () async {
+      final client = MockClient();
+      final urlTemplate = UriTemplate('https://myUrl{?page}');
+      when(() => client.get(Uri.parse(urlTemplate.expand({})), headers: {}))
+          .thenAnswer((_) async => Response(firstUrlResponseBody, 200));
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 2})), headers: {}))
+          .thenAnswer((_) async => Response(secondUrlResponseBody, 200));
+      when(() => client
+              .get(Uri.parse(urlTemplate.expand({'page': 3})), headers: {}))
+          .thenAnswer((_) async => Response(thirdUrlResponseBody, 200));
+
+      var result = await getPaginated(client, Uri.parse(urlTemplate.expand({})),
+          cacheable: false);
+      expect(3, result.length);
+
+      result = await getPaginated(client, Uri.parse(urlTemplate.expand({})),
+          cacheable: false);
+
+      verify(() => client.get(any(), headers: {})).called(6);
+    });
+  });
 }
 
 class Dummy {
