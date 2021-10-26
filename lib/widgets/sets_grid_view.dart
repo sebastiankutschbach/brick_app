@@ -25,13 +25,8 @@ class _SetsGridViewState extends State<SetsGridView> {
       padding: EdgeInsets.all(16.0),
       child: Stack(
         children: [
-          GridView.builder(
+          ListView.builder(
             itemCount: widget.sets.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                crossAxisCount:
-                    MediaQuery.of(context).size.width > 768 ? 3 : 2),
             itemBuilder: (context, index) => SetsGridTile(
               widget.sets[index],
               withButtons: widget.withButtons,

@@ -27,6 +27,7 @@ class SetListPage extends StatelessWidget {
                 )
               : CircularProgressIndicator(),
         ),
+        floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {},),
       ),
     );
   }

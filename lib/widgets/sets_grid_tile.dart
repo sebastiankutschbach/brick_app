@@ -32,7 +32,7 @@ class _SetGridTileState extends State<SetsGridTile> {
           border: Border.all(
               color: Theme.of(context).colorScheme.secondary, width: 2),
           borderRadius: BorderRadius.all(
-            Radius.circular(16.0),
+            Radius.circular(10.0),
           ),
         ),
         child: _createSetTile(context, widget.set,
@@ -42,20 +42,14 @@ class _SetGridTileState extends State<SetsGridTile> {
   }
 
   Widget _createSetTile(context, set, {required withOverlay}) {
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
+    return ListTile(
+          contentPadding: EdgeInsets.all(10),
+          title:
             Image.network(
               set.imgUrl,
               key: Key('tile_${widget.set.setNum}'),
             ),
-            withOverlay ? _createButtons(context, set) : Container(),
-          ],
-        ),
-      ),
+          subtitle: Column(children: [Text(set.name),],),
     );
   }
 
