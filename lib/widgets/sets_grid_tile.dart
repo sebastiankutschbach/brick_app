@@ -2,6 +2,7 @@ import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/pages/moc_page.dart';
 import 'package:brick_app/pages/part_list.dart';
 import 'package:brick_app/pages/web_view_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,37 +24,46 @@ class _SetGridTileState extends State<SetsGridTile> {
 
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => setState(() => _clickedSetNum == widget.set.setNum
-          ? _clickedSetNum = null
-          : _clickedSetNum = widget.set.setNum),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-              color: Theme.of(context).colorScheme.secondary, width: 2),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
+      onTap: () => setState(() {
+        _clickedSetNum =
+            _clickedSetNum == widget.set.setNum ? null : widget.set.setNum;
+      }),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+                color: Theme.of(context).colorScheme.secondary, width: 2),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
           ),
+          child: _createSetTile(context, widget.set,
+              selected: _clickedSetNum == widget.set.setNum),
         ),
-        child: _createSetTile(context, widget.set,
-            withOverlay: _clickedSetNum == widget.set.setNum),
       ),
     );
   }
 
-  Widget _createSetTile(context, set, {required withOverlay}) {
-    return ListTile(
-          contentPadding: EdgeInsets.all(10),
-          title:
-            Image.network(
-              set.imgUrl,
+  Widget _createSetTile(context, set, {required selected}) {
+    return selected
+        ? _createButtons(context, set)
+        : ListTile(
+            contentPadding: EdgeInsets.all(10),
+            title: CachedNetworkImage(
+              imageUrl: set.imgUrl,
               key: Key('tile_${widget.set.setNum}'),
             ),
-          subtitle: Column(children: [Text(set.name),],),
-    );
+            subtitle: Column(
+              children: [
+                Text(set.name),
+              ],
+            ),
+          );
   }
 
-  Widget _createButtons(BuildContext context, set) => Column(
+  Widget _createButtons(BuildContext context, set) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -65,7 +75,6 @@ class _SetGridTileState extends State<SetsGridTile> {
               onPressedCallback: () => _openUrl(context, set.url),
             ),
           ),
-          Expanded(child: Divider()),
           Expanded(
             child: TileButton(
               key: Key('mocs_button_${set.setNum}'),
@@ -79,7 +88,6 @@ class _SetGridTileState extends State<SetsGridTile> {
               ),
             ),
           ),
-          Expanded(child: Divider()),
           Expanded(
             child: TileButton(
               key: Key('parts_button_${set.setNum}'),
