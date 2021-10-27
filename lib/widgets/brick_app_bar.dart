@@ -33,7 +33,7 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
 
   IconButton _createSettingsButton(BuildContext context) {
     return IconButton(
-        key: ObjectKey('brickAppBarSettings'),
+        key: Key('brickAppBarSettings'),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SettingsPage()));
@@ -43,7 +43,7 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
 
   IconButton _createLogoutButton(BuildContext context) {
     return IconButton(
-        key: ObjectKey('brickAppBarLogout'),
+        key: Key('brickAppBarLogout'),
         onPressed: () {
           context.read<PreferencesService>().userToken = '';
           Navigator.pushReplacement(

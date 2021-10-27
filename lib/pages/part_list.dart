@@ -79,7 +79,7 @@ class _PartListState extends State<PartList> {
 
   IconButton _createSortButton(BuildContext context) {
     return IconButton(
-        key: ObjectKey('brickAppBarSort'),
+        key: Key('brickAppBarSort'),
         onPressed: () {
           setState(() {
             sortDirection == SortDirection.ascending

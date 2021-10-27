@@ -19,7 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ObjectKey('settingsPage'),
+      key: Key('settingsPage'),
       appBar: AppBar(
         title: Text('Settings'),
       ),

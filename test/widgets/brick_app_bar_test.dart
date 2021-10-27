@@ -41,16 +41,16 @@ main() {
         (tester) async {
       await tester.pumpWidget(_createApp(showLogoutButton: false));
 
-      expect(find.byKey(ObjectKey('brickAppBarSettings')), findsOneWidget);
-      expect(find.byKey(ObjectKey('brickAppBarLogout')), findsNothing);
+      expect(find.byKey(Key('brickAppBarSettings')), findsOneWidget);
+      expect(find.byKey(Key('brickAppBarLogout')), findsNothing);
     });
 
     testWidgets('logout button is shown if showLogoutButton is true',
         (tester) async {
       await tester.pumpWidget(_createApp(showLogoutButton: true));
 
-      expect(find.byKey(ObjectKey('brickAppBarSettings')), findsOneWidget);
-      expect(find.byKey(ObjectKey('brickAppBarLogout')), findsOneWidget);
+      expect(find.byKey(Key('brickAppBarSettings')), findsOneWidget);
+      expect(find.byKey(Key('brickAppBarLogout')), findsOneWidget);
     });
 
     testWidgets('logout triggers reset of user_token', (tester) async {
@@ -58,7 +58,7 @@ main() {
       await tester.pumpWidget(
           _createApp(preferencesServiceMock: preferencesServiceMock));
 
-      await tester.tap(find.byKey(ObjectKey('brickAppBarLogout')));
+      await tester.tap(find.byKey(Key('brickAppBarLogout')));
 
       verify(() => preferencesServiceMock.userToken = '').called(1);
     });
@@ -74,7 +74,7 @@ main() {
           navigatorObserverMock: observerMock,
           preferencesServiceMock: preferencesServiceMock));
 
-      await tester.tap(find.byKey(ObjectKey('brickAppBarSettings')));
+      await tester.tap(find.byKey(Key('brickAppBarSettings')));
       await tester.pump();
 
       verify(() => observerMock.didPush(captureAny(), any())).called(2);

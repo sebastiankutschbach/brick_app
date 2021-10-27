@@ -45,7 +45,7 @@ class OverviewPage extends StatelessWidget {
   ListView _createListView(List<BrickSetList> brickSetLists) =>
       brickSetLists.length != 0
           ? ListView.builder(
-              key: ObjectKey('setList'),
+              key: Key('setList'),
               itemBuilder: (context, index) =>
                   _createListTile(context, brickSetLists[index]),
               itemCount: brickSetLists.length)
