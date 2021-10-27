@@ -82,7 +82,7 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         final setTileFinder = find.byKey(Key('tile_70672-1'));
         expect(setTileFinder, findsOneWidget);
@@ -94,7 +94,7 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         expect(find.byKey(Key('home_button_70672-1')), findsOneWidget);
         expect(find.byKey(Key('mocs_button_70672-1')), findsOneWidget);
@@ -107,7 +107,7 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         final setTileFinder = find.byKey(Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
@@ -126,7 +126,7 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         final setTileFinder = find.byKey(Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
@@ -145,12 +145,12 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         final setTileFinder = find.byKey(Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         final buttonFinder = find.byKey(Key('mocs_button_70672-1'));
         await tester.tap(buttonFinder.first);
