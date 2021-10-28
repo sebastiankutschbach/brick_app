@@ -76,11 +76,12 @@ class _OverviewPageState extends State<OverviewPage> {
           ),
         ),
         trailing: IconButton(
+          key: Key('deleteSetList'),
           icon: Icon(Icons.delete),
           onPressed: () => showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Delete set list'),
+              title: Text('Delete Set List'),
               content: Text('''Do you really want to delete this set list? 
 This deletes the list itself and all sets in this list.'''),
               actions: [
