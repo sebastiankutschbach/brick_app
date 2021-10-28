@@ -104,7 +104,7 @@ void main() {
       final body = 'is_buildable=true&name=$setListName&num_sets=0';
       final headers = _authHeaderWithContentType;
       when(() => client.post(url, headers: headers, body: body))
-          .thenAnswer((_) async => Response('', 200));
+          .thenAnswer((_) async => Response('', 201));
 
       await service.addSetList(setListName: setListName);
       verify(() => client.post(url, headers: headers, body: body)).called(1);
@@ -136,7 +136,7 @@ void main() {
           .expand({'user_token': 'validtoken', 'list_id': setListId}));
       final headers = _authHeader;
       when(() => client.delete(url, headers: headers))
-          .thenAnswer((_) async => Response('', 200));
+          .thenAnswer((_) async => Response('', 204));
 
       await service.deleteSetList(setListId: setListId);
 
