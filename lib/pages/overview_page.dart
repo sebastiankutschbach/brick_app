@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
+import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,10 @@ class _OverviewPageState extends State<OverviewPage> {
                   _createListTile(context, brickSetLists[index]),
               itemCount: brickSetLists.length)
           : ListView(
-              children: [Text('You have no set lists in your account.')]);
+              children: [
+                Text('You have no set lists in your account.'),
+              ],
+            );
 
   ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
@@ -95,8 +99,14 @@ This deletes the list itself and all sets in this list.'''),
                       final model = context.read<RebrickableModel>();
                       model.deleteSetList(setListId: brickSetList.id);
                       Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('List deleted successfully'),
+                        ),
+                      );
                       setState(() {
                         // force reload
+                        httpCache.clear();
                       });
                     }),
               ],
@@ -134,6 +144,11 @@ This deletes the list itself and all sets in this list.'''),
                           .read<RebrickableModel>()
                           .addSetList(setListName: setListName!);
                       Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('List created successfully'),
+                        ),
+                      );
                       setState(() {
                         // force reload
                       });

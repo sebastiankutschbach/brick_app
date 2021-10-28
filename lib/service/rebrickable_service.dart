@@ -100,7 +100,7 @@ class RebrickableService {
     var result = await _client.post(addSetUrl,
         headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
         body: 'is_buildable=true&name=$setListName&num_sets=0');
-    if (result.statusCode != 200) {
+    if (result.statusCode != 201) {
       throw RebrickableApiException(result.statusCode);
     }
   }
@@ -109,7 +109,7 @@ class RebrickableService {
     final deleteSetUrl = Uri.parse(deleteSetListUrlTemplate
         .expand({'user_token': _userToken, 'list_id': setListId}));
     var result = await _client.delete(deleteSetUrl, headers: createHeader());
-    if (result.statusCode != 200) {
+    if (result.statusCode != 204) {
       throw RebrickableApiException(result.statusCode);
     }
   }
