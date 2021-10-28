@@ -6,7 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OverviewPage extends StatelessWidget {
+class OverviewPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _OverviewPageState();
+}
+
+class _OverviewPageState extends State<OverviewPage> {
   Widget build(BuildContext context) {
     final model = context.read<RebrickableModel>();
     return FutureBuilder<List<BrickSetList>>(
@@ -22,7 +27,7 @@ class OverviewPage extends StatelessWidget {
               ),
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.add),
-                onPressed: () => _showDialog(context, model),
+                onPressed: () => _showDialog(context),
               ),
             );
           } else if (snapshot.hasError) {
@@ -65,11 +70,41 @@ class OverviewPage extends StatelessWidget {
         ),
         title: Text(brickSetList.name),
         subtitle: Text('${brickSetList.numSets} sets'),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SetListPage(brickSetList: brickSetList))),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SetListPage(brickSetList: brickSetList),
+          ),
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Delete set list'),
+              content: Text('''Do you really want to delete this set list? 
+This deletes the list itself and all sets in this list.'''),
+              actions: [
+                ElevatedButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                ElevatedButton(
+                    child: Text('Delete'),
+                    onPressed: () {
+                      final model = context.read<RebrickableModel>();
+                      model.deleteSetList(setListId: brickSetList.id);
+                      Navigator.of(context).pop();
+                      setState(() {
+                        // force reload
+                      });
+                    }),
+              ],
+            ),
+          ),
+        ),
       );
 
-  void _showDialog(BuildContext context, RebrickableModel model) {
+  void _showDialog(BuildContext context) {
     String? setListName;
     showDialog(
       context: context,
@@ -94,8 +129,13 @@ class OverviewPage extends StatelessWidget {
               child: Text('Create'),
               onPressed: setListName != null
                   ? () {
-                      model.addSetList(setListName: setListName!);
+                      context
+                          .read<RebrickableModel>()
+                          .addSetList(setListName: setListName!);
                       Navigator.of(context).pop();
+                      setState(() {
+                        // force reload
+                      });
                     }
                   : null,
             ),

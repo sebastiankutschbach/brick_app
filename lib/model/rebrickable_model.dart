@@ -50,4 +50,8 @@ class RebrickableModel with ChangeNotifier {
   Future<void> addSetList({required String setListName}) async {
     return rebrickableService.addSetList(setListName: setListName);
   }
+
+  Future<void> deleteSetList({required int setListId}) async {
+    return rebrickableService.deleteSetList(setListId: setListId);
+  }
 }

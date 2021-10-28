@@ -21,3 +21,6 @@ UriTemplate setPartListUrlTemplate =
 
 UriTemplate addSetListUrlTemplate =
     UriTemplate('https://$authority$_baseUrl/users/{user_token}/setlists/');
+
+UriTemplate deleteSetListUrlTemplate = UriTemplate(
+    'https://$authority$_baseUrl/users/{user_token}/setlists/{list_id}/');
