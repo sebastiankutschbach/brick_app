@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class OverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
+    final model = context.read<RebrickableModel>();
     return FutureBuilder<List<BrickSetList>>(
-        future: context.read<RebrickableModel>().getUsersSetLists(),
+        future: model.getUsersSetLists(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -18,6 +19,10 @@ class OverviewPage extends StatelessWidget {
               ),
               body: Center(
                 child: _createListView(snapshot.data!),
+              ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _showDialog(context, model),
               ),
             );
           } else if (snapshot.hasError) {
@@ -63,4 +68,40 @@ class OverviewPage extends StatelessWidget {
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => SetListPage(brickSetList: brickSetList))),
       );
+
+  void _showDialog(BuildContext context, RebrickableModel model) {
+    String? setListName;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text('Create new Set List'),
+          content: Form(
+            child: TextFormField(
+              key: Key('username'),
+              decoration: InputDecoration(labelText: 'Set list name'),
+              onChanged: (value) => setState(() => setListName = value),
+              validator: (value) =>
+                  value!.isEmpty ? 'Set list name cannot be empty' : null,
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            ElevatedButton(
+              child: Text('Create'),
+              onPressed: setListName != null
+                  ? () {
+                      model.addSetList(setListName: setListName!);
+                      Navigator.of(context).pop();
+                    }
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

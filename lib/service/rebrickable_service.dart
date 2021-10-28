@@ -94,6 +94,17 @@ class RebrickableService {
     return 'https://rebrickable.com${pdfUrl.attributes["href"]}';
   }
 
+  Future<void> addSetList({required String setListName}) async {
+    final addSetUrl =
+        Uri.parse(addSetListUrlTemplate.expand({'user_token': _userToken}));
+    var result = await _client.post(addSetUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
+        body: 'is_buildable=true&name=$setListName&num_sets=0');
+    if (result.statusCode != 200) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
   Map<String, String> createHeader({String? contentType}) {
     if (contentType != null) {
       return {'Authorization': 'key $_apiKey', 'content-type': contentType};
