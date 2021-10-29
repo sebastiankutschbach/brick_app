@@ -2,9 +2,6 @@ name: Flutter
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -39,7 +36,7 @@ jobs:
     - name: Integration test
       run: |
         echo ${DOTENV_IT} | tee .env
-        flutter test integration_test
+        flutter test integration_test -d chrome
     - name: Build Android APK
       run: flutter build apk
     - name: Build web version
