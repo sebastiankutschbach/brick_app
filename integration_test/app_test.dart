@@ -42,7 +42,7 @@ void main() {
 
       await tester.tap(find.byKey(Key('login')));
 
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(Duration(seconds: 2));
       expect(find.byKey(Key('setList')), findsOneWidget);
     });
   });
