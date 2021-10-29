@@ -38,9 +38,8 @@ jobs:
         DOTENV: ${secrets.DOTENV_IT}
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: ${{ matrix.api-level }}
-        target: ${{ matrix.target }}
-        arch: x86
+        api-level: 29
+        arch: x86_64
         profile: Nexus 6
         script: |
           echo $DOTENV > .env
