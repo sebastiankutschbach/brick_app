@@ -42,17 +42,6 @@ class RebrickableService {
     return _userToken;
   }
 
-  Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
-    final userSetListUrl = Uri.parse(userSetListUrlTemplate
-        .expand({'user_token': _userToken, 'list_id': listId}));
-    var results = await getPaginated(_client, userSetListUrl,
-        headers: createHeader(), cacheable: true);
-
-    return results
-        .map((json) => BrickSetList.fromJson(json))
-        .toList(growable: false);
-  }
-
   Future<List<BrickSet>> getSetsFromList({required int listId}) async {
     final userSetListDetailsUrl = Uri.parse(userSetListDetailsUrlTemplate
         .expand({'user_token': _userToken, 'list_id': listId}));
@@ -92,6 +81,37 @@ class RebrickableService {
     final pdfUrl = selectors
         .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
     return 'https://rebrickable.com${pdfUrl.attributes["href"]}';
+  }
+
+  Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
+    final userSetListUrl = Uri.parse(userSetListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': listId}));
+    var results = await getPaginated(_client, userSetListUrl,
+        headers: createHeader(), cacheable: false);
+
+    return results
+        .map((json) => BrickSetList.fromJson(json))
+        .toList(growable: false);
+  }
+
+  Future<void> addSetList({required String setListName}) async {
+    final addSetUrl =
+        Uri.parse(addSetListUrlTemplate.expand({'user_token': _userToken}));
+    var result = await _client.post(addSetUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
+        body: 'is_buildable=true&name=$setListName&num_sets=0');
+    if (result.statusCode != 201) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
+  Future<void> deleteSetList({required int setListId}) async {
+    final deleteSetUrl = Uri.parse(deleteSetListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': setListId}));
+    var result = await _client.delete(deleteSetUrl, headers: createHeader());
+    if (result.statusCode != 204) {
+      throw RebrickableApiException(result.statusCode);
+    }
   }
 
   Map<String, String> createHeader({String? contentType}) {

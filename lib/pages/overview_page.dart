@@ -1,15 +1,22 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
+import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OverviewPage extends StatelessWidget {
+class OverviewPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _OverviewPageState();
+}
+
+class _OverviewPageState extends State<OverviewPage> {
   Widget build(BuildContext context) {
+    final model = context.read<RebrickableModel>();
     return FutureBuilder<List<BrickSetList>>(
-        future: context.read<RebrickableModel>().getUsersSetLists(),
+        future: model.getUsersSetLists(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -18,6 +25,10 @@ class OverviewPage extends StatelessWidget {
               ),
               body: Center(
                 child: _createListView(snapshot.data!),
+              ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _showDialog(context),
               ),
             );
           } else if (snapshot.hasError) {
@@ -50,7 +61,10 @@ class OverviewPage extends StatelessWidget {
                   _createListTile(context, brickSetLists[index]),
               itemCount: brickSetLists.length)
           : ListView(
-              children: [Text('You have no set lists in your account.')]);
+              children: [
+                Text('You have no set lists in your account.'),
+              ],
+            );
 
   ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
@@ -60,7 +74,90 @@ class OverviewPage extends StatelessWidget {
         ),
         title: Text(brickSetList.name),
         subtitle: Text('${brickSetList.numSets} sets'),
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => SetListPage(brickSetList: brickSetList))),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SetListPage(brickSetList: brickSetList),
+          ),
+        ),
+        trailing: IconButton(
+          key: Key('deleteSetList'),
+          icon: Icon(Icons.delete),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Delete Set List'),
+              content: Text('''Do you really want to delete this set list? 
+This deletes the list itself and all sets in this list.'''),
+              actions: [
+                ElevatedButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                ElevatedButton(
+                    child: Text('Delete'),
+                    onPressed: () {
+                      final model = context.read<RebrickableModel>();
+                      model.deleteSetList(setListId: brickSetList.id);
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('List deleted successfully'),
+                        ),
+                      );
+                      setState(() {
+                        // force reload
+                        httpCache.clear();
+                      });
+                    }),
+              ],
+            ),
+          ),
+        ),
       );
+
+  void _showDialog(BuildContext context) {
+    String? setListName;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text('Create new Set List'),
+          content: Form(
+            child: TextFormField(
+              key: Key('username'),
+              decoration: InputDecoration(labelText: 'Set list name'),
+              onChanged: (value) => setState(() => setListName = value),
+              validator: (value) =>
+                  value!.isEmpty ? 'Set list name cannot be empty' : null,
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            ElevatedButton(
+              child: Text('Create'),
+              onPressed: setListName != null
+                  ? () {
+                      context
+                          .read<RebrickableModel>()
+                          .addSetList(setListName: setListName!);
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('List created successfully'),
+                        ),
+                      );
+                      setState(() {
+                        // force reload
+                      });
+                    }
+                  : null,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

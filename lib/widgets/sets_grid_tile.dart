@@ -41,6 +41,10 @@ class SetsGridTile extends StatelessWidget {
           title: CachedNetworkImage(
             imageUrl: set.imgUrl,
             key: Key('tile_${set.setNum}'),
+            progressIndicatorBuilder: (context, url, progress) =>
+                LinearProgressIndicator(
+              value: progress.progress,
+            ),
           ),
           subtitle: Column(
             children: [

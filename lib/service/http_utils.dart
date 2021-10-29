@@ -8,9 +8,12 @@ final Map<String, Future<List<dynamic>>> httpCache = {};
 
 Future<List<dynamic>> getPaginated(Client client, Uri url,
     {Map<String, String> headers = const {}, bool cacheable = false}) async {
+  log('getPaginated, url: $url, cacheable: $cacheable');
   return await (cacheable
-      ? httpCache.putIfAbsent(
-          url.toString(), () => _getPaginated(client, url, headers))
+      ? httpCache.putIfAbsent(url.toString(), () {
+          log('cache miss');
+          return _getPaginated(client, url, headers);
+        })
       : _getPaginated(client, url, headers));
 }
 

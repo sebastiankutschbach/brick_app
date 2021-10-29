@@ -92,6 +92,72 @@ void main() {
     });
   });
 
+  group('add set list', () {
+    setUp(() async {
+      _setUpAuthenticatedServiceMock();
+    });
+
+    test('executes fine', () async {
+      final setListName = 'setListName';
+      final url =
+          Uri.parse(addSetListUrlTemplate.expand({'user_token': 'validtoken'}));
+      final body = 'is_buildable=true&name=$setListName&num_sets=0';
+      final headers = _authHeaderWithContentType;
+      when(() => client.post(url, headers: headers, body: body))
+          .thenAnswer((_) async => Response('', 201));
+
+      await service.addSetList(setListName: setListName);
+      verify(() => client.post(url, headers: headers, body: body)).called(1);
+    });
+
+    test('handles error', () async {
+      final setListName = 'setListName';
+      final url =
+          Uri.parse(addSetListUrlTemplate.expand({'user_token': 'validtoken'}));
+      final body = 'is_buildable=true&name=$setListName&num_sets=0';
+      final headers = _authHeaderWithContentType;
+      when(() => client.post(url, headers: headers, body: body))
+          .thenAnswer((_) async => Response('', 500));
+
+      expect(() async => await service.addSetList(setListName: setListName),
+          throwsA(isA<RebrickableApiException>()));
+      verify(() => client.post(url, headers: headers, body: body)).called(1);
+    });
+  });
+
+  group('delete set list', () {
+    setUp(() async {
+      _setUpAuthenticatedServiceMock();
+    });
+
+    test('executes fine', () async {
+      final setListId = 1;
+      final url = Uri.parse(deleteSetListUrlTemplate
+          .expand({'user_token': 'validtoken', 'list_id': setListId}));
+      final headers = _authHeader;
+      when(() => client.delete(url, headers: headers))
+          .thenAnswer((_) async => Response('', 204));
+
+      await service.deleteSetList(setListId: setListId);
+
+      verify(() => client.delete(url, headers: headers)).called(1);
+    });
+
+    test('handles error', () async {
+      final setListId = 1;
+      final url = Uri.parse(deleteSetListUrlTemplate
+          .expand({'user_token': 'validtoken', 'list_id': setListId}));
+      final headers = _authHeader;
+      when(() => client.delete(url, headers: headers))
+          .thenAnswer((_) async => Response('', 404));
+
+      expect(() async => await service.deleteSetList(setListId: setListId),
+          throwsA(isA<RebrickableApiException>()));
+
+      verify(() => client.delete(url, headers: headers)).called(1);
+    });
+  });
+
   group('set list details', () {
     setUp(() async {
       _setUpAuthenticatedServiceMock();

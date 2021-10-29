@@ -8,6 +8,17 @@ import 'package:provider/provider.dart';
 
 import '../mocks.dart';
 
+final dummyBrickSets = [
+  BrickSetList.fromJson(
+      {"id": 521857, "is_buildable": true, "name": "Set List", "num_sets": 23}),
+  BrickSetList.fromJson({
+    "id": 521853,
+    "is_buildable": true,
+    "name": "Second Set List",
+    "num_sets": 3
+  })
+];
+
 main() {
   createApp({List<BrickSetList>? brickSets}) =>
       ChangeNotifierProvider<RebrickableModel>(
@@ -33,20 +44,7 @@ main() {
     });
 
     testWidgets('does show a tile for each set list', (tester) async {
-      await tester.pumpWidget(createApp(brickSets: [
-        BrickSetList.fromJson({
-          "id": 521857,
-          "is_buildable": true,
-          "name": "Set List",
-          "num_sets": 23
-        }),
-        BrickSetList.fromJson({
-          "id": 521853,
-          "is_buildable": true,
-          "name": "Second Set List",
-          "num_sets": 3
-        })
-      ]));
+      await tester.pumpWidget(createApp(brickSets: dummyBrickSets));
 
       await tester.pumpAndSettle();
 
@@ -64,6 +62,31 @@ main() {
           findsOneWidget);
       expect(find.descendant(of: listViewFinder, matching: find.text('3 sets')),
           findsOneWidget);
+    });
+  });
+
+  group('add/delete list', () {
+    testWidgets('does open dialog after tapping on add button', (tester) async {
+      await tester.pumpWidget(createApp());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.text('Create new Set List'), findsOneWidget);
+    });
+
+    testWidgets('does open dialog after tapping on delete button',
+        (tester) async {
+      await tester.pumpWidget(createApp(brickSets: dummyBrickSets));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('deleteSetList')).first);
+      await tester.pump();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(find.text('Delete Set List'), findsOneWidget);
     });
   });
 }
