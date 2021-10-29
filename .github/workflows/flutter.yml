@@ -34,9 +34,11 @@ jobs:
     - name: Test with coverage
       run: flutter test --coverage
     - name: Integration test
+      env:
+        DOTENV: ${secrets.DOTENV_IT}
       run: |
-        echo ${DOTENV_IT} | tee .env
-        flutter test integration_test -d chrome
+        echo $DOTENV > .env
+        flutter test integration_test
     - name: Build Android APK
       run: flutter build apk
     - name: Build web version
