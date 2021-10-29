@@ -28,7 +28,7 @@ main() {
               .thenAnswer((_) async => brickSets ?? []);
           return mock;
         },
-        child: MaterialApp(
+        child: const MaterialApp(
           home: OverviewPage(),
         ),
       );
@@ -48,7 +48,7 @@ main() {
 
       await tester.pumpAndSettle();
 
-      final listViewFinder = find.byKey(Key('setList'));
+      final listViewFinder = find.byKey(const Key('setList'));
       expect(listViewFinder, findsOneWidget);
       expect(
           find.descendant(of: listViewFinder, matching: find.text('Set List')),
@@ -82,7 +82,7 @@ main() {
       await tester.pumpWidget(createApp(brickSets: dummyBrickSets));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('deleteSetList')).first);
+      await tester.tap(find.byKey(const Key('deleteSetList')).first);
       await tester.pump();
 
       expect(find.byType(AlertDialog), findsOneWidget);

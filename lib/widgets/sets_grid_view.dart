@@ -9,20 +9,22 @@ class SetsGridView extends StatefulWidget {
   final List<SetOrMoc> sets;
   final bool withButtons;
 
-  SetsGridView(this.sets, {this.withButtons = false});
+  const SetsGridView(this.sets, {Key? key, this.withButtons = false})
+      : super(key: key);
 
   @override
   State<SetsGridView> createState() => _SetsGridViewState();
 }
 
 class _SetsGridViewState extends State<SetsGridView> {
+  @override
   Widget build(BuildContext context) {
     return _createSetsView(context);
   }
 
   Widget _createSetsView(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Stack(
         children: [
           ListView.builder(

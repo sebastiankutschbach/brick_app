@@ -9,46 +9,43 @@ class BrickAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
 
-  final showLogoutButton;
+  final bool showLogoutButton;
   final List<IconButton> additionalButtons;
 
   BrickAppBar(this.title,
       {Key? key,
       this.showLogoutButton = true,
       this.additionalButtons = const []})
-      : preferredSize = Size.fromHeight(50.0),
+      : preferredSize = const Size.fromHeight(50.0),
         super(key: key);
 
+  @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: title,
-      actions: []
-        ..addAll(additionalButtons)
-        ..addAll([
-          _createSettingsButton(context),
-          showLogoutButton ? _createLogoutButton(context) : Container(),
-        ]),
-    );
+    return AppBar(title: title, actions: [
+      ...additionalButtons,
+      _createSettingsButton(context),
+      showLogoutButton ? _createLogoutButton(context) : Container(),
+    ]);
   }
 
   IconButton _createSettingsButton(BuildContext context) {
     return IconButton(
-        key: Key('brickAppBarSettings'),
+        key: const Key('brickAppBarSettings'),
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SettingsPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const SettingsPage()));
         },
-        icon: Icon(Icons.settings));
+        icon: const Icon(Icons.settings));
   }
 
   IconButton _createLogoutButton(BuildContext context) {
     return IconButton(
-        key: Key('brickAppBarLogout'),
+        key: const Key('brickAppBarLogout'),
         onPressed: () {
           context.read<PreferencesService>().userToken = '';
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LoginPage()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginPage()));
         },
-        icon: Icon(Icons.logout));
+        icon: const Icon(Icons.logout));
   }
 }

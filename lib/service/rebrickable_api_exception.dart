@@ -1,4 +1,4 @@
 class RebrickableApiException implements Exception {
-  final message;
+  final dynamic message;
   RebrickableApiException(this.message);
 }

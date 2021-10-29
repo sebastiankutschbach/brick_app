@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -16,9 +18,10 @@ class _LoginPageState extends State<LoginPage> {
   var _username = "";
   var _password = "";
 
+  @override
   Widget build(BuildContext context) {
     final model = context.read<RebrickableModel>();
-    final route = MaterialPageRoute(builder: (context) => OverviewPage());
+    final route = MaterialPageRoute(builder: (context) => const OverviewPage());
     final apiKey = context.watch<PreferencesService>().apiKey;
     final userToken = context.watch<PreferencesService>().userToken;
     if (userToken.isNotEmpty && apiKey.isNotEmpty) {
@@ -27,37 +30,37 @@ class _LoginPageState extends State<LoginPage> {
     }
     return Scaffold(
       appBar: BrickAppBar(
-        Text('Rebrickable Login'),
+        const Text('Rebrickable Login'),
         showLogoutButton: false,
       ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
-                    key: Key('username'),
-                    decoration: InputDecoration(labelText: 'Username'),
+                    key: const Key('username'),
+                    decoration: const InputDecoration(labelText: 'Username'),
                     onChanged: (value) => _username = value,
                     validator: (value) =>
                         value!.isEmpty ? 'Username cannot be empty' : null,
                   ),
                   TextFormField(
-                    key: Key('password'),
-                    decoration: InputDecoration(labelText: 'Password'),
+                    key: const Key('password'),
+                    decoration: const InputDecoration(labelText: 'Password'),
                     onChanged: (value) => _password = value,
                     validator: (value) =>
                         value!.isEmpty ? 'Password cannot be empty' : null,
                     obscureText: true,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   ElevatedButton(
-                    key: Key('login'),
+                    key: const Key('login'),
                     onPressed: () async {
                       if (apiKey.isEmpty) {
                         _showDialog('API Key not set',
@@ -79,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       }
                     },
-                    child: Text('Login'),
+                    child: const Text('Login'),
                   ),
                 ],
               ),

@@ -13,17 +13,19 @@ class SetsGridTile extends StatelessWidget {
   final SetOrMoc set;
   final bool withButtons;
 
-  SetsGridTile(this.set, {this.withButtons = false});
+  const SetsGridTile(this.set, {this.withButtons = false, Key? key})
+      : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
               color: Theme.of(context).colorScheme.secondary, width: 2),
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(10.0),
           ),
         ),
@@ -37,7 +39,7 @@ class SetsGridTile extends StatelessWidget {
       children: [
         ListTile(
           onTap: withButtons ? () {} : () => _openUrl(context, set.url),
-          contentPadding: EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(10),
           title: CachedNetworkImage(
             imageUrl: set.imgUrl,
             key: Key('tile_${set.setNum}'),
@@ -61,7 +63,7 @@ class SetsGridTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Expanded(
@@ -72,7 +74,7 @@ class SetsGridTile extends StatelessWidget {
               onPressedCallback: () => _openUrl(context, set.url),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Expanded(
@@ -82,13 +84,13 @@ class SetsGridTile extends StatelessWidget {
               label: 'MOCs',
               onPressedCallback: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  settings: RouteSettings(name: 'mocsRoute'),
+                  settings: const RouteSettings(name: 'mocsRoute'),
                   builder: (context) => MocPage(set),
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
           Expanded(
@@ -98,13 +100,13 @@ class SetsGridTile extends StatelessWidget {
               label: 'Parts',
               onPressedCallback: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  settings: RouteSettings(name: 'partsRoute'),
+                  settings: const RouteSettings(name: 'partsRoute'),
                   builder: (context) => PartList(set),
                 ),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
         ],
@@ -114,7 +116,7 @@ class SetsGridTile extends StatelessWidget {
     kIsWeb
         ? launch(url)
         : Navigator.of(context).push(MaterialPageRoute(
-            settings: RouteSettings(name: 'setRoute'),
+            settings: const RouteSettings(name: 'setRoute'),
             builder: (_) => WebViewPage(url),
           ));
   }

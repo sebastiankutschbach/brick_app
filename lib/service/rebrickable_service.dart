@@ -23,7 +23,7 @@ class RebrickableService {
   bool get isAuthenticated => _userToken.isNotEmpty;
 
   RebrickableService({Client? client}) {
-    this._client = client ?? Client();
+    _client = client ?? Client();
   }
 
   Future<String> authenticate(String username, String password) async {
@@ -78,8 +78,8 @@ class RebrickableService {
     var document = parse(response.body);
     final selectors = document.querySelectorAll('div > a');
 
-    final pdfUrl = selectors
-        .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
+    final pdfUrl =
+        selectors.firstWhere((element) => element.text.contains('.pdf'));
     return 'https://rebrickable.com${pdfUrl.attributes["href"]}';
   }
 

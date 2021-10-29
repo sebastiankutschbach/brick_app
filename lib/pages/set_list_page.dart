@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 class SetListPage extends StatelessWidget {
   final BrickSetList brickSetList;
 
-  SetListPage({required this.brickSetList});
+  const SetListPage({required this.brickSetList, Key? key}) : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<BrickSet>>(
       future: context
@@ -25,19 +27,23 @@ class SetListPage extends StatelessWidget {
                   snapshot.data!,
                   withButtons: true,
                 )
-              : CircularProgressIndicator(),
+              : const CircularProgressIndicator(),
         ),
-        floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {},),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {},
+        ),
       ),
     );
   }
 
   String _getTitleIndicator(AsyncSnapshot snapshot) {
-    if (!snapshot.hasData)
+    if (!snapshot.hasData) {
       return '(loading)';
-    else if (snapshot.hasError)
+    } else if (snapshot.hasError) {
       return '(error)';
-    else
+    } else {
       return '';
+    }
   }
 }

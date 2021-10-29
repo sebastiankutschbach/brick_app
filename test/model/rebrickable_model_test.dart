@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import '../mocks.dart';
 import 'inventory_test.dart';
 
-final userToken = 'myUserToken';
+const userToken = 'myUserToken';
 
 main() {
   group('login', () {
@@ -150,7 +150,7 @@ main() {
 
   group('getMocsFromSet', () {
     test('all mocs retrieval', () async {
-      final String setNum = "MOC-56901";
+      const String setNum = "MOC-56901";
       final moc = Moc.fromJson(
         {
           "set_num": "MOC-56901",
@@ -174,7 +174,7 @@ main() {
     });
 
     test('all mocs retrieval failed', () async {
-      final String setNum = "MOC-56901";
+      const String setNum = "MOC-56901";
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(() => serviceMock.getMocsFromSet(setNum: setNum))
@@ -187,7 +187,7 @@ main() {
 
   group('getInventoriesOfSet', () {
     test('succeeds', () async {
-      final String setNum = "70672-1";
+      const String setNum = "70672-1";
       final Inventory inventory = Inventory.fromJson(inventoryJson);
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
@@ -198,7 +198,7 @@ main() {
     });
 
     test('fails', () async {
-      final String setNum = "70672-1";
+      const String setNum = "70672-1";
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(() => serviceMock.getInventoriesOfSet(setNum: setNum))

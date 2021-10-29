@@ -9,8 +9,9 @@ import 'package:provider/provider.dart';
 class MocPage extends StatelessWidget {
   final BrickSet brickSet;
 
-  MocPage(this.brickSet);
+  const MocPage(this.brickSet, {Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     final service = context.read<RebrickableModel>();
     return Scaffold(
@@ -26,7 +27,7 @@ class MocPage extends StatelessWidget {
               withButtons: false,
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),

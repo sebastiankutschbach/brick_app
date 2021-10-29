@@ -13,21 +13,21 @@ main() {
   final app = MaterialApp(
     home: ChangeNotifierProvider<PreferencesService>(
       create: (context) => preferencesServiceMock,
-      child: SettingsPage(),
+      child: const SettingsPage(),
     ),
   );
   group('smoke test', () {
     testWidgets('has a text field for api key', (tester) async {
       await tester.pumpWidget(MaterialApp(home: app));
 
-      expect(find.byKey(Key('apiKey')), findsOneWidget);
+      expect(find.byKey(const Key('apiKey')), findsOneWidget);
     });
   });
 
   group('api key', () {
     testWidgets('does persist api key', (tester) async {
       await tester.pumpWidget(MaterialApp(home: app));
-      await tester.enterText(find.byKey(Key('apiKey')), 'myKey');
+      await tester.enterText(find.byKey(const Key('apiKey')), 'myKey');
       await tester.pumpAndSettle();
 
       verify(() => preferencesServiceMock.apiKey = 'myKey');

@@ -102,7 +102,7 @@ class Dummy {
   Dummy(this.name);
 }
 
-final firstUrlResponseBody = '''{
+const firstUrlResponseBody = '''{
   "count": 39932,
   "next": "https://myUrl?page=2",
   "previous": null,
@@ -111,7 +111,7 @@ final firstUrlResponseBody = '''{
   ]
 }''';
 
-final secondUrlResponseBody = '''{
+const secondUrlResponseBody = '''{
   "count": 39932,
   "next": "https://myUrl?page=3",
   "previous": "https://myUrl",
@@ -120,7 +120,7 @@ final secondUrlResponseBody = '''{
   ]
 }''';
 
-final thirdUrlResponseBody = '''{
+const thirdUrlResponseBody = '''{
   "count": 39932,
   "next": null,
   "previous": "https://myUrl?page=2",

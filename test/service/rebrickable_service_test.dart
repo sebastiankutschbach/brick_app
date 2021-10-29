@@ -12,13 +12,13 @@ import 'package:mocktail/mocktail.dart';
 import '../mocks.dart';
 
 void main() {
-  final String _apiKey = 'apiKey';
+  const String _apiKey = 'apiKey';
   final Map<String, String> _authHeader = {'Authorization': 'key $_apiKey'};
   final Map<String, String> _authHeaderWithContentType = {
     'Authorization': 'key $_apiKey',
     'content-type': 'application/x-www-form-urlencoded'
   };
-  var client;
+  late Client client;
   late RebrickableService service;
 
   void _setUpAuthenticatedServiceMock() async {
@@ -82,7 +82,7 @@ void main() {
     });
 
     test('it should retrieve a specific set list', () async {
-      final id = 521857;
+      const id = 521857;
       final uri = Uri.parse(userSetListUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
       when(() => client.get(uri, headers: _authHeader))
@@ -98,10 +98,10 @@ void main() {
     });
 
     test('executes fine', () async {
-      final setListName = 'setListName';
+      const setListName = 'setListName';
       final url =
           Uri.parse(addSetListUrlTemplate.expand({'user_token': 'validtoken'}));
-      final body = 'is_buildable=true&name=$setListName&num_sets=0';
+      const body = 'is_buildable=true&name=$setListName&num_sets=0';
       final headers = _authHeaderWithContentType;
       when(() => client.post(url, headers: headers, body: body))
           .thenAnswer((_) async => Response('', 201));
@@ -111,10 +111,10 @@ void main() {
     });
 
     test('handles error', () async {
-      final setListName = 'setListName';
+      const setListName = 'setListName';
       final url =
           Uri.parse(addSetListUrlTemplate.expand({'user_token': 'validtoken'}));
-      final body = 'is_buildable=true&name=$setListName&num_sets=0';
+      const body = 'is_buildable=true&name=$setListName&num_sets=0';
       final headers = _authHeaderWithContentType;
       when(() => client.post(url, headers: headers, body: body))
           .thenAnswer((_) async => Response('', 500));
@@ -131,7 +131,7 @@ void main() {
     });
 
     test('executes fine', () async {
-      final setListId = 1;
+      const setListId = 1;
       final url = Uri.parse(deleteSetListUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': setListId}));
       final headers = _authHeader;
@@ -144,7 +144,7 @@ void main() {
     });
 
     test('handles error', () async {
-      final setListId = 1;
+      const setListId = 1;
       final url = Uri.parse(deleteSetListUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': setListId}));
       final headers = _authHeader;
@@ -164,7 +164,7 @@ void main() {
     });
 
     test('it should retrieve a specific set', () async {
-      final id = 548040;
+      const id = 548040;
       final uri = Uri.parse(userSetListDetailsUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
       when(() => client.get(uri, headers: _authHeader))
@@ -177,7 +177,7 @@ void main() {
     });
 
     test('it should handle http errors', () async {
-      final id = 548040;
+      const id = 548040;
       final uri = Uri.parse(userSetListDetailsUrlTemplate
           .expand({'user_token': 'validtoken', 'list_id': id}));
       when(() => client.get(uri, headers: _authHeader))
@@ -194,7 +194,7 @@ void main() {
     });
 
     test('it should retrieve mocs for a set', () async {
-      final setNum = "70672-1";
+      const setNum = "70672-1";
       final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
       when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(aMocList, 200));
@@ -205,7 +205,7 @@ void main() {
     });
 
     test('it should handle http errors', () async {
-      final setNum = "70672-1";
+      const setNum = "70672-1";
       final uri = Uri.parse(setMocListUrlTemplate.expand({'set_num': setNum}));
       when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
@@ -221,7 +221,7 @@ void main() {
     });
 
     test('it should retrieve inventories for a set', () async {
-      final setNum = "70672-1";
+      const setNum = "70672-1";
       final uri = Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
       when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response(anInventoryList, 200));
@@ -233,7 +233,7 @@ void main() {
     });
 
     test('it should handle http errors', () async {
-      final setNum = "70672-1";
+      const setNum = "70672-1";
       final uri = Uri.parse(setPartListUrlTemplate.expand({'set_num': setNum}));
       when(() => client.get(uri, headers: _authHeader))
           .thenAnswer((_) async => Response('not found', 404));
@@ -266,7 +266,7 @@ void main() {
   });
 }
 
-final aSetListList = '''{
+const aSetListList = '''{
         "count": 1,
         "next": null,
         "previous": null,
@@ -280,7 +280,7 @@ final aSetListList = '''{
         ]
       }''';
 
-final aSingleSetListList = '''{
+const aSingleSetListList = '''{
           "count": 1,
           "next": null,
           "previous": null,
@@ -294,7 +294,7 @@ final aSingleSetListList = '''{
           ]
         }''';
 
-final aSingleSet = '''{
+const aSingleSet = '''{
           "count": 1,
           "next": null,
           "previous": null,
@@ -317,7 +317,7 @@ final aSingleSet = '''{
           ]
         }''';
 
-final aMocList = '''{
+const aMocList = '''{
           "count": 2,
           "next": null,
           "previous": null,
@@ -347,7 +347,7 @@ final aMocList = '''{
           ]
         }''';
 
-final anInventoryList = '''{
+const anInventoryList = '''{
             "count": 2,
             "next": null,
             "previous": null,

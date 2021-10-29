@@ -10,7 +10,7 @@ enum SortDirection { ascending, descending }
 class PartList extends StatefulWidget {
   final BrickSet brickSet;
 
-  PartList(this.brickSet);
+  const PartList(this.brickSet, {Key? key}) : super(key: key);
 
   @override
   State<PartList> createState() => _PartListState();
@@ -19,6 +19,7 @@ class PartList extends StatefulWidget {
 class _PartListState extends State<PartList> {
   SortDirection sortDirection = SortDirection.descending;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BrickAppBar(
@@ -33,7 +34,7 @@ class _PartListState extends State<PartList> {
             .getInventoriesOfSet(setNum: widget.brickSet.setNum),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
@@ -70,16 +71,16 @@ class _PartListState extends State<PartList> {
         leading: Text('${inventory.quantity}x'),
         title: Text(
             '${inventory.part.name}${inventory.isSpare ? " (spare part)" : ""}'),
-        subtitle: Text('${inventory.part.partNum}'),
+        subtitle: Text(inventory.part.partNum),
         trailing: inventory.part.partImgUrl == null
-            ? Text("Image n/a") // TODO can be replaced with image e.g.
+            ? const Text("Image n/a") // TODO can be replaced with image e.g.
             : Image.network(inventory.part.partImgUrl!),
-        tileColor: inventory.isSpare ? Color(0xFFEEEEEE) : Colors.white,
+        tileColor: inventory.isSpare ? const Color(0xFFEEEEEE) : Colors.white,
       );
 
   IconButton _createSortButton(BuildContext context) {
     return IconButton(
-        key: Key('brickAppBarSort'),
+        key: const Key('brickAppBarSort'),
         onPressed: () {
           setState(() {
             sortDirection == SortDirection.ascending
@@ -87,6 +88,6 @@ class _PartListState extends State<PartList> {
                 : sortDirection = SortDirection.ascending;
           });
         },
-        icon: Icon(Icons.sort));
+        icon: const Icon(Icons.sort));
   }
 }

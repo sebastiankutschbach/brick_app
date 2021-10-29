@@ -20,7 +20,11 @@ class MyApp extends StatelessWidget {
   final PreferencesService preferencesService;
   final RebrickableModel rebrickableModel;
 
-  MyApp({required this.preferencesService, required this.rebrickableModel});
+  const MyApp(
+      {required this.preferencesService,
+      required this.rebrickableModel,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }

@@ -5,12 +5,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebViewPage extends StatelessWidget {
   final String url;
 
-  WebViewPage(this.url);
+  const WebViewPage(this.url, {Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BrickAppBar(
-        Text('Rebrickable'),
+        const Text('Rebrickable'),
       ),
       body: WebView(
         initialUrl: url,

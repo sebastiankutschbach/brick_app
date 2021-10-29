@@ -27,7 +27,7 @@ main() {
   late NavigatorObserver navigatorObserver;
 
   setUpAll(() {
-    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+    registerFallbackValue(MaterialPageRoute(builder: (_) => const Text('')));
   });
 
   createApp() {
@@ -84,7 +84,7 @@ main() {
 
         await tester.pump();
 
-        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        final setTileFinder = find.byKey(const Key('tile_70672-1'));
         expect(setTileFinder, findsOneWidget);
       });
     });
@@ -96,9 +96,9 @@ main() {
 
         await tester.pump();
 
-        expect(find.byKey(Key('home_button_70672-1')), findsOneWidget);
-        expect(find.byKey(Key('mocs_button_70672-1')), findsOneWidget);
-        expect(find.byKey(Key('parts_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('home_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('mocs_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('parts_button_70672-1')), findsOneWidget);
       });
     });
 
@@ -109,12 +109,12 @@ main() {
 
         await tester.pump();
 
-        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        final setTileFinder = find.byKey(const Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
 
         await tester.pump();
 
-        final buttonFinder = find.byKey(Key('home_button_70672-1'));
+        final buttonFinder = find.byKey(const Key('home_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('setRoute');
@@ -128,12 +128,12 @@ main() {
 
         await tester.pump();
 
-        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        final setTileFinder = find.byKey(const Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
 
         await tester.pump();
 
-        final buttonFinder = find.byKey(Key('parts_button_70672-1'));
+        final buttonFinder = find.byKey(const Key('parts_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('partsRoute');
@@ -147,12 +147,12 @@ main() {
 
         await tester.pump();
 
-        final setTileFinder = find.byKey(Key('tile_70672-1'));
+        final setTileFinder = find.byKey(const Key('tile_70672-1'));
         await tester.tap(setTileFinder.first);
 
         await tester.pump();
 
-        final buttonFinder = find.byKey(Key('mocs_button_70672-1'));
+        final buttonFinder = find.byKey(const Key('mocs_button_70672-1'));
         await tester.tap(buttonFinder.first);
 
         _verifyCorrectRouting('mocsRoute');

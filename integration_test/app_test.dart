@@ -29,21 +29,21 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byKey(Key('username')), username!);
-      await tester.enterText(find.byKey(Key('password')), password!);
+      await tester.enterText(find.byKey(const Key('username')), username!);
+      await tester.enterText(find.byKey(const Key('password')), password!);
 
-      await tester.tap(find.byKey(Key('brickAppBarSettings')));
+      await tester.tap(find.byKey(const Key('brickAppBarSettings')));
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byKey(Key('apiKey')), apiKey!);
+      await tester.enterText(find.byKey(const Key('apiKey')), apiKey!);
 
       await tester.pageBack();
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('login')));
+      await tester.tap(find.byKey(const Key('login')));
 
-      await tester.pumpAndSettle(Duration(seconds: 2));
-      expect(find.byKey(Key('setList')), findsOneWidget);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.byKey(const Key('setList')), findsOneWidget);
     });
   });
 }

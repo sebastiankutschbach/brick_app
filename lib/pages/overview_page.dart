@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OverviewPage extends StatefulWidget {
+  const OverviewPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _OverviewPageState();
 }
 
 class _OverviewPageState extends State<OverviewPage> {
+  @override
   Widget build(BuildContext context) {
     final model = context.read<RebrickableModel>();
     return FutureBuilder<List<BrickSetList>>(
@@ -26,25 +29,25 @@ class _OverviewPageState extends State<OverviewPage> {
                 child: _createListView(snapshot.data!),
               ),
               floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
                 onPressed: () => _showDialog(context),
               ),
             );
           } else if (snapshot.hasError) {
             return Scaffold(
               appBar: AppBar(
-                title: Text('My Set Lists (error)'),
+                title: const Text('My Set Lists (error)'),
               ),
-              body: Center(
+              body: const Center(
                 child: Text('An error occured while loading the set lists.'),
               ),
             );
           } else {
             return Scaffold(
               appBar: AppBar(
-                title: Text('My Set Lists (loading)'),
+                title: const Text('My Set Lists (loading)'),
               ),
-              body: Center(
+              body: const Center(
                 child: CircularProgressIndicator(),
               ),
             );
@@ -53,21 +56,21 @@ class _OverviewPageState extends State<OverviewPage> {
   }
 
   ListView _createListView(List<BrickSetList> brickSetLists) =>
-      brickSetLists.length != 0
+      brickSetLists.isNotEmpty
           ? ListView.builder(
-              key: Key('setList'),
+              key: const Key('setList'),
               itemBuilder: (context, index) =>
                   _createListTile(context, brickSetLists[index]),
               itemCount: brickSetLists.length)
           : ListView(
-              children: [
+              children: const [
                 Text('You have no set lists in your account.'),
               ],
             );
 
   ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
-        leading: Icon(
+        leading: const Icon(
           Icons.domain,
           color: Colors.red,
         ),
@@ -79,27 +82,28 @@ class _OverviewPageState extends State<OverviewPage> {
           ),
         ),
         trailing: IconButton(
-          key: Key('deleteSetList'),
-          icon: Icon(Icons.delete),
+          key: const Key('deleteSetList'),
+          icon: const Icon(Icons.delete),
           onPressed: () => showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Delete Set List'),
-              content: Text('''Do you really want to delete this set list? 
+              title: const Text('Delete Set List'),
+              content:
+                  const Text('''Do you really want to delete this set list? 
 This deletes the list itself and all sets in this list.'''),
               actions: [
                 ElevatedButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 ElevatedButton(
-                    child: Text('Delete'),
+                    child: const Text('Delete'),
                     onPressed: () {
                       final model = context.read<RebrickableModel>();
                       model.deleteSetList(setListId: brickSetList.id);
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('List deleted successfully'),
                         ),
                       );
@@ -120,11 +124,11 @@ This deletes the list itself and all sets in this list.'''),
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: Text('Create new Set List'),
+          title: const Text('Create new Set List'),
           content: Form(
             child: TextFormField(
-              key: Key('username'),
-              decoration: InputDecoration(labelText: 'Set list name'),
+              key: const Key('username'),
+              decoration: const InputDecoration(labelText: 'Set list name'),
               onChanged: (value) => setState(() => setListName = value),
               validator: (value) =>
                   value!.isEmpty ? 'Set list name cannot be empty' : null,
@@ -132,11 +136,11 @@ This deletes the list itself and all sets in this list.'''),
           ),
           actions: [
             ElevatedButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () => Navigator.of(context).pop(),
             ),
             ElevatedButton(
-              child: Text('Create'),
+              child: const Text('Create'),
               onPressed: setListName != null
                   ? () {
                       context
@@ -144,7 +148,7 @@ This deletes the list itself and all sets in this list.'''),
                           .addSetList(setListName: setListName!);
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('List created successfully'),
                         ),
                       );
