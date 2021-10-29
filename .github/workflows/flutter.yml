@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -36,9 +36,15 @@ jobs:
     - name: Integration test
       env:
         DOTENV: ${secrets.DOTENV_IT}
-      run: |
-        echo $DOTENV > .env
-        flutter test integration_test
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: ${{ matrix.api-level }}
+        target: ${{ matrix.target }}
+        arch: x86
+        profile: Nexus 6
+        script: |
+          echo $DOTENV > .env
+          flutter test integration_test
     - name: Build Android APK
       run: flutter build apk
     - name: Build web version
