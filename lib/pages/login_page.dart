@@ -3,7 +3,6 @@ import 'package:brick_app/pages/overview_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
