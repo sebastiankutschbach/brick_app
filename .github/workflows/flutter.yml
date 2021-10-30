@@ -5,14 +5,13 @@ on:
 
 env:
   flutter_version: "2.6.9"
+  flutter_channel: dev
   java_version: "12.x"
 
 jobs:
   setup:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -23,7 +22,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
-          channel: dev
+          channel: ${{ env.flutter_channel }}
       - name: Cache Flutter dependencies
         uses: actions/cache@v2
         with:
@@ -40,6 +39,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
@@ -53,6 +60,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
@@ -66,6 +81,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
@@ -88,6 +111,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ env.java_version }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: ${{ env.flutter_channel }}
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
@@ -114,6 +145,9 @@ jobs:
 
   deploy-webapp:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     needs: [ test, integration-test, upload-artifacts ]
     if: github.ref == 'refs/heads/main'
 
