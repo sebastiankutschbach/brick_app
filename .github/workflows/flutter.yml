@@ -98,7 +98,7 @@ jobs:
           profile: Nexus 6
           script: |
             echo $DOTENV > .env
-            ls -lR
+            ls -la
             flutter test integration_test
 
   deploy-webapp:
