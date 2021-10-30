@@ -3,6 +3,10 @@ name: CI/CD
 on:
   [workflow_dispatch, pull_request, push]
 
+env:
+  flutter_version: "2.6.9"
+  java_version: "12.x"
+
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -10,14 +14,21 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: '12.x'
+          java-version: ${{ env.java_version }}
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
           channel: dev
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
       - name: Setup Coverage
         uses: stelynx/dart-full-coverage@v1.0.3
         with:
