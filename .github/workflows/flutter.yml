@@ -98,7 +98,7 @@ jobs:
           profile: Nexus 6
           script: |
             echo "$DOTENV" > .env
-            flutter test integration_test
+            flutter drive --driver=test_driver/integration_test_driver.dart --target=integration_test/gherkin_suite_test.dart
 
   deploy-webapp:
     runs-on: ubuntu-latest
