@@ -19,4 +19,3 @@ Scenario: User can login with correct credentials and api key
   Given A fresh app
   When I login with username, with password and with api key
   Then I expect the widget "SetList" to be visible
-  And When I logout

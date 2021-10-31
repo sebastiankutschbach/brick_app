@@ -7,7 +7,7 @@ StepDefinitionGeneric freshApp() {
     'A fresh app',
     (context) async {
       final sharedPrefs = await SharedPreferences.getInstance();
-      await sharedPrefs.clear();
+      context.expect(await sharedPrefs.clear(), true);
     },
   );
 }

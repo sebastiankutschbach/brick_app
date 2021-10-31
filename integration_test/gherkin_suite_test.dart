@@ -7,7 +7,9 @@ import 'package:flutter_gherkin/flutter_gherkin.dart'; // notice new import name
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gherkin/gherkin.dart';
 
+import 'gherkin/hooks/clear_preferences_hook.dart';
 import 'gherkin/steps/given/fresh_app.dart';
+import 'gherkin/steps/given/logged_in.dart';
 import 'gherkin/steps/then/expect_widget_visible.dart';
 import 'gherkin/steps/when/login.dart';
 import 'gherkin/steps/when/logout.dart';
@@ -18,10 +20,15 @@ part 'gherkin_suite_test.g.dart';
 void main() {
   executeTestSuite(
     FlutterTestConfiguration.DEFAULT([])
+      ..hooks = [ClearPreferencesHook()]
       ..stepDefinitions = [
+        // GIVEN
+        loggedIn(),
         freshApp(),
+        // WHEN
         login(),
         logout(),
+        // THEN
         expectWidgetVisible(),
         TextExistsStep()
       ]
