@@ -3,6 +3,16 @@
 version: '3'
 
 tasks:
+
+  test:
+    cmds:
+      - task: unit-test
+      - task: integration-test
+
+  unit-test:
+    cmds:
+      - flutter test
+
   integration-test:
     cmds:
       - flutter clean
