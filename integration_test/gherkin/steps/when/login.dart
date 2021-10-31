@@ -39,5 +39,7 @@ StepDefinitionGeneric login() {
       await context.world.appDriver
           .waitForAppToSettle(duration: const Duration(seconds: 2));
     },
+    configuration: StepDefinitionConfiguration()
+      ..timeout = const Duration(seconds: 15),
   );
 }

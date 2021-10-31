@@ -1,5 +1,6 @@
 // The application under test.
-import 'dart:developer';
+
+// ignore_for_file: avoid_print
 
 import 'package:brick_app/main.dart' as app;
 import 'package:flutter_gherkin/flutter_gherkin.dart'; // notice new import name
@@ -19,14 +20,14 @@ void main() {
       ..stepDefinitions = [freshApp(), login(), expectVisible()]
       ..reporters = [
         StdoutReporter(MessageLevel.error)
-          ..setWriteLineFn(log)
-          ..setWriteFn(log),
+          ..setWriteLineFn(print)
+          ..setWriteFn(print),
         ProgressReporter()
-          ..setWriteLineFn(log)
-          ..setWriteFn(log),
+          ..setWriteLineFn(print)
+          ..setWriteFn(print),
         TestRunSummaryReporter()
-          ..setWriteLineFn(log)
-          ..setWriteFn(log),
+          ..setWriteLineFn(print)
+          ..setWriteFn(print),
         JsonReporter(
           writeReport: (_, __) => Future<void>.value(),
         ),
