@@ -8,8 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gherkin/gherkin.dart';
 
 import 'gherkin/steps/given/fresh_app.dart';
-import 'gherkin/steps/then/expect_visible.dart';
+import 'gherkin/steps/then/expect_widget_visible.dart';
 import 'gherkin/steps/when/login.dart';
+import 'gherkin/steps/when/logout.dart';
 
 part 'gherkin_suite_test.g.dart';
 
@@ -17,7 +18,13 @@ part 'gherkin_suite_test.g.dart';
 void main() {
   executeTestSuite(
     FlutterTestConfiguration.DEFAULT([])
-      ..stepDefinitions = [freshApp(), login(), expectVisible()]
+      ..stepDefinitions = [
+        freshApp(),
+        login(),
+        logout(),
+        expectWidgetVisible(),
+        TextExistsStep()
+      ]
       ..reporters = [
         StdoutReporter(MessageLevel.error)
           ..setWriteLineFn(print)

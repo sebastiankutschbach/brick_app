@@ -4,11 +4,11 @@ import 'package:gherkin/gherkin.dart';
 
 const Map<String, String> widgetNameToKeyMapping = {'SetList': 'setList'};
 
-StepDefinitionGeneric expectVisible() {
+StepDefinitionGeneric expectWidgetVisible() {
   return then1<String, FlutterWorld>(
-    'I expect the {string} to be visible',
+    'I expect the widget {string} to be visible',
     (widgetName, context) async {
-      expect(
+      context.expect(
           context.world.appDriver
               .findBy(widgetNameToKeyMapping[widgetName], FindType.key),
           findsWidgets);
