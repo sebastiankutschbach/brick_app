@@ -1,7 +1,6 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
-import 'package:brick_app/service/http_utils.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +13,18 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
+  Future<List<BrickSetList>>? brickSetListFuture;
+
+  @override
+  initState() {
+    super.initState();
+    _refreshBrickSetList(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = context.read<RebrickableModel>();
     return FutureBuilder<List<BrickSetList>>(
-        future: model.getUsersSetLists(),
+        future: brickSetListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -55,8 +61,8 @@ class _OverviewPageState extends State<OverviewPage> {
         });
   }
 
-  ListView _createListView(List<BrickSetList> brickSetLists) =>
-      brickSetLists.isNotEmpty
+  Widget _createListView(List<BrickSetList> brickSetLists) => RefreshIndicator(
+      child: brickSetLists.isNotEmpty
           ? ListView.builder(
               key: const Key('setList'),
               itemBuilder: (context, index) =>
@@ -66,7 +72,8 @@ class _OverviewPageState extends State<OverviewPage> {
               children: const [
                 Text('You have no set lists in your account.'),
               ],
-            );
+            ),
+      onRefresh: () => _refreshBrickSetList(context));
 
   ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
@@ -99,19 +106,12 @@ This deletes the list itself and all sets in this list.'''),
                 ),
                 ElevatedButton(
                     child: const Text('Delete'),
-                    onPressed: () {
+                    onPressed: () async {
                       final model = context.read<RebrickableModel>();
-                      model.deleteSetList(setListId: brickSetList.id);
+                      await model.deleteSetList(setListId: brickSetList.id);
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('List deleted successfully'),
-                        ),
-                      );
-                      setState(() {
-                        // force reload
-                        httpCache.clear();
-                      });
+                      _showSnackBar(context, 'List deleted successfully');
+                      await _refreshBrickSetList(context);
                     }),
               ],
             ),
@@ -143,19 +143,13 @@ This deletes the list itself and all sets in this list.'''),
             ElevatedButton(
               child: const Text('Create'),
               onPressed: setListName != null
-                  ? () {
-                      context
+                  ? () async {
+                      await context
                           .read<RebrickableModel>()
                           .addSetList(setListName: setListName!);
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('List created successfully'),
-                        ),
-                      );
-                      setState(() {
-                        // force reload
-                      });
+                      _showSnackBar(context, 'List created successfully');
+                      await _refreshBrickSetList(context);
                     }
                   : null,
             ),
@@ -163,5 +157,21 @@ This deletes the list itself and all sets in this list.'''),
         ),
       ),
     );
+  }
+
+  void _showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
+  }
+
+  Future<void> _refreshBrickSetList(BuildContext context) async {
+    RebrickableModel model = context.read<RebrickableModel>();
+    List<BrickSetList> usersSetList = await model.getUsersSetLists();
+    setState(() {
+      brickSetListFuture = Future.value(usersSetList);
+    });
   }
 }
