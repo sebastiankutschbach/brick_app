@@ -28,6 +28,9 @@ void main() {
         // WHEN
         login(),
         logout(),
+        TapWidgetOfTypeStep(),
+        WhenFillFieldStep(),
+        TapWidgetOfTypeWithinStep(),
         // THEN
         expectWidgetVisible(),
         TextExistsStep()

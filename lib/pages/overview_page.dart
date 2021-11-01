@@ -70,6 +70,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   ListTile _createListTile(BuildContext context, BrickSetList brickSetList) =>
       ListTile(
+        key: Key('overviewListTile_${brickSetList.name}'),
         leading: const Icon(
           Icons.domain,
           color: Colors.red,
@@ -127,7 +128,7 @@ This deletes the list itself and all sets in this list.'''),
           title: const Text('Create new Set List'),
           content: Form(
             child: TextFormField(
-              key: const Key('username'),
+              key: const Key('setListName'),
               decoration: const InputDecoration(labelText: 'Set list name'),
               onChanged: (value) => setState(() => setListName = value),
               validator: (value) =>
