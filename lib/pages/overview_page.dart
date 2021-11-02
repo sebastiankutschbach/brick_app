@@ -65,7 +65,7 @@ class _OverviewPageState extends State<OverviewPage> {
   Widget _createListView(List<BrickSetList> brickSetLists) => RefreshIndicator(
       child: brickSetLists.isNotEmpty
           ? ListView.builder(
-              key: const Key('setList'),
+              key: const Key('overviewList'),
               itemBuilder: (context, index) =>
                   _createListTile(context, brickSetLists[index]),
               itemCount: brickSetLists.length)
