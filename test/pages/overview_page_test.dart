@@ -82,7 +82,7 @@ main() {
       await tester.pumpWidget(createApp(brickSets: dummyBrickSets));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const Key('deleteSetList')).first);
+      await tester.tap(find.byKey(const Key('deleteSetList_Set List')).first);
       await tester.pump();
 
       expect(find.byType(AlertDialog), findsOneWidget);

@@ -13,6 +13,7 @@ import 'gherkin/steps/given/logged_in.dart';
 import 'gherkin/steps/then/expect_widget_visible.dart';
 import 'gherkin/steps/when/login.dart';
 import 'gherkin/steps/when/logout.dart';
+import 'gherkin/steps/when/tap_widget.dart';
 
 part 'gherkin_suite_test.g.dart';
 
@@ -31,6 +32,7 @@ void main() {
         TapWidgetOfTypeStep(),
         WhenFillFieldStep(),
         TapWidgetOfTypeWithinStep(),
+        tapWidget(),
         // THEN
         expectWidgetVisible(),
         TextExistsStep()

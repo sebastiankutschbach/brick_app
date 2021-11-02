@@ -35,6 +35,7 @@ class _OverviewPageState extends State<OverviewPage> {
                 child: _createListView(snapshot.data!),
               ),
               floatingActionButton: FloatingActionButton(
+                key: const Key('createSetList'),
                 child: const Icon(Icons.add),
                 onPressed: () => _showDialog(context),
               ),
@@ -90,7 +91,7 @@ class _OverviewPageState extends State<OverviewPage> {
           ),
         ),
         trailing: IconButton(
-          key: const Key('deleteSetList'),
+          key: Key('deleteSetList_${brickSetList.name}'),
           icon: const Icon(Icons.delete),
           onPressed: () => showDialog(
             context: context,
