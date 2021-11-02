@@ -48,7 +48,7 @@ main() {
 
       await tester.pumpAndSettle();
 
-      final listViewFinder = find.byKey(const Key('setList'));
+      final listViewFinder = find.byKey(const Key('overviewList'));
       expect(listViewFinder, findsOneWidget);
       expect(
           find.descendant(of: listViewFinder, matching: find.text('Set List')),

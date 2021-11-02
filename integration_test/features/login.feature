@@ -18,4 +18,4 @@ Scenario: User cannot login without password
 Scenario: User can login with correct credentials and api key
   Given A fresh app
   When I login with username, with password and with api key
-  Then I expect the widget "OverViewList" to be visible
+  Then I expect the widget "overviewList" to be visible

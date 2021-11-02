@@ -13,7 +13,7 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
-  Future<List<BrickSetList>>? brickSetListFuture;
+  Future<List<BrickSetList>>? _brickSetListsFuture;
 
   @override
   initState() {
@@ -24,7 +24,7 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<BrickSetList>>(
-        future: brickSetListFuture,
+        future: _brickSetListsFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
@@ -169,10 +169,9 @@ This deletes the list itself and all sets in this list.'''),
   }
 
   Future<void> _refreshBrickSetList(BuildContext context) async {
-    RebrickableModel model = context.read<RebrickableModel>();
-    List<BrickSetList> usersSetList = await model.getUsersSetLists();
     setState(() {
-      brickSetListFuture = Future.value(usersSetList);
+      _brickSetListsFuture =
+          context.read<RebrickableModel>().getUsersSetLists();
     });
   }
 }
