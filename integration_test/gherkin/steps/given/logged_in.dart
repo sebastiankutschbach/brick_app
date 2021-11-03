@@ -41,6 +41,8 @@ StepDefinitionGeneric loggedIn() {
 
       await context.world.appDriver
           .waitForAppToSettle(duration: const Duration(seconds: 2));
+
+      await context.world.appDriver.waitForAppToSettle();
     },
     configuration: StepDefinitionConfiguration()
       ..timeout = const Duration(seconds: 30),
