@@ -2,6 +2,7 @@ import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/widgets/create_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -95,27 +96,19 @@ class _OverviewPageState extends State<OverviewPage> {
           icon: const Icon(Icons.delete),
           onPressed: () => showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Delete Set List'),
+            builder: (context) => CreateDeleteDialog(
+              title: 'Delete Set List',
               content:
                   const Text('''Do you really want to delete this set list? 
 This deletes the list itself and all sets in this list.'''),
-              actions: [
-                ElevatedButton(
-                  child: const Text('Cancel'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.red),
-                    child: const Text('Delete'),
-                    onPressed: () async {
-                      final model = context.read<RebrickableModel>();
-                      await model.deleteSetList(setListId: brickSetList.id);
-                      Navigator.of(context).pop();
-                      _showSnackBar(context, 'List deleted successfully');
-                      await _refreshBrickSetList(context);
-                    }),
-              ],
+              okButtonText: 'Delete',
+              onOkButtonPress: () async {
+                final model = context.read<RebrickableModel>();
+                await model.deleteSetList(setListId: brickSetList.id);
+                Navigator.of(context).pop();
+                _showSnackBar(context, 'List deleted successfully');
+                await _refreshBrickSetList(context);
+              },
             ),
           ),
         ),
@@ -126,37 +119,27 @@ This deletes the list itself and all sets in this list.'''),
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: const Text('Create new Set List'),
-          content: Form(
-            child: TextFormField(
-              key: const Key('setListName'),
-              decoration: const InputDecoration(labelText: 'Set list name'),
-              onChanged: (value) => setState(() => setListName = value),
-              validator: (value) =>
-                  value!.isEmpty ? 'Set list name cannot be empty' : null,
-            ),
+        builder: (context, setState) => CreateDeleteDialog(
+          key: const Key('setListName'),
+          title: 'Create new Set List',
+          content: TextFormField(
+            key: const Key('setListName'),
+            decoration: const InputDecoration(labelText: 'Set list name'),
+            onChanged: (value) => setState(() => setListName = value),
+            validator: (value) =>
+                value!.isEmpty ? 'Set list name cannot be empty' : null,
           ),
-          actions: [
-            ElevatedButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.green),
-              child: const Text('Create'),
-              onPressed: setListName != null
-                  ? () async {
-                      await context
-                          .read<RebrickableModel>()
-                          .addSetList(setListName: setListName!);
-                      Navigator.of(context).pop();
-                      _showSnackBar(context, 'List created successfully');
-                      await _refreshBrickSetList(context);
-                    }
-                  : null,
-            ),
-          ],
+          okButtonText: 'Create',
+          onOkButtonPress: setListName != null
+              ? () async {
+                  await context
+                      .read<RebrickableModel>()
+                      .addSetList(setListName: setListName!);
+                  Navigator.of(context).pop();
+                  _showSnackBar(context, 'List created successfully');
+                  await _refreshBrickSetList(context);
+                }
+              : null,
         ),
       ),
     );

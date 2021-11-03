@@ -43,6 +43,6 @@ StepDefinitionGeneric loggedIn() {
           .waitForAppToSettle(duration: const Duration(seconds: 2));
     },
     configuration: StepDefinitionConfiguration()
-      ..timeout = const Duration(seconds: 15),
+      ..timeout = const Duration(seconds: 30),
   );
 }
