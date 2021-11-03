@@ -120,7 +120,6 @@ This deletes the list itself and all sets in this list.'''),
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => CreateDeleteDialog(
-          key: const Key('setListName'),
           title: 'Create new Set List',
           content: TextFormField(
             key: const Key('setListName'),
