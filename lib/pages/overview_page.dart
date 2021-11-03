@@ -106,6 +106,7 @@ This deletes the list itself and all sets in this list.'''),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
                     child: const Text('Delete'),
                     onPressed: () async {
                       final model = context.read<RebrickableModel>();
@@ -142,6 +143,7 @@ This deletes the list itself and all sets in this list.'''),
               onPressed: () => Navigator.of(context).pop(),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.green),
               child: const Text('Create'),
               onPressed: setListName != null
                   ? () async {
