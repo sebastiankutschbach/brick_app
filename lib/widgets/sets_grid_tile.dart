@@ -43,11 +43,7 @@ class SetsGridTile extends StatelessWidget {
               value: progress.progress,
             ),
           ),
-          subtitle: Column(
-            children: [
-              Text(set.name),
-            ],
-          ),
+          subtitle: Text(set.name),
         ),
         _createButtons(context),
       ],

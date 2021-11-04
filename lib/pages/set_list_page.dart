@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/pages/utils.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:brick_app/widgets/create_delete_dialog.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
@@ -38,6 +39,7 @@ class _SetListPageState extends State<SetListPage> {
               ? RefreshIndicator(
                   child: SetsGridView(
                     snapshot.data!,
+                    setListId: widget.brickSetList.id,
                     key: const Key('setList'),
                   ),
                   onRefresh: () =>
@@ -84,18 +86,10 @@ class _SetListPageState extends State<SetListPage> {
                       setListId: widget.brickSetList.id, setId: setId!);
                   await _refreshBrickSets(context, widget.brickSetList.id);
                   Navigator.of(context).pop();
-                  _showSnackBar(context, 'Set added successfully');
+                  showSnackBar(context, 'Set added successfully');
                 }
               : null,
         ),
-      ),
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
       ),
     );
   }

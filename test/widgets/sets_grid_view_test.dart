@@ -49,4 +49,13 @@ main() {
             of: find.byType(SetsGridTile), matching: find.byType(PartsButton)),
         findsOneWidget);
   });
+
+  testWidgets('renders delete button if set list id is set', (tester) async {
+    await tester.pumpWidget(_createApp());
+
+    expect(
+        find.descendant(
+            of: find.byType(SetsGridTile), matching: find.byType(PartsButton)),
+        findsOneWidget);
+  });
 }

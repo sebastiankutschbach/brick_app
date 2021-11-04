@@ -1,6 +1,7 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
+import 'package:brick_app/pages/utils.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:brick_app/widgets/create_delete_dialog.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ This deletes the list itself and all sets in this list.'''),
                 await model.deleteSetList(setListId: brickSetList.id);
                 await _refreshBrickSetList(context);
                 Navigator.of(context).pop();
-                _showSnackBar(context, 'List deleted successfully');
+                showSnackBar(context, 'List deleted successfully');
               },
             ),
           ),
@@ -136,18 +137,10 @@ This deletes the list itself and all sets in this list.'''),
                       .addSetList(setListName: setListName!);
                   await _refreshBrickSetList(context);
                   Navigator.of(context).pop();
-                  _showSnackBar(context, 'List created successfully');
+                  showSnackBar(context, 'List created successfully');
                 }
               : null,
         ),
-      ),
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
       ),
     );
   }
