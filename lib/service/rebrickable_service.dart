@@ -114,6 +114,28 @@ class RebrickableService {
     }
   }
 
+  Future<void> addSetToList(
+      {required int setListId, required String setId}) async {
+    final addSetUrl = Uri.parse(addSetToListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': setListId}));
+    var result = await _client.post(addSetUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
+        body: 'include_spares=true&set_num=$setId&quantity=1');
+    if (result.statusCode != 201) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
+  Future<void> deleteSetFromList(
+      {required int setListId, required String setId}) async {
+    final deleteSetUrl = Uri.parse(deleteSetFromListUrlTemplate.expand(
+        {'user_token': _userToken, 'list_id': setListId, 'set_num': setId}));
+    var result = await _client.delete(deleteSetUrl, headers: createHeader());
+    if (result.statusCode != 204) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
   Map<String, String> createHeader({String? contentType}) {
     if (contentType != null) {
       return {'Authorization': 'key $_apiKey', 'content-type': contentType};

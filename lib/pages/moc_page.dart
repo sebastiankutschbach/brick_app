@@ -1,13 +1,12 @@
-import 'package:brick_app/model/brick_set.dart';
-import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MocPage extends StatefulWidget {
-  final BrickSet brickSet;
+  final SetOrMoc brickSet;
 
   const MocPage(this.brickSet, {Key? key}) : super(key: key);
 
@@ -16,7 +15,7 @@ class MocPage extends StatefulWidget {
 }
 
 class _MocPageState extends State<MocPage> {
-  Future<List<Moc>>? _setOrMocListFuture;
+  Future<List<SetOrMoc>>? _setOrMocListFuture;
 
   @override
   void initState() {
@@ -30,16 +29,13 @@ class _MocPageState extends State<MocPage> {
       appBar: BrickAppBar(
         Text(widget.brickSet.name),
       ),
-      body: FutureBuilder<List<Moc>>(
+      body: FutureBuilder<List<SetOrMoc>>(
         future: _setOrMocListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              child: SetsGridView(
-                snapshot.data!,
-                key: const Key('setGridView'),
-                withButtons: false,
-              ),
+              child:
+                  SetsGridView(snapshot.data!, key: const Key('setGridView')),
               onRefresh: () => _refreshMocList(context),
             );
           } else {

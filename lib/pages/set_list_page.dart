@@ -2,6 +2,7 @@ import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/widgets/create_delete_dialog.dart';
 import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,6 @@ class _SetListPageState extends State<SetListPage> {
               ? RefreshIndicator(
                   child: SetsGridView(
                     snapshot.data!,
-                    withButtons: true,
                     key: const Key('setList'),
                   ),
                   onRefresh: () =>
@@ -47,7 +47,7 @@ class _SetListPageState extends State<SetListPage> {
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {},
+          onPressed: () => _showDialog(context),
         ),
       ),
     );
@@ -61,6 +61,43 @@ class _SetListPageState extends State<SetListPage> {
     } else {
       return '';
     }
+  }
+
+  void _showDialog(BuildContext context) {
+    String? setId;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => CreateDeleteDialog(
+          title: 'Add Set to List',
+          content: TextFormField(
+            key: const Key('setIdInput'),
+            decoration: const InputDecoration(labelText: 'Set id'),
+            onChanged: (value) => setState(() => setId = value),
+            validator: (value) =>
+                value!.isEmpty ? 'Set list name cannot be empty' : null,
+          ),
+          okButtonText: 'Create',
+          onOkButtonPress: setId != null
+              ? () async {
+                  await context.read<RebrickableModel>().addSetToList(
+                      setListId: widget.brickSetList.id, setId: setId!);
+                  await _refreshBrickSets(context, widget.brickSetList.id);
+                  Navigator.of(context).pop();
+                  _showSnackBar(context, 'Set added successfully');
+                }
+              : null,
+        ),
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
   }
 
   Future<void> _refreshBrickSets(

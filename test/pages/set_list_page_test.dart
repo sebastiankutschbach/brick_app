@@ -48,18 +48,6 @@ main() {
     );
   }
 
-  void _verifyCorrectRouting(String routeName) {
-    List<MaterialPageRoute> pushedRoutes =
-        verify(() => navigatorObserver.didPush(captureAny(), any()))
-            .captured
-            .cast<MaterialPageRoute>();
-    expect(
-        pushedRoutes
-            .where((element) => element.settings.name == routeName)
-            .length,
-        1);
-  }
-
   group('app bar', () {
     testWidgets('does show the name of the set list in the app bar',
         (tester) async {
@@ -99,63 +87,6 @@ main() {
         expect(find.byKey(const Key('home_button_70672-1')), findsOneWidget);
         expect(find.byKey(const Key('mocs_button_70672-1')), findsOneWidget);
         expect(find.byKey(const Key('parts_button_70672-1')), findsOneWidget);
-      });
-    });
-
-    testWidgets('does navigate to set home page on tap',
-        (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(createApp());
-
-        await tester.pump();
-
-        final setTileFinder = find.byKey(const Key('tile_70672-1'));
-        await tester.tap(setTileFinder.first);
-
-        await tester.pump();
-
-        final buttonFinder = find.byKey(const Key('home_button_70672-1'));
-        await tester.tap(buttonFinder.first);
-
-        _verifyCorrectRouting('setRoute');
-      });
-    });
-
-    testWidgets('does navigate to parts page on tap',
-        (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(createApp());
-
-        await tester.pump();
-
-        final setTileFinder = find.byKey(const Key('tile_70672-1'));
-        await tester.tap(setTileFinder.first);
-
-        await tester.pump();
-
-        final buttonFinder = find.byKey(const Key('parts_button_70672-1'));
-        await tester.tap(buttonFinder.first);
-
-        _verifyCorrectRouting('partsRoute');
-      });
-    });
-
-    testWidgets('does navigate to moc page on tap',
-        (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(createApp());
-
-        await tester.pump();
-
-        final setTileFinder = find.byKey(const Key('tile_70672-1'));
-        await tester.tap(setTileFinder.first);
-
-        await tester.pump();
-
-        final buttonFinder = find.byKey(const Key('mocs_button_70672-1'));
-        await tester.tap(buttonFinder.first);
-
-        _verifyCorrectRouting('mocsRoute');
       });
     });
   });
