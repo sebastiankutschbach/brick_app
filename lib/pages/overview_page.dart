@@ -105,9 +105,9 @@ This deletes the list itself and all sets in this list.'''),
               onOkButtonPress: () async {
                 final model = context.read<RebrickableModel>();
                 await model.deleteSetList(setListId: brickSetList.id);
+                await _refreshBrickSetList(context);
                 Navigator.of(context).pop();
                 _showSnackBar(context, 'List deleted successfully');
-                await _refreshBrickSetList(context);
               },
             ),
           ),
@@ -134,9 +134,9 @@ This deletes the list itself and all sets in this list.'''),
                   await context
                       .read<RebrickableModel>()
                       .addSetList(setListName: setListName!);
+                  await _refreshBrickSetList(context);
                   Navigator.of(context).pop();
                   _showSnackBar(context, 'List created successfully');
-                  await _refreshBrickSetList(context);
                 }
               : null,
         ),
