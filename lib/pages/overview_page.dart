@@ -37,10 +37,25 @@ class _OverviewPageState extends State<OverviewPage> {
                 child: _createListView(snapshot.data!),
               ),
               floatingActionButton: FloatingActionButton(
-                key: const Key('createSetList'),
-                child: const Icon(Icons.add),
-                onPressed: () => _showDialog(context),
-              ),
+                  key: const Key('createSetList'),
+                  child: const Icon(Icons.add),
+                  onPressed: () => {
+                        showInputDialog(context,
+                            title: 'Create new Set List',
+                            inputFieldKey: const Key('setListName'),
+                            label: 'Set list name',
+                            validationErrorMessage:
+                                'Set list name cannot be empty',
+                            okButtonText: 'Create',
+                            onOkButtonPress: (input) async {
+                          await context
+                              .read<RebrickableModel>()
+                              .addSetList(setListName: input);
+                          await _refreshBrickSetList(context);
+                          Navigator.of(context).pop();
+                          showSnackBar(context, 'List created successfully');
+                        }),
+                      }),
             );
           } else if (snapshot.hasError) {
             return Scaffold(
@@ -114,36 +129,6 @@ This deletes the list itself and all sets in this list.'''),
           ),
         ),
       );
-
-  void _showDialog(BuildContext context) {
-    String? setListName;
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => CreateDeleteDialog(
-          title: 'Create new Set List',
-          content: TextFormField(
-            key: const Key('setListName'),
-            decoration: const InputDecoration(labelText: 'Set list name'),
-            onChanged: (value) => setState(() => setListName = value),
-            validator: (value) =>
-                value!.isEmpty ? 'Set list name cannot be empty' : null,
-          ),
-          okButtonText: 'Create',
-          onOkButtonPress: setListName != null
-              ? () async {
-                  await context
-                      .read<RebrickableModel>()
-                      .addSetList(setListName: setListName!);
-                  await _refreshBrickSetList(context);
-                  Navigator.of(context).pop();
-                  showSnackBar(context, 'List created successfully');
-                }
-              : null,
-        ),
-      ),
-    );
-  }
 
   Future<void> _refreshBrickSetList(BuildContext context) async {
     setState(() {
