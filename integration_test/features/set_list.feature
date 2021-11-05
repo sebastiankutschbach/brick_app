@@ -13,7 +13,7 @@ Scenario: User can add sets to a list
   When I tap the widget with the key "addSetButton"
   When I fill the "setIdInput" field with "71234-1"
   When I tap the button that contains the text "Add to list"
-  Then I expect the text "Gear Wheel Assortment" to be present
+  Then I expect the text "Sensei Wu Fun Pack" to be present
 
 Scenario: User can delete sets from a list
   Given A fresh app
@@ -21,4 +21,4 @@ Scenario: User can delete sets from a list
   When I tap the widget with the key "overviewListTile_Empty List"
   When I tap the widget with the key "deleteSetList_71234-1"
   When I tap the button that contains the text "Delete from list"
-  Then I expect the text "Gear Wheel Assortment" to be absent
+  Then I expect the text "Sensei Wu Fun Pack" to be absent
