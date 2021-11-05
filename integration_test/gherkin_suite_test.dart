@@ -33,6 +33,7 @@ void main() {
         WhenFillFieldStep(),
         TapWidgetOfTypeWithinStep(),
         tapWidget(),
+        WhenTapWidget(),
         // THEN
         expectWidgetVisible(),
         TextExistsStep()
