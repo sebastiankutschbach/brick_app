@@ -16,6 +16,7 @@ class DeleteFromListButton extends StatelessWidget {
   Widget build(BuildContext context) => TileButton(
         key: Key('delete_from_list_button_${set.setNum}'),
         iconData: Icons.delete_forever,
+        style: ElevatedButton.styleFrom(primary: Colors.red),
         label: 'Delete',
         onPressedCallback: () async {
           await context
