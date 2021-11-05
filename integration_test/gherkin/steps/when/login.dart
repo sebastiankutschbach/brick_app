@@ -47,8 +47,8 @@ StepDefinitionGeneric login() {
             context.world.appDriver.findBy('apiKey', FindType.key), apiKey!);
 
         await context.world.appDriver.pageBack();
-        await context.world.appDriver.waitForAppToSettle();
       }
+      await context.world.appDriver.waitForAppToSettle();
 
       await context.world.appDriver
           .tap(context.world.appDriver.findBy('login', FindType.key));

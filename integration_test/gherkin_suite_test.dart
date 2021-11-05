@@ -29,9 +29,7 @@ void main() {
         // WHEN
         login(),
         logout(),
-        TapWidgetOfTypeStep(),
         WhenFillFieldStep(),
-        TapWidgetOfTypeWithinStep(),
         tapWidget(),
         WhenTapWidget(),
         // THEN
