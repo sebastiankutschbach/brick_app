@@ -4,21 +4,8 @@ import 'dart:developer';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:http/http.dart';
 
-final Map<String, Future<List<dynamic>>> httpCache = {};
-
 Future<List<dynamic>> getPaginated(Client client, Uri url,
-    {Map<String, String> headers = const {}, bool cacheable = false}) async {
-  log('getPaginated, url: $url, cacheable: $cacheable');
-  return await (cacheable
-      ? httpCache.putIfAbsent(url.toString(), () {
-          log('cache miss');
-          return _getPaginated(client, url, headers);
-        })
-      : _getPaginated(client, url, headers));
-}
-
-Future<List<dynamic>> _getPaginated(
-    Client client, Uri url, Map<String, String> headers) async {
+    {Map<String, String> headers = const {}}) async {
   var body = await _getJsonDecoded(client, url, headers: headers);
   final List values = body['results'];
   while (body['next'] != null) {
