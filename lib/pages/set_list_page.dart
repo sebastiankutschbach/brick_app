@@ -48,6 +48,7 @@ class _SetListPageState extends State<SetListPage> {
               : const CircularProgressIndicator(),
         ),
         floatingActionButton: FloatingActionButton(
+          key: const Key('addSetButton'),
           child: const Icon(Icons.add),
           onPressed: () => _showDialog(context),
         ),
@@ -79,7 +80,7 @@ class _SetListPageState extends State<SetListPage> {
             validator: (value) =>
                 value!.isEmpty ? 'Set list name cannot be empty' : null,
           ),
-          okButtonText: 'Create',
+          okButtonText: 'Add to list',
           onOkButtonPress: setId != null
               ? () async {
                   await context.read<RebrickableModel>().addSetToList(

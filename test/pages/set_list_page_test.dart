@@ -84,9 +84,10 @@ main() {
 
         await tester.pump();
 
-        expect(find.byKey(const Key('home_button_70672-1')), findsOneWidget);
         expect(find.byKey(const Key('mocs_button_70672-1')), findsOneWidget);
         expect(find.byKey(const Key('parts_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('delete_from_list_button_70672-1')),
+            findsOneWidget);
       });
     });
   });

@@ -20,10 +20,6 @@ class TileButton extends StatelessWidget {
       icon: Icon(iconData, color: Colors.white),
       label: Text(label),
       onPressed: onPressedCallback,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity,
-            30), // double.infinity is the width and 30 is the height
-      ),
     );
   }
 }
