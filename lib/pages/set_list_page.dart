@@ -52,7 +52,6 @@ class _SetListPageState extends State<SetListPage> {
           onPressed: () => showInputDialog(context,
               title: 'Add Set to List',
               inputFieldKey: const Key('setIdInput'),
-              validationErrorMessage: 'Set id cannot be empty',
               label: 'Set id',
               okButtonText: 'Add to list', onOkButtonPress: (input) async {
             await context

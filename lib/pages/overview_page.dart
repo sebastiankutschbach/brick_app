@@ -44,8 +44,6 @@ class _OverviewPageState extends State<OverviewPage> {
                             title: 'Create new Set List',
                             inputFieldKey: const Key('setListName'),
                             label: 'Set list name',
-                            validationErrorMessage:
-                                'Set list name cannot be empty',
                             okButtonText: 'Create',
                             onOkButtonPress: (input) async {
                           await context
