@@ -40,6 +40,8 @@ class _SetListPageState extends State<SetListPage> {
                     snapshot.data!,
                     setListId: widget.brickSetList.id,
                     key: const Key('setList'),
+                    onSetDeleted: () =>
+                        _refreshBrickSets(context, widget.brickSetList.id),
                   ),
                   onRefresh: () =>
                       _refreshBrickSets(context, widget.brickSetList.id),

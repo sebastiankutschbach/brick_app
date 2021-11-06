@@ -11,8 +11,10 @@ typedef OnTapCallback = void Function(dynamic);
 class SetsGridView extends StatelessWidget {
   final List<SetOrMoc> sets;
   final int? setListId;
+  final Function? onSetDeleted;
 
-  const SetsGridView(this.sets, {this.setListId, Key? key}) : super(key: key);
+  const SetsGridView(this.sets, {this.setListId, this.onSetDeleted, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -27,7 +29,8 @@ class SetsGridView extends StatelessWidget {
                   MocsButton(sets[index]),
                   PartsButton(sets[index]),
                   setListId != null
-                      ? DeleteFromListButton(sets[index], setListId: setListId!)
+                      ? DeleteFromListButton(sets[index],
+                          setListId: setListId!, onSetDeleted: onSetDeleted)
                       : Container()
                 ],
               ),

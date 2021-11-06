@@ -20,4 +20,4 @@ Scenario: User can delete sets from a list
   Given A logged in user
   When I tap the widget with the key "overviewListTile_Empty List"
   When I tap the "delete_from_list_button_71234-1" button
-  #Then I expect the text "Sensei Wu Fun Pack" to be absent
+  Then I expect the text "Sensei Wu Fun Pack" to be absent

@@ -9,7 +9,9 @@ import '../mocks.dart';
 import '../model/brick_set_test.dart';
 
 main() {
-  Widget _createApp({RebrickableModel? rebrickableModel}) => MultiProvider(
+  Widget _createApp(
+          {RebrickableModel? rebrickableModel, Function? onSetDeleted}) =>
+      MultiProvider(
         providers: [
           ChangeNotifierProvider<RebrickableModel>(
             create: (_) => rebrickableModel ?? MockRebrickableModel(),
@@ -20,6 +22,7 @@ main() {
             body: DeleteFromListButton(
               testBrickSet,
               setListId: 1,
+              onSetDeleted: onSetDeleted ?? () {},
             ),
           ),
         ),
@@ -48,5 +51,20 @@ main() {
 
     verify(() => rebrickableModel.deleteSetFromList(
         setListId: 1, setId: testBrickSet.setNum)).called(1);
+  });
+
+  testWidgets('calls onSetDeleted on press', (tester) async {
+    final rebrickableModel = MockRebrickableModel();
+    when(() => rebrickableModel.deleteSetFromList(
+        setListId: 1, setId: testBrickSet.setNum)).thenAnswer((_) async {
+      return;
+    });
+    bool called = false;
+    await tester.pumpWidget(_createApp(
+        rebrickableModel: rebrickableModel, onSetDeleted: () => called = true));
+
+    await tester.tap(find.byType(DeleteFromListButton));
+
+    expect(called, true);
   });
 }

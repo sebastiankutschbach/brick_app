@@ -8,8 +8,10 @@ import 'package:provider/provider.dart';
 class DeleteFromListButton extends StatelessWidget {
   final SetOrMoc set;
   final int setListId;
+  final Function? onSetDeleted;
 
-  const DeleteFromListButton(this.set, {required this.setListId, Key? key})
+  const DeleteFromListButton(this.set,
+      {required this.setListId, required this.onSetDeleted, Key? key})
       : super(key: key);
 
   @override
@@ -23,6 +25,9 @@ class DeleteFromListButton extends StatelessWidget {
               .read<RebrickableModel>()
               .deleteSetFromList(setListId: setListId, setId: set.setNum);
           showSnackBar(context, 'Set deleted successfully');
+          if (onSetDeleted != null) {
+            onSetDeleted!();
+          }
         },
       );
 }
