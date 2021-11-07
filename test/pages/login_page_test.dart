@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../mocks.dart';
 
-final userToken = 'myUserToken';
+const userToken = 'myUserToken';
 
 void main() {
   createApp(bool loginSuccess,
@@ -34,14 +34,14 @@ void main() {
           }),
         ],
         child: MaterialApp(
-          home: LoginPage(),
+          home: const LoginPage(),
           navigatorObservers:
               navigatorObserverMock != null ? [navigatorObserverMock] : [],
         ),
       );
 
   setUpAll(() {
-    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+    registerFallbackValue(MaterialPageRoute(builder: (_) => const Text('')));
   });
 
   group('smoke test', () {
@@ -53,10 +53,10 @@ void main() {
       expect(find.byType(BrickAppBar), findsOneWidget);
       expect(find.text('Rebrickable Login'), findsOneWidget);
 
-      expect(find.byKey(Key('username')), findsOneWidget);
-      expect(find.byKey(Key('password')), findsOneWidget);
+      expect(find.byKey(const Key('username')), findsOneWidget);
+      expect(find.byKey(const Key('password')), findsOneWidget);
 
-      expect(find.byKey(Key('login')), findsOneWidget);
+      expect(find.byKey(const Key('login')), findsOneWidget);
     });
   });
 
@@ -64,7 +64,7 @@ void main() {
     testWidgets('Does not accept empty username', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
-      expect(find.byKey(Key('username')), findsOneWidget);
+      expect(find.byKey(const Key('username')), findsOneWidget);
       await tester.tap(find.text('Login'));
 
       await tester.pumpAndSettle();
@@ -75,8 +75,8 @@ void main() {
     testWidgets('Does not accept empty password', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: createApp(true)));
 
-      await tester.enterText(find.byKey(Key('username')), 'myUsername');
-      await tester.tap(find.byKey(Key('login')));
+      await tester.enterText(find.byKey(const Key('username')), 'myUsername');
+      await tester.tap(find.byKey(const Key('login')));
 
       await tester.pumpAndSettle();
 
@@ -93,9 +93,9 @@ void main() {
       await tester.pumpWidget(MaterialApp(
           home: createApp(true, rebrickableModelMock: rebrickableModelMock)));
 
-      await tester.enterText(find.byKey(Key('username')), 'username');
-      await tester.enterText(find.byKey(Key('password')), 'password');
-      await tester.tap(find.byKey(Key('login')));
+      await tester.enterText(find.byKey(const Key('username')), 'username');
+      await tester.enterText(find.byKey(const Key('password')), 'password');
+      await tester.tap(find.byKey(const Key('login')));
 
       await tester.pump();
 
@@ -118,9 +118,9 @@ void main() {
               rebrickableModelMock: rebrickableModelMock,
               preferencesService: preferencesService)));
 
-      await tester.enterText(find.byKey(Key('username')), 'username');
-      await tester.enterText(find.byKey(Key('password')), 'password');
-      await tester.tap(find.byKey(Key('login')));
+      await tester.enterText(find.byKey(const Key('username')), 'username');
+      await tester.enterText(find.byKey(const Key('password')), 'password');
+      await tester.tap(find.byKey(const Key('login')));
 
       await tester.pump();
 
@@ -141,9 +141,9 @@ void main() {
               rebrickableModelMock: modelMock,
               navigatorObserverMock: observerMock)));
 
-      await tester.enterText(find.byKey(Key('username')), 'username');
-      await tester.enterText(find.byKey(Key('password')), 'password');
-      await tester.tap(find.byKey(Key('login')));
+      await tester.enterText(find.byKey(const Key('username')), 'username');
+      await tester.enterText(find.byKey(const Key('password')), 'password');
+      await tester.tap(find.byKey(const Key('login')));
 
       await tester.pump();
 
@@ -160,9 +160,9 @@ void main() {
             rebrickableModelMock: modelMock,
             navigatorObserverMock: observerMock)));
 
-    await tester.enterText(find.byKey(Key('username')), 'username');
-    await tester.enterText(find.byKey(Key('password')), 'password');
-    await tester.tap(find.byKey(Key('login')));
+    await tester.enterText(find.byKey(const Key('username')), 'username');
+    await tester.enterText(find.byKey(const Key('password')), 'password');
+    await tester.tap(find.byKey(const Key('login')));
 
     await tester.pump();
 

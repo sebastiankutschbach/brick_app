@@ -4,9 +4,9 @@ import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/set_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
 
@@ -27,7 +27,7 @@ main() {
   late NavigatorObserver navigatorObserver;
 
   setUpAll(() {
-    registerFallbackValue(MaterialPageRoute(builder: (_) => Text('')));
+    registerFallbackValue(MaterialPageRoute(builder: (_) => const Text('')));
   });
 
   createApp() {
@@ -46,18 +46,6 @@ main() {
         navigatorObservers: [navigatorObserver],
       ),
     );
-  }
-
-  void _verifyCorrectRouting(String routeName) {
-    List<MaterialPageRoute> pushedRoutes =
-        verify(() => navigatorObserver.didPush(captureAny(), any()))
-            .captured
-            .cast<MaterialPageRoute>();
-    expect(
-        pushedRoutes
-            .where((element) => element.settings.name == routeName)
-            .length,
-        1);
   }
 
   group('app bar', () {
@@ -82,50 +70,24 @@ main() {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
-        var setTileImageFinder = find.byType(Image);
-        expect(setTileImageFinder, findsOneWidget);
+        final setTileFinder = find.byKey(const Key('tile_70672-1'));
+        expect(setTileFinder, findsOneWidget);
       });
     });
 
-    testWidgets('does navigate to set home page on tap',
+    testWidgets('does have buttons for further navigation',
         (WidgetTester tester) async {
       await mockNetworkImagesFor(() async {
         await tester.pumpWidget(createApp());
 
         await tester.pump();
 
-        var setTileImageFinder = find.byType(Image);
-        await tester.tap(setTileImageFinder.first);
-        _verifyCorrectRouting('setRoute');
-      });
-    });
-
-    testWidgets('does navigate to parts page on tap',
-        (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(createApp());
-
-        await tester.pump();
-
-        var setTileImageFinder = find.byIcon(Icons.grain);
-        await tester.tap(setTileImageFinder.first);
-
-        _verifyCorrectRouting('partsRoute');
-      });
-    });
-
-    testWidgets('does navigate to moc page on tap',
-        (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
-        await tester.pumpWidget(createApp());
-
-        await tester.pump();
-
-        var setTileImageFinder = find.byIcon(Icons.star);
-        await tester.tap(setTileImageFinder.first);
-        _verifyCorrectRouting('mocsRoute');
+        expect(find.byKey(const Key('mocs_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('parts_button_70672-1')), findsOneWidget);
+        expect(find.byKey(const Key('delete_from_list_button_70672-1')),
+            findsOneWidget);
       });
     });
   });

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -10,7 +11,6 @@ import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'dart:async';
 
 class RebrickableService {
   late Client _client;
@@ -23,7 +23,7 @@ class RebrickableService {
   bool get isAuthenticated => _userToken.isNotEmpty;
 
   RebrickableService({Client? client}) {
-    this._client = client ?? Client();
+    _client = client ?? Client();
   }
 
   Future<String> authenticate(String username, String password) async {
@@ -40,17 +40,6 @@ class RebrickableService {
     final body = jsonDecode(response.body);
     _userToken = body['user_token'];
     return _userToken;
-  }
-
-  Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
-    final userSetListUrl = Uri.parse(userSetListUrlTemplate
-        .expand({'user_token': _userToken, 'list_id': listId}));
-    var results =
-        await getPaginated(_client, userSetListUrl, headers: createHeader());
-
-    return results
-        .map((json) => BrickSetList.fromJson(json))
-        .toList(growable: false);
   }
 
   Future<List<BrickSet>> getSetsFromList({required int listId}) async {
@@ -87,9 +76,62 @@ class RebrickableService {
     var document = parse(response.body);
     final selectors = document.querySelectorAll('div > a');
 
-    final pdfUrl = selectors
-        .firstWhere((element) => element.text.contains('.pdf'), orElse: null);
+    final pdfUrl =
+        selectors.firstWhere((element) => element.text.contains('.pdf'));
     return 'https://rebrickable.com${pdfUrl.attributes["href"]}';
+  }
+
+  Future<List<BrickSetList>> getUsersSetList({int? listId}) async {
+    final userSetListUrl = Uri.parse(userSetListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': listId}));
+    var results =
+        await getPaginated(_client, userSetListUrl, headers: createHeader());
+
+    return results
+        .map((json) => BrickSetList.fromJson(json))
+        .toList(growable: false);
+  }
+
+  Future<void> addSetList({required String setListName}) async {
+    final addSetUrl =
+        Uri.parse(addSetListUrlTemplate.expand({'user_token': _userToken}));
+    var result = await _client.post(addSetUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
+        body: 'is_buildable=true&name=$setListName&num_sets=0');
+    if (result.statusCode != 201) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
+  Future<void> deleteSetList({required int setListId}) async {
+    final deleteSetUrl = Uri.parse(deleteSetListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': setListId}));
+    var result = await _client.delete(deleteSetUrl, headers: createHeader());
+    if (result.statusCode != 204) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
+  Future<void> addSetToList(
+      {required int setListId, required String setId}) async {
+    final addSetUrl = Uri.parse(addSetToListUrlTemplate
+        .expand({'user_token': _userToken, 'list_id': setListId}));
+    var result = await _client.post(addSetUrl,
+        headers: createHeader(contentType: 'application/x-www-form-urlencoded'),
+        body: 'include_spares=true&set_num=$setId&quantity=1');
+    if (result.statusCode != 201) {
+      throw RebrickableApiException(result.statusCode);
+    }
+  }
+
+  Future<void> deleteSetFromList(
+      {required int setListId, required String setId}) async {
+    final deleteSetUrl = Uri.parse(deleteSetFromListUrlTemplate.expand(
+        {'user_token': _userToken, 'list_id': setListId, 'set_num': setId}));
+    var result = await _client.delete(deleteSetUrl, headers: createHeader());
+    if (result.statusCode != 204) {
+      throw RebrickableApiException(result.statusCode);
+    }
   }
 
   Map<String, String> createHeader({String? contentType}) {

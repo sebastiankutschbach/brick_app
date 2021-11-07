@@ -1,4 +1,3 @@
-import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/model/set_or_moc.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
@@ -6,30 +5,52 @@ import 'package:brick_app/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MocPage extends StatelessWidget {
-  final BrickSet brickSet;
+class MocPage extends StatefulWidget {
+  final SetOrMoc brickSet;
 
-  MocPage(this.brickSet);
+  const MocPage(this.brickSet, {Key? key}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() => _MocPageState();
+}
+
+class _MocPageState extends State<MocPage> {
+  Future<List<SetOrMoc>>? _setOrMocListFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshMocList(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final service = context.read<RebrickableModel>();
     return Scaffold(
       appBar: BrickAppBar(
-        Text(brickSet.name),
+        Text(widget.brickSet.name),
       ),
       body: FutureBuilder<List<SetOrMoc>>(
-        future: service.getMocsFromSet(setNum: brickSet.setNum),
+        future: _setOrMocListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SetsGridView(
-              snapshot.data!,
-              withButtons: false,
+            return RefreshIndicator(
+              child:
+                  SetsGridView(snapshot.data!, key: const Key('setGridView')),
+              onRefresh: () => _refreshMocList(context),
             );
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         },
       ),
     );
+  }
+
+  Future<void> _refreshMocList(BuildContext context) async {
+    setState(() {
+      _setOrMocListFuture = context
+          .read<RebrickableModel>()
+          .getMocsFromSet(setNum: widget.brickSet.setNum);
+    });
   }
 }

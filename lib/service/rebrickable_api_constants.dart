@@ -18,3 +18,15 @@ UriTemplate setMocListUrlTemplate = UriTemplate(
 
 UriTemplate setPartListUrlTemplate =
     UriTemplate('https://$authority$_baseUrl/lego$_setsApi/{set_num}/parts');
+
+UriTemplate addSetListUrlTemplate =
+    UriTemplate('https://$authority$_baseUrl/users/{user_token}/setlists/');
+
+UriTemplate deleteSetListUrlTemplate = UriTemplate(
+    'https://$authority$_baseUrl/users/{user_token}/setlists/{list_id}/');
+
+UriTemplate addSetToListUrlTemplate = UriTemplate(
+    'https://$authority$_baseUrl/users/{user_token}/setlists/{list_id}/sets/');
+
+UriTemplate deleteSetFromListUrlTemplate = UriTemplate(
+    'https://$authority$_baseUrl/users/{user_token}/setlists/{list_id}/sets/{set_num}/');

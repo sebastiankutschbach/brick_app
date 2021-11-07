@@ -5,16 +5,23 @@ part 'moc.g.dart';
 
 @JsonSerializable()
 class Moc extends SetOrMoc {
+  @override
   @JsonKey(name: 'set_num')
   final String setNum;
+  @override
   final String name;
+  @override
   final int year;
+  @override
   @JsonKey(name: 'theme_id')
   final int themeId;
+  @override
   @JsonKey(name: 'num_parts')
   final int numParts;
+  @override
   @JsonKey(name: 'moc_img_url')
   final String imgUrl;
+  @override
   @JsonKey(name: 'moc_url')
   final String url;
   @JsonKey(name: 'designer_name')

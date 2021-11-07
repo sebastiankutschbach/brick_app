@@ -1,5 +1,6 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
+import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
@@ -7,8 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
+import 'inventory_test.dart';
 
-final userToken = 'myUserToken';
+const userToken = 'myUserToken';
 
 main() {
   group('login', () {
@@ -74,6 +76,46 @@ main() {
     });
   });
 
+  group('add/delete list', () {
+    test('create a new list succeeds', () async {
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.addSetList(setListName: 'setListName'))
+          .thenAnswer((_) => Future.value());
+
+      await model.addSetList(setListName: 'setListName');
+    });
+
+    test('create a new list failed', () async {
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.addSetList(setListName: 'setListName'))
+          .thenThrow(RebrickableApiException('message'));
+
+      expect(model.addSetList(setListName: 'setListName'),
+          throwsA(isA<RebrickableApiException>()));
+    });
+
+    test('deleting a list succeeds', () async {
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.deleteSetList(setListId: 1))
+          .thenAnswer((_) => Future.value());
+
+      await model.deleteSetList(setListId: 1);
+    });
+
+    test('deleting a list failed', () async {
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.deleteSetList(setListId: 1))
+          .thenThrow(RebrickableApiException('message'));
+
+      expect(model.deleteSetList(setListId: 1),
+          throwsA(isA<RebrickableApiException>()));
+    });
+  });
+
   group('getSetsFromList', () {
     test('all sets retrieval', () async {
       final set = BrickSet.fromJson({
@@ -108,7 +150,7 @@ main() {
 
   group('getMocsFromSet', () {
     test('all mocs retrieval', () async {
-      final String setNum = "MOC-56901";
+      const String setNum = "MOC-56901";
       final moc = Moc.fromJson(
         {
           "set_num": "MOC-56901",
@@ -132,13 +174,37 @@ main() {
     });
 
     test('all mocs retrieval failed', () async {
-      final String setNum = "MOC-56901";
+      const String setNum = "MOC-56901";
       final serviceMock = MockRebrickableService();
       final model = RebrickableModel(rebrickableService: serviceMock);
       when(() => serviceMock.getMocsFromSet(setNum: setNum))
           .thenThrow(RebrickableApiException('message'));
 
       expect(model.getMocsFromSet(setNum: setNum),
+          throwsA(isA<RebrickableApiException>()));
+    });
+  });
+
+  group('getInventoriesOfSet', () {
+    test('succeeds', () async {
+      const String setNum = "70672-1";
+      final Inventory inventory = Inventory.fromJson(inventoryJson);
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.getInventoriesOfSet(setNum: setNum))
+          .thenAnswer((_) async => [inventory]);
+
+      expect(await model.getInventoriesOfSet(setNum: setNum), [inventory]);
+    });
+
+    test('fails', () async {
+      const String setNum = "70672-1";
+      final serviceMock = MockRebrickableService();
+      final model = RebrickableModel(rebrickableService: serviceMock);
+      when(() => serviceMock.getInventoriesOfSet(setNum: setNum))
+          .thenThrow(RebrickableApiException('message'));
+
+      expect(model.getInventoriesOfSet(setNum: setNum),
           throwsA(isA<RebrickableApiException>()));
     });
   });
