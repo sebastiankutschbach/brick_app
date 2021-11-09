@@ -28,10 +28,6 @@ var urls = [12]string{
 	"https://cdn.rebrickable.com/media/downloads/inventory_sets.csv.gz",
 	"https://cdn.rebrickable.com/media/downloads/inventory_minifigs.csv.gz"}
 
-type MyEvent struct {
-	Name string `json:"name"`
-}
-
 func HandleRequest() (string, error) {
 	bucketName, success := os.LookupEnv("BUCKET")
 	if !success {
