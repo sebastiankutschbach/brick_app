@@ -8,6 +8,10 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 var urls = [12]string{
@@ -29,15 +33,23 @@ type MyEvent struct {
 }
 
 func HandleRequest() (string, error) {
-
+	bucketName, success := os.LookupEnv("BUCKET")
+	if !success {
+		errMsg := "Environment variable BUCKET not set. Exiting."
+		fmt.Println(errMsg)
+		panic(errMsg)
+	}
 	for _, fileUrl := range urls {
 		elems := strings.Split(fileUrl, "/")
-		path := "/tmp/" + elems[len(elems)-1]
+		fileName := elems[len(elems)-1]
+		path := "/tmp/" + fileName
 		err := DownloadFile(path, fileUrl)
 		if err != nil {
 			panic(err)
 		}
 		fmt.Println("Downloaded: " + fileUrl)
+
+		uploadToS3(bucketName, path, fileName)
 	}
 	return "", nil
 }
@@ -64,5 +76,42 @@ func DownloadFile(filepath string, url string) error {
 
 	// Write the body to file
 	_, err = io.Copy(out, resp.Body)
+
 	return err
+}
+
+func uploadToS3(bucketName string, filePath string, key string) {
+	awsConfig := &aws.Config{
+		Region: aws.String("eu-central-1"),
+	}
+
+	// The session the S3 Uploader will use
+	sess := session.Must(session.NewSession(awsConfig))
+
+	// Create an uploader with the session and custom options
+	uploader := s3manager.NewUploader(sess, func(u *s3manager.Uploader) {
+		u.PartSize = 5 * 1024 * 1024 // The minimum/default allowed part size is 5MB
+		u.Concurrency = 2            // default is 5
+	})
+
+	//open the file
+	f, err := os.Open(filePath)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
+	// Upload the file to S3.
+	result, err := uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(bucketName),
+		Key:    aws.String(key),
+		Body:   f,
+	})
+
+	//in case it fails to upload
+	if err != nil {
+		fmt.Printf("failed to upload file, %v", err)
+		return
+	}
+	fmt.Printf("file uploaded to, %s\n", result.Location)
 }
