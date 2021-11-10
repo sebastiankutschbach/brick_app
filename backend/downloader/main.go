@@ -35,6 +35,12 @@ func HandleRequest() (string, error) {
 		fmt.Println(errMsg)
 		panic(errMsg)
 	}
+	region, success := os.LookupEnv("REGION")
+	if !success {
+		errMsg := "Environment variable REGION not set. Exiting."
+		fmt.Println(errMsg)
+		panic(errMsg)
+	}
 	for _, fileUrl := range urls {
 		elems := strings.Split(fileUrl, "/")
 		fileName := elems[len(elems)-1]
@@ -45,7 +51,7 @@ func HandleRequest() (string, error) {
 		}
 		fmt.Println("Downloaded: " + fileUrl)
 
-		uploadToS3(bucketName, path, fileName)
+		uploadToS3(bucketName, region, path, fileName)
 	}
 	return "", nil
 }
@@ -76,9 +82,9 @@ func DownloadFile(filepath string, url string) error {
 	return err
 }
 
-func uploadToS3(bucketName string, filePath string, key string) {
+func uploadToS3(bucketName string, region string, filePath string, key string) {
 	awsConfig := &aws.Config{
-		Region: aws.String("eu-central-1"),
+		Region: aws.String(region),
 	}
 
 	// The session the S3 Uploader will use

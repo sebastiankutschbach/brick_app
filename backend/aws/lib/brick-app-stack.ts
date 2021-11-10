@@ -17,7 +17,7 @@ export class BrickAppStack extends cdk.Stack {
       entry: '../downloader/',
       memorySize: 128,
       timeout: cdk.Duration.seconds(10),
-      environment: {'BUCKET' : downloadBucket.bucketName},
+      environment: {'BUCKET' : downloadBucket.bucketName, 'REGION': props?.env?.region ?? 'eu-central-1'},
       logRetention: logs.RetentionDays.ONE_DAY
     })
 
@@ -26,6 +26,7 @@ export class BrickAppStack extends cdk.Stack {
     const importerFunction = new lambdaGo.GoFunction(this, 'Importer', {
       entry: '../importer/',
       memorySize: 128,
+      environment: {'BUCKET' : downloadBucket.bucketName, 'REGION': props?.env?.region ?? 'eu-central-1'},
       timeout: cdk.Duration.seconds(10),
       logRetention: logs.RetentionDays.ONE_DAY,
     });
@@ -37,6 +38,8 @@ export class BrickAppStack extends cdk.Stack {
     });
 
     importerFunction.addEventSource(objectCreatedEvent);
+
+    downloadBucket.grantRead(importerFunction);
   }
 }
  
