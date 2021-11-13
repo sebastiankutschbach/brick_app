@@ -1,9 +1,11 @@
 name: CI/CD
 
 on:
-  [workflow_dispatch, pull_request, push]
-  paths-ignore:
-    - 'backend/**'
+  workflow_dispatch:
+  pull_request:
+  push:
+    paths-ignore:
+      - 'backend/**'
 
 env:
   flutter_channel: dev
