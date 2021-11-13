@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 
@@ -28,28 +27,43 @@ func HandleRequest(ctx context.Context, s3Event events.S3Event) (string, error) 
 			gzFilePath := "/tmp/" + key
 			fmt.Printf("FilePath : %s\n", gzFilePath)
 
-			DownloadObject(s3.Bucket.Name, region, key, gzFilePath)
+			err := DownloadObject(s3.Bucket.Name, region, key, gzFilePath)
+			if err != nil {
+				panic(err)
+			}
 
 			in, err := ioutil.ReadFile(gzFilePath)
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			csvFilePath := strings.ReplaceAll(gzFilePath, ".gz", "")
 			out, err := os.Create(csvFilePath)
 			if err != nil {
-				log.Fatal(err)
+				panic(err)
+			}
+			defer out.Close()
+
+			fmt.Printf("Unzipping %s\n", gzFilePath)
+			err = Gunzip(out, in)
+			if err != nil {
+				panic(err)
 			}
 
-			Gunzip(out, in)
+			out.Seek(0, 0)
+			fmt.Printf("Parsing %s\n", csvFilePath)
+			header, data, err := ParseCsv(out)
+			if err != nil {
+				panic(err)
+			}
+
+			databaseName := "bricks"
+			collectionName := strings.ReplaceAll(key, ".csv.gz", "")
+			err = ImportData(databaseName, collectionName, header, data)
+			if err != nil {
+				panic(err)
+			}
 		}
-	}
-
-	files, _ := ioutil.ReadDir(os.TempDir())
-
-	fmt.Println("Content of /tmp")
-	for _, file := range files {
-		fmt.Println(file.Name())
 	}
 
 	return "", nil

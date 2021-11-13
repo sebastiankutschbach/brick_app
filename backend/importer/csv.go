@@ -5,11 +5,11 @@ import (
 	"io"
 )
 
-func ParseCsv(r io.Reader) (data [][]string, err error) {
+func ParseCsv(r io.Reader) (header []string, data [][]string, err error) {
 	data, err = csv.NewReader(r).ReadAll()
-	if err != nil {
+	if err != nil || len(data) == 0 {
 		return
 	}
 
-	return data[1:], nil
+	return data[0], data[1:], nil
 }

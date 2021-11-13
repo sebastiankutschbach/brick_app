@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 )
 
-func Gunzip(w io.Writer, data []byte) error {
+func Gunzip(w io.Writer, data []byte) (err error) {
 	gr, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
 		return err

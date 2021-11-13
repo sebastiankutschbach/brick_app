@@ -1,0 +1,46 @@
+# https://taskfile.dev
+
+version: 3
+
+tasks:
+
+  # infrastructure
+  start-infrastructure:
+    cmds:
+      - echo $AWS_ACCESS_KEY
+      - docker run --name test-s3 -d -p 9000:9000 -p 9001:9001 -e "MINIO_ACCESS_KEY=$AWS_ACCESS_KEY_ID" -e "MINIO_SECRET_KEY=$AWS_SECRET_ACCESS_KEY" minio/minio server --console-address ":9001" testdata/
+      - docker run --name test-mongo -d -p 27017:27017 mongo
+
+    env:
+      AWS_ACCESS_KEY_ID: aaa 
+      AWS_SECRET_ACCESS_KEY: bbbbbbbb 
+
+  stop-infrastructure:
+    cmds:
+      - docker stop test-s3
+      - docker rm test-s3
+      - docker stop test-mongo
+      - docker rm test-mongo
+
+  # test
+  test-downloader:
+    dir: downloader
+    cmds:
+      - go test
+
+  test-importer:
+    dir: importer
+    cmds:
+      - go test
+
+  test:
+    cmds:
+      - task: test-downloader
+      - task: test-importer
+
+  # deploy
+  deploy:
+    dir:
+      aws
+    cmds:
+      - cdk deploy

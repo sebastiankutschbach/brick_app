@@ -4,15 +4,28 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws/credentials"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-func DownloadObject(bucketName string, region string, key string, file string) {
-	awsConfig := &aws.Config{
-		Region: aws.String(region),
+func DownloadObject(bucketName string, region string, key string, file string) (err error) {
+	_, test := os.LookupEnv("TEST")
+	var awsConfig *aws.Config
+	if test {
+		awsConfig = &aws.Config{
+			Credentials:      credentials.NewStaticCredentials("aaa", "bbbbbbbb", ""),
+			Region:           aws.String(region),
+			Endpoint:         aws.String("http://localhost:9000"),
+			S3ForcePathStyle: aws.Bool(true),
+		}
+	} else {
+		awsConfig = &aws.Config{
+			Region: aws.String(region),
+		}
 	}
 
 	// The session the S3 Uploader will use
@@ -27,7 +40,7 @@ func DownloadObject(bucketName string, region string, key string, file string) {
 	//open the file
 	f, err := os.Create(file)
 	if err != nil {
-		return
+		return err
 	}
 	defer f.Close()
 
@@ -40,7 +53,9 @@ func DownloadObject(bucketName string, region string, key string, file string) {
 	//in case it fails to upload
 	if err != nil {
 		fmt.Printf("failed to download file, %v", err)
-		return
+		return err
 	}
 	fmt.Printf("file downloaded successfully from: %s\n", file)
+
+	return
 }
