@@ -1,17 +1,17 @@
 import * as lambdaGo from '@aws-cdk/aws-lambda-go';
 import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as logs from '@aws-cdk/aws-logs';
 import * as lambdaEventSources from '@aws-cdk/aws-lambda-event-sources';
+import * as ec2 from '@aws-cdk/aws-ec2'
+import { IBucket } from '@aws-cdk/aws-s3';
 
 export class BrickAppStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    let downloadBucket = new s3.Bucket(this, 'DownloadBucket', {
-      bucketName: 'brick-app-download-bucket',
-    });
+    let downloadBucket = new s3.Bucket(this, 'DownloadBucket', {});
+
 
     const downloaderFunction = new lambdaGo.GoFunction(this, 'Downloader', {
       entry: '../downloader/',
