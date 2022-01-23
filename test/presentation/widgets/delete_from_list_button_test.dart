@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
-import '../model/brick_set_test.dart';
+import '../../mocks.dart';
+import '../../model/brick_set_test.dart';
 
 main() {
   Widget _createApp(

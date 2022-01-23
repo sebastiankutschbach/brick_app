@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:uri/uri.dart';
 
-import '../mocks.dart';
+import '../../mocks.dart';
 
 main() {
   group('pagination', () {

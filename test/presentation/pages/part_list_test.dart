@@ -9,8 +9,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks.dart';
-import '../model/inventory_test.dart';
+import '../../mocks.dart';
+import '../../model/inventory_test.dart';
 
 main() {
   createApp() {

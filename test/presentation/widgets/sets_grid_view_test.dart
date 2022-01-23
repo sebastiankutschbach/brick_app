@@ -6,7 +6,7 @@ import 'package:brick_app/presentation/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../model/brick_set_test.dart';
+import '../../model/brick_set_test.dart';
 
 main() {
   Widget _createApp({List<SetOrMoc>? sets}) => MaterialApp(
