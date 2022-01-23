@@ -1,5 +1,5 @@
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/widgets/delete_from_list_button.dart';
+import 'package:brick_app/presentation/widgets/delete_from_list_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

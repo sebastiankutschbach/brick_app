@@ -1,6 +1,6 @@
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/overview_page.dart';
+import 'package:brick_app/presentation/pages/overview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

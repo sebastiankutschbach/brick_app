@@ -1,4 +1,4 @@
-import 'package:brick_app/service/preferences_service.dart';
+import 'package:brick_app/infrastructure/service/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

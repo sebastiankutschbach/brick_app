@@ -1,5 +1,5 @@
 import 'package:brick_app/model/brick_set.dart';
-import 'package:brick_app/pages/web_view_page.dart';
+import 'package:brick_app/presentation/pages/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

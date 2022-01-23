@@ -1,6 +1,6 @@
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/pages/moc_page.dart';
-import 'package:brick_app/widgets/tile_button.dart';
+import 'package:brick_app/presentation/pages/moc_page.dart';
+import 'package:brick_app/presentation/widgets/tile_button.dart';
 import 'package:flutter/material.dart';
 
 class MocsButton extends StatelessWidget {

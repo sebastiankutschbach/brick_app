@@ -1,5 +1,5 @@
-import 'package:brick_app/pages/utils.dart';
-import 'package:brick_app/widgets/create_delete_dialog.dart';
+import 'package:brick_app/presentation/pages/utils.dart';
+import 'package:brick_app/presentation/widgets/create_delete_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

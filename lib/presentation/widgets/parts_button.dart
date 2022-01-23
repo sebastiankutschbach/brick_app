@@ -1,6 +1,6 @@
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/pages/part_list.dart';
-import 'package:brick_app/widgets/tile_button.dart';
+import 'package:brick_app/presentation/pages/part_list.dart';
+import 'package:brick_app/presentation/widgets/tile_button.dart';
 import 'package:flutter/material.dart';
 
 class PartsButton extends StatelessWidget {

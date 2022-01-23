@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:brick_app/service/rebrickable_api_exception.dart';
+import 'package:brick_app/infrastructure/service/rebrickable_api_exception.dart';
 import 'package:http/http.dart';
 
 Future<List<dynamic>> getPaginated(Client client, Uri url,

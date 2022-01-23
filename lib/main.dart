@@ -1,9 +1,10 @@
+import 'package:brick_app/infrastructure/service/rebrickable_service.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/login_page.dart';
-import 'package:brick_app/service/preferences_service.dart';
-import 'package:brick_app/service/rebrickable_service.dart';
+import 'package:brick_app/presentation/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'infrastructure/service/preferences_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

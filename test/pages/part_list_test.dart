@@ -1,8 +1,8 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/part_list.dart';
-import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/presentation/pages/part_list.dart';
+import 'package:brick_app/presentation/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

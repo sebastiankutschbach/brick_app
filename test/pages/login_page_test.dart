@@ -1,7 +1,7 @@
+import 'package:brick_app/infrastructure/service/preferences_service.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/login_page.dart';
-import 'package:brick_app/service/preferences_service.dart';
-import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/presentation/pages/login_page.dart';
+import 'package:brick_app/presentation/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

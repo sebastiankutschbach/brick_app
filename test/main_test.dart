@@ -1,5 +1,5 @@
 import 'package:brick_app/main.dart';
-import 'package:brick_app/pages/login_page.dart';
+import 'package:brick_app/presentation/pages/login_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

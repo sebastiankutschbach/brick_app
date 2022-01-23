@@ -1,4 +1,4 @@
-import 'package:brick_app/widgets/parts_button.dart';
+import 'package:brick_app/presentation/widgets/parts_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

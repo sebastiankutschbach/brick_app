@@ -1,4 +1,4 @@
-import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/presentation/widgets/brick_app_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

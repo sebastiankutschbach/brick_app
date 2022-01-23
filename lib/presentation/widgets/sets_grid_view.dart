@@ -1,6 +1,6 @@
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/widgets/parts_button.dart';
-import 'package:brick_app/widgets/sets_grid_tile.dart';
+import 'package:brick_app/presentation/widgets/parts_button.dart';
+import 'package:brick_app/presentation/widgets/sets_grid_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'delete_from_list_button.dart';

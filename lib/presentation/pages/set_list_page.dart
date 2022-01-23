@@ -1,9 +1,9 @@
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
-import 'package:brick_app/pages/utils.dart';
-import 'package:brick_app/widgets/brick_app_bar.dart';
-import 'package:brick_app/widgets/sets_grid_view.dart';
+import 'package:brick_app/presentation/pages/utils.dart';
+import 'package:brick_app/presentation/widgets/brick_app_bar.dart';
+import 'package:brick_app/presentation/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,8 @@
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/widgets/mocs_button.dart';
-import 'package:brick_app/widgets/parts_button.dart';
-import 'package:brick_app/widgets/sets_grid_tile.dart';
-import 'package:brick_app/widgets/sets_grid_view.dart';
+import 'package:brick_app/presentation/widgets/mocs_button.dart';
+import 'package:brick_app/presentation/widgets/parts_button.dart';
+import 'package:brick_app/presentation/widgets/sets_grid_tile.dart';
+import 'package:brick_app/presentation/widgets/sets_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

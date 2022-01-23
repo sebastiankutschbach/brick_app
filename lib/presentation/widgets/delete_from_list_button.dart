@@ -1,7 +1,7 @@
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/pages/utils.dart';
-import 'package:brick_app/widgets/tile_button.dart';
+import 'package:brick_app/presentation/pages/utils.dart';
+import 'package:brick_app/presentation/widgets/tile_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

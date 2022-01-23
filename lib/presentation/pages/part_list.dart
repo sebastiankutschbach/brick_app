@@ -1,7 +1,7 @@
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/model/set_or_moc.dart';
-import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:brick_app/presentation/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

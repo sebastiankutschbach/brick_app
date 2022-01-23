@@ -1,4 +1,4 @@
-import 'package:brick_app/service/preferences_service.dart';
+import 'package:brick_app/infrastructure/service/preferences_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

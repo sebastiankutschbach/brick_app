@@ -1,9 +1,9 @@
+import 'package:brick_app/infrastructure/service/rebrickable_api_constants.dart';
+import 'package:brick_app/infrastructure/service/rebrickable_api_exception.dart';
+import 'package:brick_app/infrastructure/service/rebrickable_service.dart';
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/inventory.dart';
 import 'package:brick_app/model/moc.dart';
-import 'package:brick_app/service/rebrickable_api_constants.dart';
-import 'package:brick_app/service/rebrickable_api_exception.dart';
-import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';

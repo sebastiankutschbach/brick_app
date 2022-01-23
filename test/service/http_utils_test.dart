@@ -1,5 +1,5 @@
-import 'package:brick_app/service/http_utils.dart';
-import 'package:brick_app/service/rebrickable_api_exception.dart';
+import 'package:brick_app/infrastructure/service/http_utils.dart';
+import 'package:brick_app/infrastructure/service/rebrickable_api_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
