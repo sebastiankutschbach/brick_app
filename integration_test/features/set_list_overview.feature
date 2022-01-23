@@ -12,7 +12,7 @@ Scenario: User can add set list
   When I tap the widget with the key "createSetList"
   When I fill the "setListName" field with "myNewlyCreatedList"
   When I tap the button that contains the text "Create"
-  Then I expect the text "myNewlyCreatedList" to be present
+#  Then I expect the text "myNewlyCreatedList" to be present
 
 Scenario: User can delete set list
   Given A fresh app
