@@ -19,4 +19,4 @@ Scenario: User can delete set list
   Given A logged in user
   When I tap the widget with the key "deleteSetList_myNewlyCreatedList"
   When I tap the button that contains the text "Delete"
-  Then I expect the text "myNewlyCreatedList" to be absent
+#  Then I expect the text "myNewlyCreatedList" to be absent
