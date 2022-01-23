@@ -19,23 +19,21 @@ class SetsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: [
-            ListView.builder(
-              itemCount: sets.length,
-              itemBuilder: (context, index) => SetsGridTile(
-                sets[index],
-                buttons: [
-                  MocsButton(sets[index]),
-                  PartsButton(sets[index]),
-                  setListId != null
-                      ? DeleteFromListButton(sets[index],
-                          setListId: setListId!, onSetDeleted: onSetDeleted)
-                      : Container()
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: sets.isNotEmpty
+            ? ListView.builder(
+                itemCount: sets.length,
+                itemBuilder: (context, index) => SetsGridTile(
+                  sets[index],
+                  buttons: [
+                    MocsButton(sets[index]),
+                    PartsButton(sets[index]),
+                    setListId != null
+                        ? DeleteFromListButton(sets[index],
+                            setListId: setListId!, onSetDeleted: onSetDeleted)
+                        : Container()
+                  ],
+                ),
+              )
+            : const Text('Nothing to see here'),
       );
 }

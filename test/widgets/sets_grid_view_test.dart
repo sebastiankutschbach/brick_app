@@ -21,6 +21,14 @@ main() {
     expect(find.byType(SetsGridTile), findsNWidgets(2));
   });
 
+  testWidgets('renders no list for empty set but a hint instead',
+      (tester) async {
+    await tester.pumpWidget(_createApp(sets: []));
+
+    expect(find.byType(SetsGridTile), findsNothing);
+    expect(find.text('Nothing to see here'), findsOneWidget);
+  });
+
   testWidgets('renders moc button', (tester) async {
     await tester.pumpWidget(_createApp());
 
