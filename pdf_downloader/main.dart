@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:math' as math;
 import 'package:dio/dio.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:html/dom.dart';
@@ -80,11 +79,11 @@ downloadMocHtmls(Dio dio, String setNum) async {
         response.data['results'].map((result) => result['moc_url']));
 
     Directory('./$mocHtmlDirName/$setNum/').createSync();
-    mocHtmlUrls.forEach((mocHtmlUrl) async {
+    for (final mocHtmlUrl in mocHtmlUrls) {
       final mocName = mocHtmlUrl.split("/")[4];
       await dio.download(mocHtmlUrl, './$mocHtmlDirName/$setNum/$mocName.html');
-      sleep(Duration(milliseconds: math.Random().nextInt(1000)));
-    });
+      await Future.delayed(Duration(milliseconds: 500));
+    }
   } on DioError catch (e) {
     log('Failed to download html for $setNum. Error: ${e.message}');
   }
@@ -113,8 +112,9 @@ downloadPdf(Dio dio, Element? element, String setNum, String mocName) async {
   if (element != null) {
     String pdfUrlString =
         element.attributes['href']!.replaceFirst('/external/view/?url=', '');
-
-    pdfUrlString = pdfUrlString.substring(0, pdfUrlString.indexOf('&'));
+    if (pdfUrlString.contains('&')) {
+      pdfUrlString = pdfUrlString.substring(0, pdfUrlString.indexOf('&'));
+    }
     final String pdfUrl = Uri.decodeFull(pdfUrlString);
     try {
       final String pdfFileName = './$mocPdfDirName/$setNum/$mocName.pdf';
