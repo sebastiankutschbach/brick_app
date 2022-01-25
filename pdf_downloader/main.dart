@@ -1,24 +1,96 @@
 import 'dart:developer';
+import 'dart:math' as math;
+import 'package:dio/dio.dart';
+import 'package:dotenv/dotenv.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
 import 'dart:io';
 
-import 'package:http/http.dart';
+const mocHtmlDirName = 'moc_html';
+const mocPdfDirName = 'moc_pdf';
 
 main() async {
-  final mainDir = Directory('moc_html');
-  final subdirs = mainDir
-      .listSync()
-      .where((element) => element is Directory)
-      .cast<Directory>();
+  load();
+  final Dio dio = Dio(
+    BaseOptions(
+      headers: {
+        Headers.acceptHeader: Headers.jsonContentType,
+        'Authorization': 'key ${env["API_KEY"]}'
+      },
+    ),
+  );
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) {
+      log('REQUEST[${options.method}] => PATH: ${options.path}');
+      return handler.next(options);
+    },
+  ));
+  final String userToken = await getUserToken(dio);
+  final List<String> allSetNums = await getAllSetsNum(dio, userToken);
 
-  for (final Directory subdir in subdirs) {
-    await downloadPdfsForSet(subdir);
+  log('All sets of user: ${allSetNums.join(', ')}');
+
+  for (final setNum in allSetNums) {
+    log('Starting with setNum: $setNum');
+    await downloadMocHtmls(dio, setNum);
+    final setHtmlDir = Directory('./$mocHtmlDirName/$setNum');
+    await downloadPdfs(dio, setHtmlDir);
+    log('Finished setNum: $setNum');
   }
 }
 
-downloadPdfsForSet(Directory dir) async {
+Future<String> getUserToken(Dio dio) async {
+  final response = await dio.post(
+      'https://rebrickable.com/api/v3/users/_token/',
+      data: 'username=${env['USERNAME']}&password=${env['PASSWORD']}',
+      options: Options(headers: {
+        Headers.contentTypeHeader: Headers.formUrlEncodedContentType
+      }));
+  return response.data['user_token'];
+}
+
+Future<List<String>> getAllSetsNum(Dio dio, String userToken) async {
+  final response = await dio.get(
+      'https://rebrickable.com/api/v3/users/$userToken/setlists',
+      queryParameters: {'page_size': 1000});
+
+  final List<int> setListIds =
+      List<int>.from(response.data['results'].map((result) => result['id']));
+
+  List<String> allSets = [];
+  for (final setListId in setListIds) {
+    final response = await dio.get(
+        'https://rebrickable.com/api/v3/users/$userToken/setlists/$setListId/sets/');
+    final List<String> setsFromList = List<String>.from(
+        response.data['results'].map((result) => result['set']['set_num']));
+    allSets.addAll(setsFromList);
+  }
+  return allSets;
+}
+
+downloadMocHtmls(Dio dio, String setNum) async {
+  try {
+    final response = await dio.get(
+      'https://rebrickable.com/api/v3/lego/sets/$setNum/alternates/',
+      queryParameters: {'page_size': 1000},
+    );
+
+    final List<String> mocHtmlUrls = List<String>.from(
+        response.data['results'].map((result) => result['moc_url']));
+
+    Directory('./$mocHtmlDirName/$setNum/').createSync();
+    mocHtmlUrls.forEach((mocHtmlUrl) async {
+      final mocName = mocHtmlUrl.split("/")[4];
+      await dio.download(mocHtmlUrl, './$mocHtmlDirName/$setNum/$mocName.html');
+      sleep(Duration(milliseconds: math.Random().nextInt(1000)));
+    });
+  } on DioError catch (e) {
+    log('Failed to download html for $setNum. Error: ${e.message}');
+  }
+}
+
+downloadPdfs(Dio dio, Directory dir) async {
   Directory(dir.path.replaceAll('html', 'pdf')).createSync(recursive: true);
   for (final file in dir.listSync()) {
     final pathElements = file.path.split('/');
@@ -33,24 +105,24 @@ downloadPdfsForSet(Directory dir) async {
                   element.attributes['href']!.contains('.pdf'),
               orElse: () => null,
             );
-    downloadPdf(element, setName, mocName);
+    await downloadPdf(dio, element, setName, mocName);
   }
 }
 
-downloadPdf(Element? element, String setName, String mocName) async {
+downloadPdf(Dio dio, Element? element, String setNum, String mocName) async {
   if (element != null) {
     String pdfUrlString =
         element.attributes['href']!.replaceFirst('/external/view/?url=', '');
 
     pdfUrlString = pdfUrlString.substring(0, pdfUrlString.indexOf('&'));
-    final Uri pdfUrl = Uri.parse(Uri.decodeFull(pdfUrlString));
-    final response = await get(pdfUrl);
-    if (response.statusCode != 200) {
-      log('Error while downloading pdf for $mocName: ${response.statusCode}');
+    final String pdfUrl = Uri.decodeFull(pdfUrlString);
+    try {
+      final String pdfFileName = './$mocPdfDirName/$setNum/$mocName.pdf';
+      await dio.download(pdfUrl, pdfFileName);
+      log('Pdf file for $mocName downloaded successful');
+    } on DioError catch (e) {
+      log('Error fetching pdf for $mocName. Error: ${e.message}');
     }
-    final String pdfFileName = './moc_pdf/$setName/$mocName.pdf';
-    File(pdfFileName).writeAsBytesSync(response.bodyBytes);
-    log('Pdf file for $mocName downloaded successful');
   } else {
     log('Link not found in $mocName');
   }
