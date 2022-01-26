@@ -4,7 +4,7 @@ import 'package:dotenv/dotenv.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
-import 'dart:io';
+import 'dart:io' as io;
 
 const mocHtmlDirName = 'moc_html';
 const mocPdfDirName = 'moc_pdf';
@@ -33,7 +33,7 @@ main() async {
   for (final setNum in allSetNums) {
     log('Starting with setNum: $setNum');
     await downloadMocHtmls(dio, setNum);
-    final setHtmlDir = Directory('./$mocHtmlDirName/$setNum');
+    final setHtmlDir = io.Directory('./$mocHtmlDirName/$setNum');
     await downloadPdfs(dio, setHtmlDir);
     log('Finished setNum: $setNum');
   }
@@ -78,7 +78,7 @@ downloadMocHtmls(Dio dio, String setNum) async {
     final List<String> mocHtmlUrls = List<String>.from(
         response.data['results'].map((result) => result['moc_url']));
 
-    Directory('./$mocHtmlDirName/$setNum/').createSync();
+    io.Directory('./$mocHtmlDirName/$setNum/').createSync();
     for (final mocHtmlUrl in mocHtmlUrls) {
       final mocName = mocHtmlUrl.split("/")[4];
       await dio.download(mocHtmlUrl, './$mocHtmlDirName/$setNum/$mocName.html');
@@ -89,33 +89,22 @@ downloadMocHtmls(Dio dio, String setNum) async {
   }
 }
 
-downloadPdfs(Dio dio, Directory dir) async {
-  Directory(dir.path.replaceAll('html', 'pdf')).createSync(recursive: true);
+downloadPdfs(Dio dio, io.Directory dir) async {
+  io.Directory(dir.path.replaceAll('html', 'pdf')).createSync(recursive: true);
   for (final file in dir.listSync()) {
     final pathElements = file.path.split('/');
     final String setName = pathElements[pathElements.length - 2];
     final String mocName = pathElements.last.replaceFirst('.html', '');
-    final fileContent = File(file.path);
+    final fileContent = io.File(file.path);
     final document = parse(fileContent.readAsStringSync());
-    final element =
-        document.getElementsByTagName('a').cast<Element?>().firstWhere(
-              (element) =>
-                  element!.attributes.containsKey('href') &&
-                  element.attributes['href']!.contains('.pdf'),
-              orElse: () => null,
-            );
-    await downloadPdf(dio, element, setName, mocName);
+
+    await downloadPdf(dio, document, setName, mocName);
   }
 }
 
-downloadPdf(Dio dio, Element? element, String setNum, String mocName) async {
-  if (element != null) {
-    String pdfUrlString =
-        element.attributes['href']!.replaceFirst('/external/view/?url=', '');
-    if (pdfUrlString.contains('&')) {
-      pdfUrlString = pdfUrlString.substring(0, pdfUrlString.indexOf('&'));
-    }
-    final String pdfUrl = Uri.decodeFull(pdfUrlString);
+downloadPdf(Dio dio, Document document, String setNum, String mocName) async {
+  final pdfUrl = lookForPdfLink(document);
+  if (pdfUrl != null) {
     try {
       final String pdfFileName = './$mocPdfDirName/$setNum/$mocName.pdf';
       await dio.download(pdfUrl, pdfFileName);
@@ -125,5 +114,54 @@ downloadPdf(Dio dio, Element? element, String setNum, String mocName) async {
     }
   } else {
     log('Link not found in $mocName');
+  }
+}
+
+String? lookForPdfLink(Document document) {
+  var pdfUrl = approach1(document);
+  // if (pdfUrl != null) {
+  //   log('Approach 1 successfull');
+  //   return pdfUrl;
+  // }
+  pdfUrl = approach2(document);
+  if (pdfUrl != null) {
+    log('Approach 2 successfull');
+    return pdfUrl;
+  }
+  return null;
+}
+
+String? approach1(Document document) {
+  Element? element =
+      document.getElementsByTagName('a').cast<Element?>().firstWhere(
+            (element) =>
+                element!.attributes.containsKey('href') &&
+                element.attributes['href']!.contains('.pdf'),
+            orElse: () => null,
+          );
+  if (element != null) {
+    String pdfUrlString =
+        element.attributes['href']!.replaceFirst('/external/view/?url=', '');
+    if (pdfUrlString.contains('&')) {
+      pdfUrlString = pdfUrlString.substring(0, pdfUrlString.indexOf('&'));
+    }
+    return Uri.decodeFull(pdfUrlString);
+  }
+}
+
+String? approach2(Document document) {
+  Element? element =
+      document.getElementsByTagName('a').cast<Element?>().firstWhere(
+            (element) =>
+                element!.children.any((element) =>
+                    element.localName == 'i' &&
+                    element.classes.contains('fa-download')) &&
+                element.attributes['title'] == 'Download file',
+            orElse: () => null,
+          );
+  if (element != null) {
+    String pdfUrlString =
+        'https://eu-central-1.linodeobjects.com${element.attributes['href']}';
+    return Uri.decodeFull(pdfUrlString);
   }
 }
