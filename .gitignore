@@ -49,3 +49,6 @@ coverage/lcov.info
 
 *.g.dart
 *.env
+
+pdf_downloader/moc_html/**
+pdf_downloader/moc_pdf/**
