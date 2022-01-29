@@ -1,0 +1,14 @@
+{
+  "name": "moc-instruction-provider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Sebastian Kutschbach",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1066.0"
+  }
+}
