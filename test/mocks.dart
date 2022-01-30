@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:brick_app/infrastructure/moc/moc_repository.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/service/preferences_service.dart';
@@ -17,3 +20,7 @@ class MockRebrickableService extends Mock implements RebrickableService {}
 class MockMoc extends Mock implements Moc {}
 
 class MockClient extends Mock implements Client {}
+
+class MockMocRepository extends Mock implements MocRepository {}
+
+class MockFile extends Mock implements File {}
