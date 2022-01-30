@@ -3,6 +3,7 @@ import 'package:brick_app/application/cubit/pdf_page_cubit.dart';
 import 'package:brick_app/core/failure.dart';
 import 'package:brick_app/injection.dart';
 import 'package:brick_app/pages/pdf_page.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -47,7 +48,7 @@ main() {
   testWidgets('shows success state', (WidgetTester tester) async {
     await tester.pumpWidget(
       _createTestableWidget(
-        initialState: PdfPageLoaded(MockPdfDocument()),
+        initialState: PdfPageLoaded(some(MockPdfDocument()), none()),
       ),
     );
 
