@@ -19,10 +19,11 @@ class PdfPageError extends PdfPageState {
 }
 
 class PdfPageLoaded extends PdfPageState {
-  final PdfDocument pdfDocument;
+  final Option<PdfDocument> pdfDocument;
+  final Option<Uri> pdfDocumentUri;
 
-  const PdfPageLoaded(this.pdfDocument);
+  const PdfPageLoaded(this.pdfDocument, this.pdfDocumentUri);
 
   @override
-  List<Object> get props => [pdfDocument];
+  List<Object> get props => [pdfDocument, pdfDocumentUri];
 }

@@ -1,9 +1,11 @@
 import 'package:brick_app/application/cubit/pdf_page_cubit.dart';
 import 'package:brick_app/injection.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PdfPage extends StatelessWidget {
   final String setNum;
@@ -31,13 +33,29 @@ class PdfPage extends StatelessWidget {
         ),
       );
 
-  Scaffold _successState(BuildContext context, PdfPageLoaded state) {
-    PdfController controller =
-        PdfController(document: Future.value(state.pdfDocument));
+  Scaffold _successState(BuildContext context, PdfPageLoaded state) => kIsWeb
+      ? _successStateWeb(context, state)
+      : _successStateApp(context, state);
+
+  Scaffold _successStateApp(BuildContext context, PdfPageLoaded state) {
+    final doc = state.pdfDocument.toNullable();
+    PdfController controller = PdfController(document: Future.value(doc));
     return Scaffold(
       key: const Key('success'),
       appBar: BrickAppBar(Text(mocNum)),
       body: PdfView(controller: controller),
+    );
+  }
+
+  Scaffold _successStateWeb(BuildContext context, PdfPageLoaded state) {
+    final url = state.pdfDocumentUri.toNullable();
+    launch(url.toString());
+    return Scaffold(
+      key: const Key('success'),
+      appBar: BrickAppBar(Text(mocNum)),
+      body: const Center(
+        child: Text('PDF will be opened in another tab'),
+      ),
     );
   }
 
