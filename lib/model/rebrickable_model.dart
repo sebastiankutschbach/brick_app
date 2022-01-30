@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:brick_app/infrastructure/moc/moc_repository.dart';
 import 'package:brick_app/model/brick_set.dart';
 import 'package:brick_app/model/brick_set_list.dart';
 import 'package:brick_app/model/inventory.dart';
@@ -40,7 +43,20 @@ class RebrickableModel with ChangeNotifier {
   }
 
   Future<List<Moc>> getMocsFromSet({required String setNum}) async {
-    return rebrickableService.getMocsFromSet(setNum: setNum);
+    final mocs = rebrickableService.getMocsFromSet(setNum: setNum)
+      ..then((mocs) async {
+        final MocRepositoryFacade repo = MocRepository();
+        final existingMocNums = await repo.areBuildInstructionsAvailable(
+          setNum: setNum,
+          mocNums: List<String>.from(
+            mocs.map((moc) => moc.setNum),
+          ),
+        );
+        for (final moc in mocs) {
+          moc.hasInstruction = existingMocNums.contains(moc.setNum);
+        }
+      });
+    return mocs;
   }
 
   Future<List<Inventory>> getInventoriesOfSet({required String setNum}) async {

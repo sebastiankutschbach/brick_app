@@ -17,8 +17,8 @@ main() {
           setNum: '10696-1', mocNum: 'MOC-93758');
 
       response.fold((failure) => fail('Should not throw an error'),
-          (downloadedBytes) async {
-        expect(downloadedBytes.length, greaterThan(0));
+          (downloadedFile) async {
+        expect(await downloadedFile.exists(), true);
       });
     });
 
