@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:brick_app/infrastructure/moc/moc_repository.dart';
+import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/model/set_or_moc.dart';
+import 'package:brick_app/pages/pdf_page.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
-import 'package:brick_app/widgets/sets_grid_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +20,7 @@ class MocPage extends StatefulWidget {
 }
 
 class _MocPageState extends State<MocPage> {
-  Future<List<SetOrMoc>>? _setOrMocListFuture;
+  Future<List<Moc>>? _setOrMocListFuture;
 
   @override
   void initState() {
@@ -29,13 +34,16 @@ class _MocPageState extends State<MocPage> {
       appBar: BrickAppBar(
         Text(widget.brickSet.name),
       ),
-      body: FutureBuilder<List<SetOrMoc>>(
+      body: FutureBuilder<List<Moc>>(
         future: _setOrMocListFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return RefreshIndicator(
-              child:
-                  SetsGridView(snapshot.data!, key: const Key('setGridView')),
+              child: ListView.builder(
+                itemBuilder: (context, index) =>
+                    _buildListTile(context, snapshot.data![index]),
+                itemCount: snapshot.data?.length,
+              ),
               onRefresh: () => _refreshMocList(context),
             );
           } else {
@@ -52,5 +60,33 @@ class _MocPageState extends State<MocPage> {
           .read<RebrickableModel>()
           .getMocsFromSet(setNum: widget.brickSet.setNum);
     });
+  }
+
+  _buildListTile(BuildContext context, Moc moc) {
+    return ListTile(
+      onTap: moc.hasInstruction
+          ? () async {
+              final repo = MocRepository();
+              final result = await repo.getBuildInstruction(
+                  setNum: widget.brickSet.setNum, mocNum: moc.setNum);
+              result.fold((l) => log('Error downloading file.'), (pdfFile) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PdfPage(pdfFile),
+                  ),
+                );
+              });
+            }
+          : null,
+      tileColor: moc.hasInstruction ? Colors.white : Colors.grey,
+      title: SizedBox(
+        height: 200,
+        width: 200,
+        child: CachedNetworkImage(
+          imageUrl: moc.imgUrl,
+          fit: BoxFit.scaleDown,
+        ),
+      ),
+    );
   }
 }

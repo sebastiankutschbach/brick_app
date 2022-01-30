@@ -1,46 +1,68 @@
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:brick_app/core/failure.dart';
+import 'package:brick_app/credentials/api_gateway.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 
 abstract class MocRepositoryFacade {
   Future<List<String>> areBuildInstructionsAvailable(
       {required String setNum, required List<String> mocNums});
 
-  Future<Either<Failure, Uint8List>> getBuildInstruction(
+  Future<Either<Failure, File>> getBuildInstruction(
       {required String setNum, required String mocNum});
 }
 
 class MocRepository implements MocRepositoryFacade {
   @override
-  Future<Either<Failure, Uint8List>> getBuildInstruction(
+  Future<List<String>> areBuildInstructionsAvailable(
+      {required String setNum, required List<String> mocNums}) async {
+    final urlPath = '$apiGwBaseUrl/sets/$setNum';
+
+    final response =
+        await get(Uri.parse(urlPath), headers: {'x-api-key': apiGwKey});
+    if (response.statusCode != 200) {
+      final errMsg = 'Could not request moc list for $setNum';
+      log(errMsg);
+    }
+
+    final List<String> mocNameKeys = jsonDecode(response.body)['Contents']
+        .map((content) => content['Key'])
+        .cast<String>()
+        .toList();
+
+    final List<String> mocNames = mocNameKeys
+        .map((mocNameKey) =>
+            mocNameKey.replaceFirst('$setNum/', '').replaceFirst('.pdf', ''))
+        .toList();
+
+    return List<String>.from(
+        mocNames.where((mocName) => mocNums.contains(mocName)));
+  }
+
+  @override
+  Future<Either<Failure, File>> getBuildInstruction(
       {required String setNum, required String mocNum}) async {
-    final urlPath = 'https://brickapp.sebku.de/mocs/$setNum/$mocNum.pdf';
-    print(urlPath);
-    final response = await get(Uri.parse(urlPath));
+    final urlPath = '$apiGwBaseUrl/sets/$setNum/mocs/$mocNum';
+    final response =
+        await get(Uri.parse(urlPath), headers: {'x-api-key': apiGwKey});
     if (response.statusCode != 200) {
       final String errMsg =
           'Failed to download build instructions for set $setNum and moc $mocNum from $urlPath. ErrorCode ${response.statusCode}';
       log(errMsg);
       return left(Failure(errMsg));
     }
+    final presignedUrl = Uri.parse(response.body.replaceAll('"', ''));
+    final appDir = await getApplicationDocumentsDirectory();
+    final File pdf = File('${appDir.path}/$setNum/$mocNum.pdf')
+      ..createSync(recursive: true);
 
-    return right(response.bodyBytes);
-  }
+    await get(presignedUrl).then((r) {
+      pdf.writeAsBytesSync(r.bodyBytes);
+    });
 
-  @override
-  Future<List<String>> areBuildInstructionsAvailable(
-      {required String setNum, required List<String> mocNums}) async {
-    final results = <String>[];
-    for (final mocNum in mocNums) {
-      final urlPath = 'https://brickapp.sebku.de/mocs/$setNum/$mocNum.pdf';
-      final response = await head(Uri.parse(urlPath));
-
-      if (response.statusCode == 200) {
-        results.add(mocNum);
-      }
-    }
-    return results;
+    return right(pdf);
   }
 }

@@ -54,3 +54,4 @@ pdf_downloader/moc_html/**
 pdf_downloader/moc_pdf/**
 
 node_modules
+lib/credentials
