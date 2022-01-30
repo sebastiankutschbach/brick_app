@@ -14,6 +14,9 @@ abstract class MocRepositoryFacade {
 
   Future<Either<Failure, File>> getBuildInstruction(
       {required String setNum, required String mocNum});
+
+  Future<Either<Failure, Uri>> getBuildInstructionUrl(
+      {required String setNum, required String mocNum});
 }
 
 @Injectable(as: MocRepositoryFacade)
@@ -47,24 +50,36 @@ class MocRepository implements MocRepositoryFacade {
   @override
   Future<Either<Failure, File>> getBuildInstruction(
       {required String setNum, required String mocNum}) async {
+    final response =
+        await getBuildInstructionUrl(setNum: setNum, mocNum: mocNum);
+
+    return response.fold((failure) {
+      return left(failure);
+    }, (presignedUrl) async {
+      final appDir = await getApplicationDocumentsDirectory();
+      final File pdf = File('${appDir.path}/$setNum/$mocNum.pdf')
+        ..createSync(recursive: true);
+
+      await get(presignedUrl).then((r) {
+        pdf.writeAsBytesSync(r.bodyBytes);
+      });
+
+      return right(pdf);
+    });
+  }
+
+  @override
+  Future<Either<Failure, Uri>> getBuildInstructionUrl(
+      {required String setNum, required String mocNum}) async {
     final urlPath = '$apiGwBaseUrl/sets/$setNum/mocs/$mocNum';
     final response =
         await get(Uri.parse(urlPath), headers: {'x-api-key': apiGwKey});
     if (response.statusCode != 200) {
       final String errMsg =
-          'Failed to download build instructions for set $setNum and moc $mocNum from $urlPath. ErrorCode ${response.statusCode}';
+          'Failed to get presigned url to build instructions for set $setNum and moc $mocNum from $urlPath. ErrorCode ${response.statusCode}';
       log(errMsg);
       return left(Failure(errMsg));
     }
-    final presignedUrl = Uri.parse(response.body.replaceAll('"', ''));
-    final appDir = await getApplicationDocumentsDirectory();
-    final File pdf = File('${appDir.path}/$setNum/$mocNum.pdf')
-      ..createSync(recursive: true);
-
-    await get(presignedUrl).then((r) {
-      pdf.writeAsBytesSync(r.bodyBytes);
-    });
-
-    return right(pdf);
+    return right(Uri.parse(response.body.replaceAll('"', '')));
   }
 }
