@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:brick_app/infrastructure/moc/moc_repository.dart';
 import 'package:brick_app/model/moc.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/model/set_or_moc.dart';
@@ -65,18 +62,14 @@ class _MocPageState extends State<MocPage> {
   _buildListTile(BuildContext context, Moc moc) {
     return ListTile(
       onTap: moc.hasInstruction
-          ? () async {
-              final repo = MocRepository();
-              final result = await repo.getBuildInstruction(
-                  setNum: widget.brickSet.setNum, mocNum: moc.setNum);
-              result.fold((l) => log('Error downloading file.'), (pdfFile) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PdfPage(pdfFile),
+          ? () async => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => PdfPage(
+                    setNum: widget.brickSet.setNum,
+                    mocNum: moc.setNum,
                   ),
-                );
-              });
-            }
+                ),
+              )
           : null,
       tileColor: moc.hasInstruction ? Colors.white : Colors.grey,
       title: SizedBox(
