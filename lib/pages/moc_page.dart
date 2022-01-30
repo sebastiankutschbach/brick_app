@@ -80,6 +80,7 @@ class _MocPageState extends State<MocPage> {
           fit: BoxFit.scaleDown,
         ),
       ),
+      subtitle: Text(moc.name),
     );
   }
 }
