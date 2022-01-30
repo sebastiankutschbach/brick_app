@@ -1,5 +1,5 @@
 import 'package:brick_app/application/cubit/pdf_page_cubit.dart';
-import 'package:brick_app/infrastructure/moc/moc_repository.dart';
+import 'package:brick_app/injection.dart';
 import 'package:brick_app/widgets/brick_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,7 @@ class PdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
         create: (context) =>
-            PdfPageCubit(MocRepository(), setNum: setNum, mocNum: mocNum),
+            getIt<PdfPageCubit>(param1: setNum, param2: mocNum),
         child: BlocBuilder<PdfPageCubit, PdfPageState>(
           builder: (context, state) {
             switch (state.runtimeType) {
@@ -35,12 +35,14 @@ class PdfPage extends StatelessWidget {
     PdfController controller =
         PdfController(document: Future.value(state.pdfDocument));
     return Scaffold(
+      key: const Key('success'),
       appBar: BrickAppBar(Text(mocNum)),
       body: PdfView(controller: controller),
     );
   }
 
   Scaffold _loadingState(BuildContext context, PdfPageState state) => Scaffold(
+        key: const Key('loading'),
         appBar: BrickAppBar(Text(mocNum)),
         body: const Center(
           child: CircularProgressIndicator(),
@@ -48,6 +50,7 @@ class PdfPage extends StatelessWidget {
       );
 
   Scaffold _errorState(BuildContext context, PdfPageError state) => Scaffold(
+        key: const Key('error'),
         appBar: BrickAppBar(Text(mocNum)),
         body: Center(
           child: Text('An error occured: ${state.failure}'),
