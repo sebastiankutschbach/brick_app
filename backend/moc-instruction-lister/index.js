@@ -21,7 +21,9 @@ exports.handler = async (event) => {
     console.log('data' + response);
     return {
         isBase64Encoded: false,
-        headers: {},
+        headers: {
+            "Access-Control-Allow-Origin" : "*"
+        },
         statusCode: 200,
         body: JSON.stringify(response)
     }
