@@ -31,18 +31,6 @@ export class BrickAppStack extends Stack {
       deployOptions: {
         stageName: 'dev',
       },
-      // 👇 enable CORS
-      defaultCorsPreflightOptions: {
-        allowHeaders: [
-          'Content-Type',
-          'X-Amz-Date',
-          'Authorization',
-          'X-Api-Key',
-        ],
-        allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        allowCredentials: true,
-        allowOrigins: ['http://localhost:3000'],
-      },
     });
 
     const sets = restApi.root.addResource('sets');

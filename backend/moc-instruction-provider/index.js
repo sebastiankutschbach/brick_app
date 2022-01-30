@@ -25,7 +25,9 @@ exports.handler = async (event) => {
         return {
             isBase64Encoded: false,
             statusCode: 200,
-            headers: {},
+            headers: {
+                "Access-Control-Allow-Origin" : "*"
+            },
             body: JSON.stringify(response)
         }
     } catch (error) {
