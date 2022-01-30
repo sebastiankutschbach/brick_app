@@ -61,6 +61,8 @@ jobs:
         uses: stelynx/dart-full-coverage@v1.0.3
         with:
           package: brick_app
+      - name: Add credentials
+        run: echo '${{ secrets.API_GW_CREDENTIALS }}' > lib/credentials/api_gateway.dart
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
@@ -86,6 +88,8 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           channel: ${{ env.flutter_channel }}
+      - name: Add credentials
+        run: echo '${{ secrets.API_GW_CREDENTIALS }}' > lib/credentials/api_gateway.dart
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
