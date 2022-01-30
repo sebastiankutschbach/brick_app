@@ -42,6 +42,8 @@ dependencies:
   path_provider: ^2.0.8
   path: ^1.8.0
   flutter_bloc: ^8.0.1
+  injectable: ^1.5.3
+  get_it: ^7.2.0
 
 dev_dependencies:
   integration_test:
@@ -56,6 +58,7 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   flutter_gherkin: ^3.0.0-rc.9
   bloc_test: ^9.0.2
+  injectable_generator: ^1.5.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

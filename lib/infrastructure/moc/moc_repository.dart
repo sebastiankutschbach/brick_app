@@ -5,6 +5,7 @@ import 'package:brick_app/core/failure.dart';
 import 'package:brick_app/credentials/api_gateway.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart';
+import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 
 abstract class MocRepositoryFacade {
@@ -15,6 +16,7 @@ abstract class MocRepositoryFacade {
       {required String setNum, required String mocNum});
 }
 
+@Injectable(as: MocRepositoryFacade)
 class MocRepository implements MocRepositoryFacade {
   @override
   Future<List<String>> areBuildInstructionsAvailable(

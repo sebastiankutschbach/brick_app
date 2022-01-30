@@ -1,3 +1,4 @@
+import 'package:brick_app/injection.dart';
 import 'package:brick_app/model/rebrickable_model.dart';
 import 'package:brick_app/pages/login_page.dart';
 import 'package:brick_app/service/preferences_service.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureDependencies();
   final preferencesService = PreferencesService();
   await preferencesService.initPreferences();
   final rebrickableModel =
