@@ -22,7 +22,7 @@ jobs:
         with:
           channel: ${{ env.flutter_channel }}
       - name: Add credentials
-        run: echo ${{ secrets.API_GW_CREDENTIALS }} > lib/credentials/api_gateway.dart
+        run: echo '${{ secrets.API_GW_CREDENTIALS }}' > lib/credentials/api_gateway.dart
       - name: Install pub packages
         run: flutter pub get
       - name: Generate Code with build_runner
