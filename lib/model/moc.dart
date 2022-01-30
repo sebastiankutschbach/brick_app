@@ -29,6 +29,7 @@ class Moc extends SetOrMoc {
   @JsonKey(name: 'designer_url')
   final String designerUrl;
 
+  @JsonKey(ignore: true)
   bool hasInstruction = false;
 
   Moc(this.setNum, this.name, this.year, this.themeId, this.numParts,
