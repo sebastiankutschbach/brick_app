@@ -1,5 +1,4 @@
 import 'package:brick_app/injection.config.dart';
-import 'package:brick_app/service/rebrickable_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
