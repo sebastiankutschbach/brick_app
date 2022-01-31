@@ -6,3 +6,5 @@ dependencies:
   html: ^0.15.0
   dio: ^4.0.4
   dotenv: ^3.0.0
+dev_dependencies: 
+  flutter_lints: ^1.0.4

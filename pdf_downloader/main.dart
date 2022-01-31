@@ -11,6 +11,11 @@ const mocPdfDirName = 'moc_pdf';
 
 main() async {
   load();
+  if (!isEveryDefined(['USERNAME', 'PASSWORD', 'API_KEY'])) {
+    log('Please create a .env file and define USERNAME, PASSWORD and API_KEY');
+    return 1;
+  }
+
   final Dio dio = Dio(
     BaseOptions(
       headers: {
@@ -82,7 +87,7 @@ downloadMocHtmls(Dio dio, String setNum) async {
     for (final mocHtmlUrl in mocHtmlUrls) {
       final mocName = mocHtmlUrl.split("/")[4];
       await dio.download(mocHtmlUrl, './$mocHtmlDirName/$setNum/$mocName.html');
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
     }
   } on DioError catch (e) {
     log('Failed to download html for $setNum. Error: ${e.message}');
@@ -119,10 +124,10 @@ downloadPdf(Dio dio, Document document, String setNum, String mocName) async {
 
 String? lookForPdfLink(Document document) {
   var pdfUrl = approach1(document);
-  // if (pdfUrl != null) {
-  //   log('Approach 1 successfull');
-  //   return pdfUrl;
-  // }
+  if (pdfUrl != null) {
+    log('Approach 1 successfull');
+    return pdfUrl;
+  }
   pdfUrl = approach2(document);
   if (pdfUrl != null) {
     log('Approach 2 successfull');
@@ -160,8 +165,9 @@ String? approach2(Document document) {
             orElse: () => null,
           );
   if (element != null) {
-    String pdfUrlString =
-        'https://eu-central-1.linodeobjects.com${element.attributes['href']}';
+    var relativeUrl = element.attributes['href'];
+    relativeUrl = relativeUrl?.replaceFirst('Rebrickable', env['USERNAME']!);
+    String pdfUrlString = 'https://eu-central-1.linodeobjects.com$relativeUrl';
     return Uri.decodeFull(pdfUrlString);
   }
 }
