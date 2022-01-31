@@ -42,23 +42,6 @@ class RebrickableModel with ChangeNotifier {
     return rebrickableService.getSetsFromList(listId: listId);
   }
 
-  Future<List<Moc>> getMocsFromSet({required String setNum}) async {
-    final mocs = rebrickableService.getMocsFromSet(setNum: setNum)
-      ..then((mocs) async {
-        final MocRepositoryFacade repo = MocRepository();
-        final existingMocNums = await repo.areBuildInstructionsAvailable(
-          setNum: setNum,
-          mocNums: List<String>.from(
-            mocs.map((moc) => moc.setNum),
-          ),
-        );
-        for (final moc in mocs) {
-          moc.hasInstruction = existingMocNums.contains(moc.setNum);
-        }
-      });
-    return mocs;
-  }
-
   Future<List<Inventory>> getInventoriesOfSet({required String setNum}) async {
     return rebrickableService.getInventoriesOfSet(setNum: setNum);
   }

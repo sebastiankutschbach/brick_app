@@ -18,15 +18,13 @@ class PdfPageCubit extends Cubit<PdfPageState> {
 
   PdfPageCubit(this._mocRepository,
       {@factoryParam this.setNum, @factoryParam this.mocNum})
-      : super(PdfPageLoading()) {
-    _getPdf();
-  }
+      : super(PdfPageLoading());
 
-  _getPdf() async {
+  void getPdf() async {
     kIsWeb ? _getPdfUrl() : _downloadPdfFile();
   }
 
-  _downloadPdfFile() async {
+  void _downloadPdfFile() async {
     final result = await _mocRepository.getBuildInstruction(
         setNum: setNum!, mocNum: mocNum!);
     result.fold((failure) {
@@ -38,7 +36,7 @@ class PdfPageCubit extends Cubit<PdfPageState> {
     });
   }
 
-  _getPdfUrl() async {
+  void _getPdfUrl() async {
     final result = await _mocRepository.getBuildInstructionUrl(
         setNum: setNum!, mocNum: mocNum!);
     result.fold((failure) {

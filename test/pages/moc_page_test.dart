@@ -1,43 +1,53 @@
-import 'package:brick_app/model/rebrickable_model.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:brick_app/application/cubit/moc_page_cubit.dart';
+import 'package:brick_app/core/failure.dart';
+import 'package:brick_app/injection.dart';
 import 'package:brick_app/pages/moc_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:provider/provider.dart';
 
 import '../mocks.dart';
 import '../model/brick_set_test.dart';
 import '../model/moc_test.dart';
 
 main() {
-  _createApp() => ChangeNotifierProvider<RebrickableModel>(
-        create: (_) {
-          final mock = MockRebrickableModel();
-          when(() => mock.getMocsFromSet(setNum: any(named: 'setNum')))
-              .thenAnswer(
-            (_) async => [testMoc],
-          );
-          return mock;
-        },
-        child: MaterialApp(
-          home: MocPage(testBrickSet),
-        ),
-      );
+  _createTestableWidget({MocPageState? initialState}) {
+    getIt.allowReassignment = true;
+    final cubit = MockMocPageCubit();
+    whenListen(cubit, const Stream<MocPageState>.empty(),
+        initialState: initialState ?? MocPageLoading());
+    getIt.registerFactoryParam<MocPageCubit, String, void>((_, __) => cubit);
 
-  testWidgets('renders circular progress indicator while loading',
-      (tester) async {
-    await tester.pumpWidget(_createApp());
+    return MaterialApp(
+      home: MocPage(testBrickSet),
+    );
+  }
 
-    expect(find.text(testBrickSet.name), findsOneWidget);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  testWidgets('shows loading state', (WidgetTester tester) async {
+    await tester.pumpWidget(_createTestableWidget());
+
+    expect(find.byKey(const Key('loading')), findsOneWidget);
   });
 
-  testWidgets('renders set grid view after loading', (tester) async {
-    await tester.pumpWidget(_createApp());
+  testWidgets('shows error state', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _createTestableWidget(
+        initialState: const MocPageError(
+          Failure(''),
+        ),
+      ),
+    );
 
-    await tester.pump();
+    expect(find.byKey(const Key('error')), findsOneWidget);
+  });
 
-    expect(find.text(testBrickSet.name), findsOneWidget);
-    expect(find.byType(ListView), findsOneWidget);
+  testWidgets('shows success state', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      _createTestableWidget(
+        initialState: MocPageLoaded([testMoc]),
+      ),
+    );
+
+    expect(find.byKey(const Key('success')), findsOneWidget);
   });
 }

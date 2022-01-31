@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:brick_app/application/cubit/moc_page_cubit.dart';
 import 'package:brick_app/application/cubit/pdf_page_cubit.dart';
 import 'package:brick_app/infrastructure/moc/moc_repository.dart';
 import 'package:brick_app/model/moc.dart';
@@ -32,3 +33,6 @@ class MockPdfPageCubit extends MockCubit<PdfPageState> implements PdfPageCubit {
 }
 
 class MockPdfDocument extends Mock implements PdfDocument {}
+
+class MockMocPageCubit extends MockCubit<MocPageState> implements MocPageCubit {
+}

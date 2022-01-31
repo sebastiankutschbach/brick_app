@@ -12,7 +12,7 @@ void main() async {
   final preferencesService = PreferencesService();
   await preferencesService.initPreferences();
   final rebrickableModel =
-      RebrickableModel(rebrickableService: RebrickableService());
+      RebrickableModel(rebrickableService: getIt<RebrickableService>());
   runApp(MyApp(
       preferencesService: preferencesService,
       rebrickableModel: rebrickableModel));

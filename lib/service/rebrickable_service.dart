@@ -11,7 +11,9 @@ import 'package:brick_app/service/rebrickable_api_constants.dart';
 import 'package:brick_app/service/rebrickable_api_exception.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
+import 'package:injectable/injectable.dart';
 
+@Singleton()
 class RebrickableService {
   late Client _client;
   String _apiKey = '';

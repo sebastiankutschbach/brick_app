@@ -17,7 +17,7 @@ class PdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider(
         create: (context) =>
-            getIt<PdfPageCubit>(param1: setNum, param2: mocNum),
+            getIt<PdfPageCubit>(param1: setNum, param2: mocNum)..getPdf(),
         child: BlocBuilder<PdfPageCubit, PdfPageState>(
           builder: (context, state) {
             switch (state.runtimeType) {
